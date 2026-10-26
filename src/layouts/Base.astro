@@ -35,7 +35,9 @@ interface Props {
 const { title, description = '', canonical, prev, next, robots, ogType = 'article', ogImage = OG_DEFAULT, graph = [], jsonLd = [], pageType, adultOnly = false, extraMeta = [], searchAction = false } = Astro.props;
 const env = getEnv();
 const prod = env.ENVIRONMENT === 'production';
-const robotsContent = prod ? robots.join(', ') : 'noindex, nofollow';
+// meta robots = production value everywhere (parity checks compare it); non-production hosts are closed by Access and
+// the middleware's X-Robots-Tag: noindex header.
+const robotsContent = env.ENVIRONMENT === 'local' ? 'noindex, nofollow' : robots.join(', ');
 const ga = prod || env.ANALYTICS_ENABLED === '1' ? GA4_ID : '';
 const ld = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
 const F = ASSETS + 'favicon/';

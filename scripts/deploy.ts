@@ -1,11 +1,11 @@
 /**
  * Deploy eroka to STAGING (production is refused unless ERK_PRODUCTION_APPROVED=yes).
  *   tsx scripts/deploy.ts [--env staging|production] [--secrets] [--skip-build] [--no-import]
- * 1) D1 backup (SQL export → backups/, gitignored)  2) migrations  3) import Worker  4) web Worker (+ --secrets)  5) smoke test
+ * 1) D1 restore point (Time Travel bookmark → backups/, gitignored)  2) migrations  3) import Worker  4) web Worker (+ --secrets)  5) smoke test
  * Routes eroka.cz/* are NOT managed here (cutover step, CF API). Rollback: `wrangler rollback --env <env>`.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdirSync, readFileSync } from 'node:fs';
+import { appendFileSync, mkdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 const ROOT = new URL('../', import.meta.url).pathname;
@@ -38,8 +38,16 @@ const sha = run('git', ['rev-parse', '--short', 'HEAD'], { quiet: true }).trim()
 const siteBase = envName === 'staging' ? 'https://eroka-staging.huy-kenny.workers.dev' : 'https://eroka.cz';
 const base = process.env.SMOKE_BASE ?? (envName === 'staging' ? siteBase : 'https://eroka.huy-kenny.workers.dev');
 
+// D1 backup point: `d1 export` refuses databases with virtual tables (FTS5 product_fts), so the deploy records a
+// Time Travel bookmark instead (restore: wrangler d1 time-travel restore DB --env <env> --bookmark <b>, 30 days back).
 mkdirSync(join(ROOT, 'backups'), { recursive: true });
-try { wr(['d1', 'export', 'DB', '--remote', '--env', envName, '--output', join('backups', `d1-${envName}-${new Date().toISOString().replace(/[:.]/g, '-')}.sql`)]); } catch { console.log('backup skipped (empty database on first deploy)'); }
+{
+  const info = wr(['d1', 'time-travel', 'info', 'DB', '--env', envName, '--json'], { quiet: true });
+  const bookmark = /"bookmark"\s*:\s*"([^"]+)"/.exec(info)?.[1];
+  if (!bookmark) throw new Error('could not read the D1 Time Travel bookmark — refusing to deploy without a restore point');
+  appendFileSync(join(ROOT, 'backups', `d1-${envName}-bookmarks.log`), `${new Date().toISOString()} ${sha} ${bookmark}\n`);
+  console.log(`D1 restore point: ${bookmark}`);
+}
 wr(['d1', 'migrations', 'apply', 'DB', '--remote', '--env', envName], { input: 'y\n' });
 if (!argv.includes('--no-import')) wr(['deploy', '-c', 'workers/import/wrangler.jsonc', '--env', envName]);
 
