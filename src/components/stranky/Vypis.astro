@@ -11,21 +11,21 @@ import { cislo } from '../../lib/format';
 import { PER_PAGE } from '../../lib/site';
 
 interface Props {
-	crumbs?: Array<{ name: string; url?: string }>;
+	crumbs?: Array<{ name: string; url?: string }> | undefined;
 	h1: string;
-	introHtml?: string;
-	usp?: boolean;
+	introHtml?: string | undefined;
+	usp?: boolean | undefined;
 	chips?: { title: string; links: Cat[] } | undefined;
-	sidebar?: { title: string; links: Cat[]; current?: number } | undefined;
+	sidebar?: { title: string; links: Cat[]; current?: number | undefined } | undefined;
 	items: Card[];
 	cats: Map<number, Cat>;
 	total: number;
 	page: number;
 	pages: number;
 	base: string;
-	qs?: string;
-	q?: { sort: Sort; min?: number | undefined; max?: number | undefined };
-	empty?: string;
+	qs?: string | undefined;
+	q?: { sort: Sort; min?: number | undefined; max?: number | undefined } | undefined;
+	empty?: string | undefined;
 }
 const { crumbs, h1, introHtml, usp, chips, sidebar, items, cats, total, page, pages, base, qs = '', q, empty = 'Tady zatím nic není.' } = Astro.props;
 const from = (page - 1) * PER_PAGE + 1;

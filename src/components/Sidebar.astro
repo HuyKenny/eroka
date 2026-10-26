@@ -4,7 +4,7 @@
 import type { Cat } from '../lib/db';
 import { cislo } from '../lib/format';
 
-interface Props { title: string; links: Cat[]; current?: number; action: string; min?: number | undefined; max?: number | undefined; sort: string }
+interface Props { title: string; links: Cat[]; current?: number | undefined; action: string; min?: number | undefined; max?: number | undefined; sort: string }
 const { title, links, current, action, min, max, sort } = Astro.props;
 ---
 <aside class="erk-sb" aria-label="Filtry a kategorie">

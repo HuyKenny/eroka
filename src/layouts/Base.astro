@@ -11,26 +11,26 @@ import { getEnv } from '../lib/server/env';
 
 interface Props {
 	title: string;
-	description?: string;
+	description?: string | undefined;
 	/** Absolute canonical URL; omit where WordPress printed none (search, 404). */
-	canonical?: string;
-	prev?: string;
-	next?: string;
+	canonical?: string | undefined;
+	prev?: string | undefined;
+	next?: string | undefined;
 	/** Rank Math robots directives, e.g. ['follow','index',…] */
 	robots: string[];
-	ogType?: string;
-	ogImage?: string;
+	ogType?: string | undefined;
+	ogImage?: string | undefined;
 	/** Nodes appended to the Rank Math @graph (WebPage, Product, BlogPosting …). */
-	graph?: unknown[];
+	graph?: unknown[] | undefined;
 	/** Standalone JSON-LD scripts (BreadcrumbList, ItemList, FAQPage …). */
-	jsonLd?: unknown[];
+	jsonLd?: unknown[] | undefined;
 	/** home | product | category | brand | post | page | blog | search | 404 (GA4 page_type) */
 	pageType: string;
 	/** AdultEntertainment without Organization (Rank Math does that on archives). */
-	adultOnly?: boolean;
-	extraMeta?: Array<{ property?: string; name?: string; content: string }>;
+	adultOnly?: boolean | undefined;
+	extraMeta?: Array<{ property?: string; name?: string; content: string }> | undefined;
 	/** Homepage: SearchAction in the WebSite node (sitelinks search box). */
-	searchAction?: boolean;
+	searchAction?: boolean | undefined;
 }
 const { title, description = '', canonical, prev, next, robots, ogType = 'article', ogImage = OG_DEFAULT, graph = [], jsonLd = [], pageType, adultOnly = false, extraMeta = [], searchAction = false } = Astro.props;
 const env = getEnv();

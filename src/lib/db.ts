@@ -64,7 +64,7 @@ export async function guessSlug(db: D1Database, slug: string): Promise<string | 
 }
 
 export type Sort = 'date' | 'price' | 'price-desc' | 'popularity';
-export interface ListQuery { page: number; sort: Sort; min?: number; max?: number }
+export interface ListQuery { page: number; sort: Sort; min?: number | undefined; max?: number | undefined }
 
 function sortSql(s: Sort): string {
   switch (s) {
