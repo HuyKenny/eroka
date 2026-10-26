@@ -1,0 +1,20 @@
+---
+import type { PostCard } from '../lib/db';
+import { datum, decode, excerpt } from '../lib/format';
+import Ik from './Ik.astro';
+interface Props { p: PostCard; h?: 'h2' | 'h3'; eager?: boolean }
+const { p, h = 'h2', eager = false } = Astro.props;
+const H = h;
+---
+<li>
+	<article class="erk-post">
+		<div class="erk-post__obr">
+			{p.image ? <img src={p.image_card || p.image} alt={p.image_alt || ''} width="768" height="432" loading={eager ? 'eager' : 'lazy'} decoding="async" /> : <Ik id="sebe" size={64} />}
+		</div>
+		<div class="erk-post__in">
+			<H><a href={`/${p.slug}/`}>{decode(p.title)}</a></H>
+			{p.excerpt && <p>{excerpt(p.excerpt, 170)}</p>}
+			<time datetime={p.published_at.slice(0, 10)}>{datum(p.published_at)}</time>
+		</div>
+	</article>
+</li>

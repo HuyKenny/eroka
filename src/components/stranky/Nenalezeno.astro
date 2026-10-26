@@ -1,0 +1,30 @@
+---
+// 404 v2 (port of 404.php): Czech, with search and the main categories.
+import Base from '../../layouts/Base.astro';
+import Ik from '../Ik.astro';
+---
+<Base title="Stránka nenalezena | Eroka" robots={['follow', 'noindex']} pageType="404">
+	<section class="erk-sek erk-404">
+		<div class="erk-wrap erk-wrap--uzky">
+			<header class="erk-sek__hl">
+				<span class="erk-stitek erk-stitek--zl">Chyba 404</span>
+				<h1>Tady nic není</h1>
+				<p>Stránka, kterou hledáte, neexistuje nebo se přestěhovala. Zkuste vyhledávání, nebo si vyberte kategorii.</p>
+			</header>
+			<form class="erk-hledat erk-hledat--hero" role="search" method="get" action="/">
+				<label class="screen-reader-text" for="erk-q-404">Hledat pomůcku</label>
+				<input type="search" id="erk-q-404" name="s" placeholder="Hledejte: vibrátor, gel, prádlo…" />
+				<button type="submit"><Ik id="hledat" size={20} /><span>Hledat</span></button>
+			</form>
+			<ul class="erk-darek__chips erk-404__odkazy">
+				<li><a href="/vibratory/">Vibrátory</a></li>
+				<li><a href="/eroticke-pradlo/">Erotické prádlo</a></li>
+				<li><a href="/kosmetika-a-pece-o-telo/">Lubrikanty a kosmetika</a></li>
+				<li><a href="/kondomy/">Kondomy</a></li>
+				<li><a href="/eroticke-darky/">Dárky</a></li>
+				<li><a href="/blog/">Magazín</a></li>
+			</ul>
+			<p class="erk-404__dom"><a class="erk-tl" href="/">Zpět na úvod</a></p>
+		</div>
+	</section>
+</Base>

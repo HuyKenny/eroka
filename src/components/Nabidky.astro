@@ -1,0 +1,19 @@
+---
+// Offer table ("Kde koupit … nejlevněji"). Every link goes through /go/<slug>/ (302 to the affiliate URL, click logged).
+import NabidkaRadek from './NabidkaRadek.astro';
+import type { Offer } from '../lib/db';
+
+interface Props { offers: Offer[]; name: string }
+const { offers, name } = Astro.props;
+const FIRST = 8;
+const cheapest = offers.reduce((m, o) => (o.stock !== -1 && (m === 0 || o.price < m) ? o.price : m), 0);
+const head = offers.slice(0, FIRST);
+const rest = offers.slice(FIRST);
+---
+{head.length > 0 && <ul class="erk-nab" aria-label={`Nabídky obchodů: ${name}`}>{head.map((o) => <NabidkaRadek o={o} nej={o.price === cheapest} />)}</ul>}
+{rest.length > 0 && (
+	<details class="erk-nab-more">
+		<summary>Zobrazit dalších {rest.length} nabídek</summary>
+		<ul class="erk-nab">{rest.map((o) => <NabidkaRadek o={o} nej={false} />)}</ul>
+	</details>
+)}

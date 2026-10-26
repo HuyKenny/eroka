@@ -1,0 +1,15 @@
+---
+import Base from '../../layouts/Base.astro';
+import Vypis from './Vypis.astro';
+import type { brandView } from '../../lib/views';
+import { decode } from '../../lib/format';
+
+interface Props { v: NonNullable<Awaited<ReturnType<typeof brandView>>> }
+const { v } = Astro.props;
+const m = v.meta;
+---
+<Base title={m.title} description={m.description} canonical={m.canonical} prev={m.prev} next={m.next} robots={m.robots} graph={m.graph} jsonLd={m.jsonLd} pageType="brand" adultOnly={true}>
+	<Vypis crumbs={v.crumbs} h1={decode(v.brand.name)} introHtml={v.page === 1 && !v.isFiltered ? v.brand.description_html : undefined}
+		items={v.items} cats={v.tree.byId} total={v.total} page={v.page} pages={v.pages} base={v.base} qs={v.qs} q={v.q}
+		sidebar={{ title: 'Kategorie', links: [] }} empty="Od této značky teď nemáme žádné produkty." />
+</Base>

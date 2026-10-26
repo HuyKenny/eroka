@@ -1,0 +1,117 @@
+---
+// Page shell: head (Rank Math-equivalent meta, OG, JSON-LD), header v2, footer, GA4 + consent.
+import '../styles/base.css';
+import '../styles/astro.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import sprite from '../data/ikony.svg?raw';
+import { ga4Head, ga4Footer } from '../lib/analytics';
+import { ASSETS, GA4_ID, OG_DEFAULT, SITE_NAME, orgGraph } from '../lib/site';
+import { getEnv } from '../lib/server/env';
+
+interface Props {
+	title: string;
+	description?: string;
+	/** Absolute canonical URL; omit where WordPress printed none (search, 404). */
+	canonical?: string;
+	prev?: string;
+	next?: string;
+	/** Rank Math robots directives, e.g. ['follow','index',…] */
+	robots: string[];
+	ogType?: string;
+	ogImage?: string;
+	/** Nodes appended to the Rank Math @graph (WebPage, Product, BlogPosting …). */
+	graph?: unknown[];
+	/** Standalone JSON-LD scripts (BreadcrumbList, ItemList, FAQPage …). */
+	jsonLd?: unknown[];
+	/** home | product | category | brand | post | page | blog | search | 404 (GA4 page_type) */
+	pageType: string;
+	/** AdultEntertainment without Organization (Rank Math does that on archives). */
+	adultOnly?: boolean;
+	extraMeta?: Array<{ property?: string; name?: string; content: string }>;
+	/** Homepage: SearchAction in the WebSite node (sitelinks search box). */
+	searchAction?: boolean;
+}
+const { title, description = '', canonical, prev, next, robots, ogType = 'article', ogImage = OG_DEFAULT, graph = [], jsonLd = [], pageType, adultOnly = false, extraMeta = [], searchAction = false } = Astro.props;
+const env = getEnv();
+const prod = env.ENVIRONMENT === 'production';
+const robotsContent = prod ? robots.join(', ') : 'noindex, nofollow';
+const ga = prod || env.ANALYTICS_ENABLED === '1' ? GA4_ID : '';
+const ld = (o: unknown) => JSON.stringify(o).replace(/</g, '\\u003c');
+const F = ASSETS + 'favicon/';
+---
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+	<meta charset="utf-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+	<title>{title}</title>
+	{description && <meta name="description" content={description} />}
+	<meta name="robots" content={robotsContent} />
+	{canonical && <link rel="canonical" href={canonical} />}
+	{prev && <link rel="prev" href={prev} />}
+	{next && <link rel="next" href={next} />}
+	<meta property="og:locale" content="cs_CZ" />
+	<meta property="og:type" content={ogType} />
+	<meta property="og:title" content={title} />
+	{description && <meta property="og:description" content={description} />}
+	{canonical && <meta property="og:url" content={canonical} />}
+	<meta property="og:site_name" content={SITE_NAME} />
+	<meta property="og:image" content={ogImage} />
+	{extraMeta.map((m) => (m.property ? <meta property={m.property} content={m.content} /> : <meta name={m.name} content={m.content} />))}
+	<meta name="twitter:card" content="summary_large_image" />
+	<meta name="twitter:title" content={title} />
+	{description && <meta name="twitter:description" content={description} />}
+	<meta name="twitter:image" content={ogImage} />
+	<link rel="preload" href={ASSETS + 'fonty/figtree-cs.woff2'} as="font" type="font/woff2" crossorigin />
+	<link rel="preload" href={ASSETS + 'fonty/young-serif-cs.woff2'} as="font" type="font/woff2" crossorigin />
+	<link rel="preconnect" href="https://wsrv.nl" />
+	<link rel="icon" href={F + 'favicon.svg'} type="image/svg+xml" />
+	<link rel="icon" href={F + 'favicon-32.png'} sizes="32x32" type="image/png" />
+	<link rel="icon" href={F + 'favicon-192.png'} sizes="192x192" type="image/png" />
+	<link rel="apple-touch-icon" href={F + 'favicon-180.png'} />
+	<link rel="manifest" href={F + 'manifest.webmanifest'} />
+	<meta name="theme-color" content="#3B1030" />
+	<link rel="alternate" type="application/rss+xml" title="Eroka &raquo; RSS" href="https://eroka.cz/feed/" />
+	{ga && <Fragment set:html={ga4Head(ga, pageType)} />}
+	<script type="application/ld+json" set:html={ld({ '@context': 'https://schema.org', '@graph': [...orgGraph(adultOnly, searchAction), ...graph] })} />
+	{jsonLd.map((d) => <script type="application/ld+json" set:html={ld(d)} />)}
+	<slot name="head" />
+</head>
+<body class={`erk2 erk-t-${pageType}`}>
+<Fragment set:html={sprite} />
+<Header />
+<main id="erk-obsah" tabindex="-1">
+<slot />
+</main>
+<Footer />
+<script is:inline>
+(function(){
+	document.addEventListener('click',function(e){
+		var b=e.target.closest('.erk-nav__otevri');
+		if(b){var li=b.parentNode,o=li.classList.toggle('je-otevreno');b.setAttribute('aria-expanded',o?'true':'false');return;}
+		if(!e.target.closest('.erk-nav__pol')){document.querySelectorAll('.erk-nav__pol.je-otevreno').forEach(function(l){l.classList.remove('je-otevreno');l.querySelector('.erk-nav__otevri').setAttribute('aria-expanded','false');});}
+	});
+	document.addEventListener('keydown',function(e){if(e.key==='Escape'){document.querySelectorAll('.erk-nav__pol.je-otevreno').forEach(function(l){l.classList.remove('je-otevreno');});}});
+	var mq=window.matchMedia('(max-width:767px)');
+	var d=document.querySelector('.erk-popis');
+	if(d){
+		var b=document.createElement('button');b.type='button';b.className='erk-vice-btn';b.textContent='Zobrazit více';b.setAttribute('aria-expanded','false');
+		d.parentNode.insertBefore(b,d.nextSibling);
+		b.addEventListener('click',function(){var o=d.classList.toggle('je-otevreno');b.textContent=o?'Zobrazit méně':'Zobrazit více';b.setAttribute('aria-expanded',o?'true':'false');});
+		if(d.scrollHeight<=d.clientHeight+4&&mq.matches){b.hidden=true;}
+	}
+	document.querySelectorAll('.erk-pata__sl h2').forEach(function(h){
+		h.setAttribute('tabindex','0');h.setAttribute('role','button');h.setAttribute('aria-expanded','false');
+		function t(){if(!window.matchMedia('(max-width:640px)').matches){return}var n=h.parentNode,o=n.classList.toggle('je-otevreno');h.setAttribute('aria-expanded',o?'true':'false');}
+		h.addEventListener('click',t);h.addEventListener('keydown',function(e){if(e.key==='Enter'||e.key===' '){e.preventDefault();t();}});
+	});
+	var s=document.querySelector('.erk-razeni select');
+	if(s){s.addEventListener('change',function(){s.form.submit();});}
+	var l=document.querySelector('.erk-lista'),c=document.querySelector('.erk-prod__cta');
+	if(l&&c&&'IntersectionObserver' in window){new IntersectionObserver(function(en){l.classList.toggle('je-videt',!en[0].isIntersecting&&en[0].boundingClientRect.top<0);}).observe(c);}
+})();
+</script>
+{ga && <Fragment set:html={ga4Footer(ga, pageType)} />}
+</body>
+</html>

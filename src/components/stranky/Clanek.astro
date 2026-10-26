@@ -1,0 +1,45 @@
+---
+// Blog post / page. Content HTML comes from WordPress (content.rendered); posts get the "Kde vybrat a koupit" chips,
+// the Sbalit.cz module, comments (read-only) and related posts — like the_content filters of the WP mu-plugins.
+import Base from '../../layouts/Base.astro';
+import Drobky from '../Drobky.astro';
+import PostKarta from '../PostKarta.astro';
+import PartnerBox from '../PartnerBox.astro';
+import type { postView } from '../../lib/views';
+import { datum, decode } from '../../lib/format';
+
+interface Props { v: NonNullable<Awaited<ReturnType<typeof postView>>> }
+const { v } = Astro.props;
+const m = v.meta;
+const p = v.post;
+const isPost = p.type === 'post';
+const crumbs = isPost ? [{ name: 'Domů', url: '/' }, { name: 'Magazín', url: '/blog/' }, ...(v.cat ? [{ name: decode(v.cat.name), url: `/${v.cat.slug}/` }] : []), { name: decode(p.title) }] : [{ name: 'Domů', url: '/' }, { name: decode(p.title) }];
+---
+<Base title={m.title} description={m.description} canonical={m.canonical} robots={m.robots} ogImage={m.ogImage} graph={m.graph} jsonLd={m.jsonLd} extraMeta={m.extraMeta} pageType={isPost ? 'post' : 'page'}>
+	<div class="erk-obal erk-obal--uzky">
+		<Drobky items={crumbs} />
+		<article class={isPost ? 'erk-clanek' : 'erk-stranka'}>
+			{isPost && v.cat && <a class="erk-clanek__kat" href={`/${v.cat.slug}/`}>{decode(v.cat.name)}</a>}
+			<h1>{decode(p.title)}</h1>
+			{isPost && <p class="erk-clanek__meta">Ester · <time datetime={p.published_at.slice(0, 10)}>{datum(p.published_at)}</time>{p.modified_at.slice(0, 10) > p.published_at.slice(0, 10) && <> · aktualizováno <time datetime={p.modified_at.slice(0, 10)}>{datum(p.modified_at)}</time></>}</p>}
+			{isPost && p.image && <figure class="erk-clanek__foto"><img src={p.image} alt={p.image_alt} width={p.image_w || 1400} height={p.image_h || 788} fetchpriority="high" decoding="async" /></figure>}
+			<div class="erk-obsah" set:html={p.content_html} />
+			{v.shopCats.length > 0 && (
+				<div class="erk-artshop"><span>🛍️ Kde vybrat a koupit za nejlepší cenu:</span>{v.shopCats.map((c) => <a href={`/${c.slug}/`}>{decode(c.name)}</a>)}</div>
+			)}
+			{isPost && <PartnerBox slug={p.slug} />}
+			{v.comments.length > 0 && (
+				<section class="erk-komentare">
+					<h2>Komentáře ({v.comments.length})</h2>
+					<ol>{v.comments.map((c) => <li><b>{c.author}</b><time datetime={c.created_at.slice(0, 10)}>{datum(c.created_at)}</time><div set:html={c.content_html} /></li>)}</ol>
+				</section>
+			)}
+		</article>
+		{v.related.length > 0 && (
+			<section class="erk-souvc">
+				<p class="erk-stitek">Mohlo by vás zajímat</p>
+				<ul class="erk-posty" style="margin-top:16px">{v.related.map((r) => <PostKarta p={r} h="h2" />)}</ul>
+			</section>
+		)}
+	</div>
+</Base>

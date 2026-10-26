@@ -1,0 +1,81 @@
+---
+// Header v2 (port of weby/eroka/child-theme/header.php). Menu = WordPress menu 70 exported to data/menu.json.
+// Mobile menu and the search are <details>, they work without JS.
+import Ik from './Ik.astro';
+import logo from '../data/logo.svg?raw';
+import menu from '../data/menu.json';
+
+interface Item { id: number; parent: number; title: string; url: string; order: number }
+const items = (menu as Item[]).slice().sort((a, b) => a.order - b.order);
+const tree = items.filter((i) => i.parent === 0).map((i) => ({ it: i, kids: items.filter((k) => k.parent === i.id) }));
+// long labels shortened in the desktop menu (link and title stay)
+const KRATCE: Record<string, string> = { 'Umělé vaginy a masturbátory': 'Masturbátory', 'Erotické prádlo': 'Prádlo' };
+const q = Astro.url.searchParams.get('s') ?? '';
+---
+<a class="erk-skip" href="#erk-obsah">Přeskočit na obsah</a>
+<div class="erk-pas" role="note">
+	<span><Ik id="balik" size={18} /> Diskrétní balení bez loga</span>
+	<span><Ik id="cena" size={18} /> Ceny z ověřených eshopů na jednom místě</span>
+	<span class="erk-pas__18">Pouze 18+</span>
+</div>
+<header id="main_header" class="erk-hlava">
+	<div class="erk-hlava__in">
+		<a class="erk-logo" href="/" aria-label="Eroka.cz — úvodní stránka" set:html={logo} />
+		<nav class="erk-nav" aria-label="Hlavní menu">
+			<ul class="erk-nav__seznam">
+				{tree.map((n) => (
+					<li class={`erk-nav__pol${n.kids.length ? ' ma-pod' : ''}`}>
+						<a href={n.it.url} title={n.it.title}>{KRATCE[n.it.title] ?? n.it.title}</a>
+						{n.kids.length > 0 && (
+							<>
+								<button type="button" class="erk-nav__otevri" aria-expanded="false" aria-label={`Podkategorie: ${n.it.title}`}><svg width="12" height="12" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 4l4 4 4-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" /></svg></button>
+								<ul class="erk-nav__pod">
+									{n.kids.map((k) => <li><a href={k.url}>{k.title}</a></li>)}
+								</ul>
+							</>
+						)}
+					</li>
+				))}
+			</ul>
+		</nav>
+		<div class="erk-hlava__akce">
+			<details class="erk-hl-hledat">
+				<summary aria-label="Hledat pomůcku"><Ik id="hledat" size={22} /><span>Hledat</span></summary>
+				<form class="erk-hledat" role="search" method="get" action="/">
+					<label class="screen-reader-text" for="erk-q">Hledat pomůcku</label>
+					<input type="search" id="erk-q" name="s" placeholder="Co hledáte?" value={q} />
+					<button type="submit" aria-label="Hledat"><Ik id="hledat" size={20} /></button>
+				</form>
+			</details>
+			<a class="erk-tl erk-tl--darek" href="/eroticke-darky/" aria-label="Dárky" title="Dárky"><Ik id="darek" size={20} /><span>Dárky</span></a>
+		</div>
+		<details class="erk-mob">
+			<summary aria-label="Otevřít menu"><span class="erk-mob__bars" aria-hidden="true"><i></i><i></i></span><span class="erk-mob__txt">Menu</span></summary>
+			<div class="erk-mob__panel">
+				<form class="erk-hledat erk-hledat--mob" role="search" method="get" action="/">
+					<label class="screen-reader-text" for="erk-q-mob">Hledat pomůcku</label>
+					<input type="search" id="erk-q-mob" name="s" placeholder="Co hledáte?" />
+					<button type="submit" aria-label="Hledat"><Ik id="hledat" size={20} /></button>
+				</form>
+				<ul class="erk-mob__seznam">
+					{tree.map((n) => (
+						<li>
+							{n.kids.length ? (
+								<details>
+									<summary>{n.it.title}</summary>
+									<ul>
+										<li><a href={n.it.url}>Vše: {n.it.title}</a></li>
+										{n.kids.map((k) => <li><a href={k.url}>{k.title}</a></li>)}
+									</ul>
+								</details>
+							) : <a href={n.it.url}>{n.it.title}</a>}
+						</li>
+					))}
+					<li><a href="/eroticke-darky/">Dárky</a></li>
+					<li><a href="/blog/">Magazín</a></li>
+				</ul>
+				<p class="erk-mob__poz"><b>18+</b> · Diskrétní balení bez loga · Ceny z ověřených eshopů</p>
+			</div>
+		</details>
+	</div>
+</header>

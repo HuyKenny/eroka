@@ -1,0 +1,96 @@
+---
+// Product detail: summary card (photo, price, savings, best shop, CTA), offer table, description with the offer table
+// summary under the Content Egg "Kde koupit" heading and the price chart under "Vývoj ceny", related categories and products.
+import Base from '../../layouts/Base.astro';
+import Drobky from '../Drobky.astro';
+import Ik from '../Ik.astro';
+import Nabidky from '../Nabidky.astro';
+import GrafCen from '../GrafCen.astro';
+import Mrizka from '../Mrizka.astro';
+import { splitDescription, type productView } from '../../lib/views';
+import { cena, cislo, decode, esc, eshopu } from '../../lib/format';
+import { imgUrl } from '../../lib/img';
+
+interface Props { v: NonNullable<Awaited<ReturnType<typeof productView>>> }
+const { v } = Astro.props;
+const m = v.meta;
+const d = splitDescription(v.p.desc_html);
+const save = v.stats.max - v.stats.min;
+const bestGo = v.best ? `/go/${v.best.go_slug}/` : '';
+const showChart = v.history.length >= 2;
+// headings of the WordPress template are kept; without offers the empty "Kde koupit" heading is dropped
+const offersHeading = d.offersHeading || `<h3>Kde koupit ${esc(v.name)} nejlevněji</h3>`;
+---
+<Base title={m.title} description={m.description} canonical={m.canonical} robots={m.robots} ogType={m.ogType} ogImage={m.ogImage} graph={m.graph} jsonLd={m.jsonLd} extraMeta={m.extraMeta} pageType="product">
+	<div class="erk-obal">
+		<Drobky items={v.crumbs} />
+		<section class="erk-prod">
+			<div class="erk-prod__obr">
+				{v.img ? <img src={imgUrl(v.img, 600, 80)} srcset={`${imgUrl(v.img, 600, 80)} 1x, ${imgUrl(v.img, 1000, 78)} 2x`} alt={v.name} width="500" height="500" fetchpriority="high" decoding="async" /> : <Ik id="vibr" size={140} />}
+			</div>
+			<div class="erk-prod__info">
+				<div class="erk-prod__hl">
+					<h1>{v.name}</h1>
+					<p class="erk-prod__meta">
+						{v.primary && <a href={`/${v.primary.slug}/`}>{decode(v.primary.name)}</a>}
+						{v.brand && v.brand.slug !== 'ostatni' && <span>Značka: <a href={`/znacka/${v.brand.slug}/`}>{decode(v.brand.name)}</a></span>}
+					</p>
+				</div>
+				{v.p.short_html && <div class="erk-prod__kratce" set:html={v.p.short_html} />}
+				<div class="erk-prod__nakup">
+					{v.stats.n > 1 && save > 0 && (
+						<div class="erk-save"><b>Ušetříte až {cena(save)}</b><span>Porovnali jsme cenu u {cislo(v.stats.shops)} {eshopu(v.stats.shops)} · od {cena(v.stats.min)} do {cena(v.stats.max)}</span></div>
+					)}
+					{v.best ? (
+						<>
+							<p class="erk-prod__cena">{v.stats.n > 1 && <small>nejlépe za</small>}{cena(v.best.price)}</p>
+							<p class="erk-prod__u">Nejlepší nabídka u: <b>{v.best.domain}</b></p>
+							<a class="erk-prod__cta" href={bestGo} target="_blank" rel="nofollow sponsored" data-partner={v.best.domain} data-price={Math.round(v.best.price)}>Koupit za nejlepší cenu <Ik id="sipka" size={20} /></a>
+							<p class="erk-trust">Diskrétní balení bez loga · nakupujete přímo u ověřeného eshopu, cena se pro vás nemění.</p>
+						</>
+					) : (
+						<p class="erk-prod__nic">Tento produkt teď žádný z eshopů nenabízí. Podívejte se na podobné níže.</p>
+					)}
+				</div>
+			</div>
+		</section>
+
+		{v.offers.length > 0 && (
+			<section class="erk-blok" aria-labelledby="erk-nabidky">
+				<h2 id="erk-nabidky">Srovnání cen v eshopech</h2>
+				<div class="erk-blok__in"><Nabidky offers={v.offers} name={v.name} /></div>
+			</section>
+		)}
+
+		<section class="erk-blok">
+			<h2>Popis</h2>
+			<div class="erk-blok__in">
+				<Fragment set:html={d.before} />
+				{v.best && <Fragment set:html={offersHeading} />}
+				{v.best && <p>Nejnižší cena je teď <strong>{cena(v.best.price)}</strong> u eshopu {v.best.domain}{v.stats.n > 1 ? ` — ceny všech ${cislo(v.stats.n)} nabídek porovnáváme ` : ' — nabídku najdete '}<a href="#erk-nabidky">v tabulce nahoře</a>.</p>}
+				<Fragment set:html={d.middle} />
+				{showChart && d.historyHeading && <Fragment set:html={d.historyHeading} />}
+				<Fragment set:html={d.after} />
+			</div>
+		</section>
+
+		{showChart && (
+			<section class="erk-blok">
+				<h2>Historie cen</h2>
+				<div class="erk-blok__in"><GrafCen points={v.history} name={v.name} /></div>
+			</section>
+		)}
+
+		{v.relCats.length > 0 && (
+			<div class="erk-relcats"><span>Související kategorie:</span> {v.relCats.map((c) => <a href={`/${c.slug}/`}>{decode(c.name)}</a>)}</div>
+		)}
+
+		{v.related.length > 0 && (
+			<section class="erk-souv">
+				<h2>Související produkty</h2>
+				<Mrizka items={v.related} cats={v.tree.byId} cols={4} />
+			</section>
+		)}
+	</div>
+	{v.best && <div class="erk-lista" aria-hidden="true"><b>{cena(v.best.price)}</b><a href={bestGo} target="_blank" rel="nofollow sponsored" tabindex="-1" data-partner={v.best.domain} data-price={Math.round(v.best.price)}>Koupit nejlevněji</a></div>}
+</Base>

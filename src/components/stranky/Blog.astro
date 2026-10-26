@@ -1,0 +1,23 @@
+---
+import Base from '../../layouts/Base.astro';
+import Drobky from '../Drobky.astro';
+import PostKarta from '../PostKarta.astro';
+import Strankovani from '../Strankovani.astro';
+import type { blogView } from '../../lib/views';
+import { decode } from '../../lib/format';
+
+interface Props { v: NonNullable<Awaited<ReturnType<typeof blogView>>> }
+const { v } = Astro.props;
+const m = v.meta;
+const h1 = v.cat ? decode(v.cat.name) : 'Blog';
+const crumbs = [{ name: 'Domů', url: '/' }, ...(v.cat ? [{ name: 'Magazín', url: '/blog/' }] : []), { name: h1 }];
+---
+<Base title={m.title} description={m.description} canonical={m.canonical} prev={m.prev} next={m.next} robots={m.robots} graph={m.graph} jsonLd={m.jsonLd} pageType="blog" adultOnly={true}>
+	<div class="erk-obal">
+		<Drobky items={crumbs} />
+		<h1>{h1}</h1>
+		{v.page === 1 && !v.cat && <p class="erk-lead" style="margin:0 0 22px">Praktické rady bez mýtů a zbytečného studu: průvodci výběrem, tipy pro páry i recenze.</p>}
+		<ul class="erk-posty">{v.items.map((p, i) => <PostKarta p={p} h="h2" eager={i < 2} />)}</ul>
+		<Strankovani base={v.base} page={v.page} pages={v.pages} />
+	</div>
+</Base>

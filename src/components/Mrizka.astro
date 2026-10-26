@@ -1,0 +1,9 @@
+---
+import Karta from './Karta.astro';
+import type { Card, Cat } from '../lib/db';
+interface Props { items: Card[]; cats?: Map<number, Cat>; cols?: 3 | 4 | 5 }
+const { items, cats, cols = 3 } = Astro.props;
+---
+<ul class={`erk-mriz${cols !== 3 ? ' erk-mriz--' + cols : ''}`}>
+	{items.map((p, i) => <Karta p={p} cat={cats?.get(p.primary_cat)} idx={i} />)}
+</ul>

@@ -1,0 +1,13 @@
+---
+import Base from '../../layouts/Base.astro';
+import Vypis from './Vypis.astro';
+import type { searchView } from '../../lib/views';
+
+interface Props { v: Awaited<ReturnType<typeof searchView>> }
+const { v } = Astro.props;
+const qs = '?s=' + encodeURIComponent(v.query);
+---
+<Base title={v.meta.title} robots={v.meta.robots} pageType="search">
+	<Vypis h1={`Výsledky hledání: ${v.query}`} items={v.items} cats={v.tree.byId} total={v.total} page={v.page} pages={v.pages} base="/" qs={qs}
+		empty={v.query ? 'Nic jsme nenašli. Zkuste jiné slovo nebo projděte kategorie v menu.' : 'Napište, co hledáte.'} />
+</Base>

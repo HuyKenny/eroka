@@ -1,0 +1,21 @@
+---
+import type { Offer } from '../lib/db';
+import { cena } from '../lib/format';
+interface Props { o: Offer; nej: boolean }
+const { o, nej } = Astro.props;
+const logo = `/wp-content/uploads/ce-logos/icon_${o.domain.replace(/\./g, '-')}.png`;
+---
+<li class={nej ? 'je-nej' : undefined}>
+	<div class="erk-nab__shop">
+		<img src={logo} alt="" width="16" height="16" loading="lazy" decoding="async" />
+		<span>{o.domain}{nej && <em class="erk-nab__nej">Nejlevněji</em>}
+			{o.stock === 1 && <small class="erk-nab__stav erk-nab__stav--ano">Skladem</small>}
+			{o.stock === -1 && <small class="erk-nab__stav">Není skladem</small>}
+		</span>
+	</div>
+	<div class="erk-nab__cena">
+		{o.price_old > o.price && <del>{cena(o.price_old)}</del>}
+		{cena(o.price)}
+	</div>
+	<a class="erk-nab__tl" href={`/go/${o.go_slug}/`} target="_blank" rel="nofollow sponsored" data-partner={o.domain} data-price={Math.round(o.price)}>Do obchodu</a>
+</li>

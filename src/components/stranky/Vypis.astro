@@ -1,0 +1,58 @@
+---
+// Listing shell shared by category, brand and search pages: breadcrumb, H1, intro text, chips, sort, grid,
+// pagination, sidebar. Blocks below the grid (magazine box, SEO text) come through the default slot.
+import Drobky from '../Drobky.astro';
+import Mrizka from '../Mrizka.astro';
+import Strankovani from '../Strankovani.astro';
+import Sidebar from '../Sidebar.astro';
+import Razeni from '../Razeni.astro';
+import type { Card, Cat, Sort } from '../../lib/db';
+import { cislo } from '../../lib/format';
+import { PER_PAGE } from '../../lib/site';
+
+interface Props {
+	crumbs?: Array<{ name: string; url?: string }>;
+	h1: string;
+	introHtml?: string;
+	usp?: boolean;
+	chips?: { title: string; links: Cat[] } | undefined;
+	sidebar?: { title: string; links: Cat[]; current?: number } | undefined;
+	items: Card[];
+	cats: Map<number, Cat>;
+	total: number;
+	page: number;
+	pages: number;
+	base: string;
+	qs?: string;
+	q?: { sort: Sort; min?: number | undefined; max?: number | undefined };
+	empty?: string;
+}
+const { crumbs, h1, introHtml, usp, chips, sidebar, items, cats, total, page, pages, base, qs = '', q, empty = 'Tady zatím nic není.' } = Astro.props;
+const from = (page - 1) * PER_PAGE + 1;
+const to = Math.min(total, page * PER_PAGE);
+---
+<div class="erk-obal">
+	{crumbs && <Drobky items={crumbs} />}
+	<div class={`erk-vypis${sidebar ? ' erk-vypis--sb' : ''}`}>
+		<div>
+			<h1>{h1}</h1>
+			{introHtml && <div class="erk-popis" set:html={introHtml} />}
+			{usp && <div class="erk-usp">✔ Porovnáváme ceny z ověřených českých e-shopů na jednom místě · vyberte si <b>nejlevnější nabídku</b> a ušetřete u každého nákupu.</div>}
+			{chips && chips.links.length > 0 && (
+				<nav class="erk-chipy erk-chipy--sb" aria-label={chips.title}><ul>{chips.links.map((c) => <li><a href={`/${c.slug}/`}>{c.name}</a></li>)}</ul></nav>
+			)}
+			{total > 0 ? (
+				<>
+					<div class="erk-lista-v">
+						<p class="erk-pocet" role="status">Zobrazeno {cislo(from)}.–{cislo(to)}. z {cislo(total)} výsledků</p>
+						{q && <Razeni action={base} sort={q.sort} min={q.min} max={q.max} />}
+					</div>
+					<Mrizka items={items} cats={cats} />
+					<Strankovani base={base} page={page} pages={pages} query={qs} />
+				</>
+			) : <p class="erk-prazdno">{empty}</p>}
+			<slot />
+		</div>
+		{sidebar && q && <Sidebar title={sidebar.title} links={sidebar.links} current={sidebar.current} action={base} min={q.min} max={q.max} sort={q.sort} />}
+	</div>
+</div>

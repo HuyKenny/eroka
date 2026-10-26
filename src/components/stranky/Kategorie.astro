@@ -1,0 +1,24 @@
+---
+import Base from '../../layouts/Base.astro';
+import Vypis from './Vypis.astro';
+import type { categoryView } from '../../lib/views';
+import { decode } from '../../lib/format';
+
+interface Props { v: NonNullable<Awaited<ReturnType<typeof categoryView>>> }
+const { v } = Astro.props;
+const m = v.meta;
+const first = v.page === 1 && !v.isFiltered;
+---
+<Base title={m.title} description={m.description} canonical={m.canonical} prev={m.prev} next={m.next} robots={m.robots} graph={m.graph} jsonLd={m.jsonLd} pageType="category">
+	<Vypis crumbs={v.crumbs} h1={decode(v.cat.name)} introHtml={first ? v.cat.description_html : undefined} usp={true}
+		chips={{ title: v.kidsTitle, links: v.kids }} sidebar={{ title: v.kidsTitle, links: v.kids, current: v.cat.id }}
+		items={v.items} cats={v.tree.byId} total={v.total} page={v.page} pages={v.pages} base={v.base} qs={v.qs} q={v.q}
+		empty="V této kategorii teď nejsou žádné produkty.">
+		<div class="erk-magbox">
+			<h2>Z magazínu Eroka.cz</h2>
+			<p class="sub">Praktické rady a tipy, které vám pomohou vybrat i si pomůcku náležitě užít.</p>
+			<ul>{v.magbox.map((a) => <li><a href={`/${a.slug}/`}>{a.title}</a></li>)}</ul>
+		</div>
+		{first && v.cat.second_html && <div class="erk-text" set:html={v.cat.second_html} />}
+	</Vypis>
+</Base>
