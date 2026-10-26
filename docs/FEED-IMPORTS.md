@@ -21,5 +21,5 @@
 | 2 / 3 / 5 / 10 / 16 | DeepLove / Sexíček / Lékárna AVE / Dialekárna / EroticCity (eHub) | | 1 883 / 1 865 / 47 / 0 / 649 | |
 | 12 / 13 / 15 | Sexshop / Intimfitness / SexShop51 (AffilBox) | | 1 208 / 17 / 1 728 | |
 | 14 | ErosStar | 5 472 | 1 925 | |
-| 4 / 11 | Benu / Krása (Affiliateport) | — | — | **HTTP 401: token feedu vypršel** → po 7 dnech se nabídky skryjí |
-| CJ | CjProducts (1 779 nabídek, drmax, notino…) | — | — | Content Egg je hledal po produktech; importér zatím neobnovuje (TODO) |
+| 4 / 11 | Benu / Krása (Affiliateport) | — | — | **vypnuto** (`enabled: false` ve feeds.ts): token vypršel (HTTP 401), Kenny doplní nový feed |
+| CJ | CjProducts (1 779 nabídek, drmax, notino…) | — | — | zůstávají, jak je připojil Content Egg (Kenny 26. 10.); importér je neobnovuje |

@@ -31,6 +31,7 @@ export default {
     if (request.method === 'POST' && parts[0] === 'run' && parts[1]) {
       const f = FEEDS.find((x) => feedKey(x) === parts[1] || String(x.id) === parts[1]);
       if (!f) return json({ error: 'unknown feed' }, 404);
+      if (f.enabled === false && url.searchParams.get('force') !== '1') return json({ error: 'feed is switched off (feeds.ts enabled: false)' }, 409);
       // awaited: an HTTP invocation keeps running while the client waits (waitUntil work is cut after ~30 s)
       return json(await runFeed(env, f, { force: url.searchParams.get('force') === '1' }));
     }

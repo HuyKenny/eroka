@@ -9,20 +9,23 @@ export interface FeedDef {
   format: 'google' | 'heureka';
   deeplink: string;
   tracking: string;
+  /** false = feed not imported and its offers hidden (finalizeDay). Re-enable = set true + deploy. */
+  enabled?: boolean;
 }
 
 export const FEEDS: FeedDef[] = [
   { id: 1, name: 'Desirel', domain: 'desirel.cz', format: 'google', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
   { id: 2, name: 'DeepLove', domain: 'deeplove.cz', format: 'heureka', deeplink: 'https://ehub.cz/system/scripts/click.php?a_aid=052443b7&a_bid=a815cacb&desturl=', tracking: '' },
   { id: 3, name: 'SexíčekShop', domain: 'sexicekshop.cz', format: 'google', deeplink: 'https://ehub.cz/system/scripts/click.php?a_aid=052443b7&a_bid=253967b7&desturl=', tracking: '' },
-  { id: 4, name: 'Benu', domain: 'benu.cz', format: 'google', deeplink: '', tracking: '' },
+  // Benu + Krása: Affiliateport feed token expired (HTTP 401, 26. 10. 2026) — off until Kenny supplies a new feed
+  { id: 4, name: 'Benu', domain: 'benu.cz', format: 'google', deeplink: '', tracking: '', enabled: false },
   { id: 5, name: 'LékárnaAVE', domain: 'lekarnaave.cz', format: 'google', deeplink: 'https://ehub.cz/system/scripts/click.php?a_aid=052443b7&a_bid=221d8c10&desturl=', tracking: '' },
   { id: 6, name: 'RůžovýSlon', domain: 'ruzovyslon.cz', format: 'google', deeplink: '', tracking: 'a_box=9pwxgh4w&a_ch=eroka' },
   { id: 7, name: 'LovesexShop', domain: 'lovesexshop.cz', format: 'google', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
   { id: 8, name: 'Vibratory.net', domain: 'vibratory.net', format: 'heureka', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
   { id: 9, name: 'Flagranti', domain: 'flagranti.cz', format: 'heureka', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
   { id: 10, name: 'Dialekarna', domain: 'dialekarna.cz', format: 'heureka', deeplink: 'https://ehub.cz/system/scripts/click.php?a_aid=052443b7&a_bid=d90f8294&desturl=', tracking: '' },
-  { id: 11, name: 'Krása', domain: 'krasa.cz', format: 'heureka', deeplink: '', tracking: '' },
+  { id: 11, name: 'Krása', domain: 'krasa.cz', format: 'heureka', deeplink: '', tracking: '', enabled: false },
   { id: 12, name: 'Sexshop', domain: 'sexshop.cz', format: 'google', deeplink: '', tracking: 'a_box=rbrcvpst&a_ch=eroka' },
   { id: 13, name: 'Intimfitness', domain: 'intimfitness.cz', format: 'heureka', deeplink: '', tracking: 'a_box=rbrcvpst' },
   { id: 14, name: 'ErosStar.cz', domain: 'erosstar.cz', format: 'google', deeplink: '', tracking: 'id=13929' },

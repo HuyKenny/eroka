@@ -178,13 +178,13 @@ export async function nextDueFeed(db: D1Database): Promise<FeedDef | null> {
   const rows = (await db.prepare('SELECT feed, last_attempt_at FROM feed_state').all<{ feed: string; last_attempt_at: string | null }>()).results;
   const by = new Map(rows.map((r) => [r.feed, r.last_attempt_at]));
   const cutoff = new Date(Date.now() - 20 * 3600_000).toISOString().slice(0, 19).replace('T', ' ');
-  const due = FEEDS.filter((f) => { const a = by.get(feedKey(f)); return !a || a < cutoff; });
+  const due = FEEDS.filter((f) => { const a = by.get(feedKey(f)); return f.enabled !== false && (!a || a < cutoff); });
   due.sort((a, b) => (by.get(feedKey(a)) ?? '').localeCompare(by.get(feedKey(b)) ?? ''));
   return due[0] ?? null;
 }
 
-/** Once per day after the feeds: deactivate offers of feeds that have not succeeded for STALE_DAYS (expired token,
- *  dead feed), record the day's minimum price per product, rebuild sitemaps and bump data_version (page cache). */
+/** Once per day after the feeds: deactivate offers of switched-off feeds and of feeds that have not succeeded for
+ *  STALE_DAYS (expired token, dead feed; CJ offers have no feed_state row and stay — Kenny 26. 10.), record the day's minimum price per product, rebuild sitemaps and bump data_version (page cache). */
 export async function finalizeDay(env: Env): Promise<Record<string, unknown>> {
   const db = env.DB;
   const day = today();
@@ -193,6 +193,8 @@ export async function finalizeDay(env: Env): Promise<Record<string, unknown>> {
   const staleDays = Number(env.STALE_DAYS ?? 7);
   const cutoff = new Date(Date.now() - staleDays * 86400_000).toISOString().slice(0, 19).replace('T', ' ');
   const stale = (await db.prepare('SELECT feed FROM feed_state WHERE COALESCE(last_success_at, created_at) < ?').bind(cutoff).all<{ feed: string }>()).results.map((r) => r.feed);
+  // switched-off feeds (feeds.ts enabled: false) are hidden right away
+  for (const f of FEEDS) if (f.enabled === false && !stale.includes(feedKey(f))) stale.push(feedKey(f));
   let staleOffers = 0;
   for (const feed of stale) {
     const ids = (await db.prepare('SELECT id, product_id FROM offers WHERE feed = ? AND active = 1').bind(feed).all<{ id: number; product_id: number }>()).results;
