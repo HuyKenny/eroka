@@ -4,7 +4,7 @@
 import Ik from './Ik.astro';
 import type { Card } from '../lib/db';
 import { cena, nabidek, decode } from '../lib/format';
-import { imgUrl, imgSrcset, validImage } from '../lib/img';
+import { imgUrl, validImage } from '../lib/img';
 
 interface Props { p: Card; cat?: { slug: string; name: string } | undefined; idx?: number }
 const { p, cat, idx = 99 } = Astro.props;
@@ -16,7 +16,7 @@ const href = `/${p.slug}/`;
 	<article class="erk-karta">
 		<div class="erk-karta__obr">
 			{img ? (
-				<img src={imgUrl(img, 300)} srcset={imgSrcset(img, 300)} alt={name} width="300" height="300" loading={idx < 4 ? 'eager' : 'lazy'} fetchpriority={idx < 2 ? 'high' : undefined} decoding="async" />
+				<img src={imgUrl(img)} alt={name} width="300" height="300" loading={idx < 4 ? 'eager' : 'lazy'} fetchpriority={idx < 2 ? 'high' : undefined} decoding="async" />
 			) : <Ik id="vibr" size={80} />}
 		</div>
 		{cat && <div class="erk-karta__kat"><a href={`/${cat.slug}/`} style="position:relative;z-index:2">{decode(cat.name)}</a></div>}

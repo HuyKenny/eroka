@@ -109,6 +109,9 @@ def num(v):
 
 def target_url(feed, offer):
     url = (offer.get("url") or offer.get("aff_url") or offer.get("orig_url") or "").strip()
+    # Affiliateport feeds (Benu, Krása) deliver the click URL HTML-escaped once more: "?o=778&amp;a=5453&amp;deep_link=…"
+    # — sent as a Location header the partner id would arrive as "amp;a" and the click would not be attributed.
+    url = url.replace("&amp;", "&")
     cfg = FEEDS["feeds"].get(feed) or {}
     tp = re.sub(r"\s+", "", cfg.get("tracking_params") or "")
     if tp and tp not in url:

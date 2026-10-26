@@ -26,7 +26,7 @@ const offersHeading = d.offersHeading || `<h3>Kde koupit ${esc(v.name)} nejlevnÄ
 		<Drobky items={v.crumbs} />
 		<section class="erk-prod">
 			<div class="erk-prod__obr">
-				{v.img ? <img src={imgUrl(v.img, 600, 80)} srcset={`${imgUrl(v.img, 600, 80)} 1x, ${imgUrl(v.img, 1000, 78)} 2x`} alt={v.name} width="500" height="500" fetchpriority="high" decoding="async" /> : <Ik id="vibr" size={140} />}
+				{v.img ? <img src={imgUrl(v.img)} alt={v.name} width="500" height="500" fetchpriority="high" decoding="async" /> : <Ik id="vibr" size={140} />}
 			</div>
 			<div class="erk-prod__info">
 				<div class="erk-prod__hl">
