@@ -13,14 +13,18 @@ case "$target" in
     for f in "$dir"/*.sql; do npx wrangler d1 execute DB --local --persist-to .wrangler/state --file "$f" >/dev/null || { echo "CHYBA $f"; exit 1; }; done ;;
   staging|production)
     if [ "$target" = production ] && [ "${ERK_PRODUCTION_APPROVED:-}" != yes ]; then echo "production needs ERK_PRODUCTION_APPROVED=yes"; exit 2; fi
+    # wrangler auth: global key (credentials/.cloudflare-credentials.env) + eroka account id
+    val() { grep -E "^$2=" "/home/kenny/ai/credentials/$1" | head -1 | cut -d= -f2- | tr -d "\"'"; }
+    export CLOUDFLARE_EMAIL="$(val .cloudflare-credentials.env CF_EMAIL)" CLOUDFLARE_API_KEY="$(val .cloudflare-credentials.env CF_GLOBAL_API_KEY)" CLOUDFLARE_ACCOUNT_ID="$(val .eroka-credentials.env CF_ACCOUNT_ID)"
     for f in "$dir"/*.sql; do
       for try in 1 2 3; do
-        CLOUDFLARE_ENV=$target npx wrangler d1 execute DB --env "$target" --remote --yes --file "$f" >/dev/null 2>&1 && break
+        npx wrangler d1 execute DB --env "$target" --remote --yes --file "$f" >/dev/null 2>&1 && break
         [ $try = 3 ] && { echo "CHYBA $f"; exit 1; }; sleep 5
       done
       echo "ok $f"
     done ;;
   *) echo "neznámý cíl $target"; exit 2 ;;
 esac
-npx wrangler d1 execute DB ${target/local/--local} $( [ "$target" = local ] && echo "--persist-to .wrangler/state" || echo "--env $target --remote" ) --json \
+if [ "$target" = local ]; then where=(--local --persist-to .wrangler/state); else where=(--env "$target" --remote); fi
+npx wrangler d1 execute DB "${where[@]}" --json \
   --command "SELECT (SELECT COUNT(*) FROM products) products, (SELECT COUNT(*) FROM offers) offers, (SELECT COUNT(*) FROM posts) posts" | grep -A5 '"results"'
