@@ -9,7 +9,7 @@ import PostKarta from '../PostKarta.astro';
 import type { homeView } from '../../lib/views';
 import { cislo, decode } from '../../lib/format';
 import { picture } from '../../lib/img';
-import { shopIcon, shopName } from '../../lib/shops';
+import { shopIcon, shopLogo, shopName } from '../../lib/shops';
 import { BASE, OG_HOME } from '../../lib/site';
 import { robots } from '../../lib/seo';
 
@@ -106,7 +106,12 @@ const jsonLd = [
 		{shops.length > 0 && (
 			<section class="sek" aria-labelledby="h-ob">
 				<div class="sek__h"><h2 id="h-ob">Obchody, které porovnáváme</h2></div>
-				<ul class="ob">{shops.map(([d, n]) => <li><img src={shopIcon(d)} alt="" width="24" height="24" loading="lazy" decoding="async" /><div><b>{shopName(d)}</b><small>{cislo(n)} produktů</small></div></li>)}</ul>
+				<ul class="ob">{shops.map(([d, n]) => { const l = shopLogo(d); return (
+					<li>
+						<span class="ob__l">{l ? <img src={l.src} alt={shopName(d)} width={l.w} height={l.h} loading="lazy" decoding="async" /> : <><img src={shopIcon(d)} alt="" width="24" height="24" loading="lazy" decoding="async" /><b>{shopName(d)}</b></>}</span>
+						<small>{cislo(n)} produktů</small>
+					</li>
+				); })}</ul>
 			</section>
 		)}
 
