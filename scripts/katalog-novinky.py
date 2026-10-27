@@ -109,8 +109,8 @@ def clean_name(titles):
                 break
         base = " ".join(pre).rstrip(" -–,/(")
         if len(base) >= max(8, len(t[0]) * 0.45):
-            return VARIANT_TAIL.sub("", base).strip(" -–,/(")
-    return VARIANT_TAIL.sub("", t[0]).strip(" -–,/(") or t[0]
+            return VARIANT_TAIL.sub("", base).strip(" -–,/(:;")
+    return VARIANT_TAIL.sub("", t[0]).strip(" -–,/(:;") or t[0].rstrip(":;")
 
 
 FSTOP = {"eroticke", "eroticky", "eroticka", "damske", "panske", "sexy", "a", "na", "pro", "se", "s", "z", "do", "v", "ks", "the", "with", "and", "for"}
