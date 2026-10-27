@@ -50,7 +50,8 @@ export function texturize(s: string): string {
   return s
     .replace(/(\d)''/g, '$1“').replace(/(\d)"/g, '$1″').replace(/(\d)x(\d)/g, '$1×$2')
     .replace(/(^|[\s(\[])"(?=\S)/g, '$1„').replace(/"/g, '“')
-    .replace(/(\w)'(\w)/g, '$1’$2')
+    .replace(/(\d)'(?=\s|$)/g, '$1′').replace(/(\d)'/g, '$1’')
+    .replace(/(\w)'(\w)/g, '$1’$2').replace(/(\w)'(?=\s)/g, '$1‘')
     .replace(/ - /g, ' – ').replace(/ -- /g, ' — ')
     .replace(/\.\.\./g, '…');
 }
