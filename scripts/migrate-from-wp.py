@@ -143,9 +143,9 @@ def stock(o):
     return 0
 
 
-def prune_data():
-    """Parse weby/eroka/mu-plugin/eroka-prune-data.php (PHP array of ids)."""
-    p = ROOT / "weby/eroka/mu-plugin/eroka-prune-data.php"
+def prune_data(exp):
+    """Parse eroka-prune-data.php (PHP array of ids; the WP mu-plugin, kept in the export dir since WP was deleted 27. 10.)."""
+    p = exp / "eroka-prune-data.php"
     t = p.read_text(encoding="utf-8") if p.exists() else ""
 
     def ids(key):
@@ -159,7 +159,7 @@ def main():
     exp, out = Path(sys.argv[1]), sys.argv[2]
     W = Writer(out)
     rep = defaultdict(int)
-    thin, dead, enforce = prune_data()
+    thin, dead, enforce = prune_data(exp)
     if not enforce:
         thin, dead = set(), set()
 

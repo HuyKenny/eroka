@@ -11,7 +11,7 @@
 
 - Canonical absolutní na `https://eroka.cz`, stránkování má vlastní canonical + prev/next (jako Rank Math).
 - Robots: `follow, index, max-snippet:-1, …`; noindex: 115 tenkých produktů + mrtvé/prázdné kategorie
-  (`weby/eroka/mu-plugin/eroka-prune-data.php` → `products.noindex`, `categories.noindex`).
+  (`eroka-prune-data.php` z WP mu-pluginu, uložený v `backups/eroka-wp-export-2026-10-26/` → `products.noindex`, `categories.noindex`).
 - JSON-LD: Rank Math graf (Place, AdultEntertainment/Organization, WebSite) + ItemPage/Product/Offer, CollectionPage,
   WebPage/BlogPosting/Person; jeden BreadcrumbList; ItemList (20 produktů) na výpisech; FAQPage + SearchAction na úvodu.
   Oprava proti WP: `Product.name` = název produktu (WP tam dával celý title).
