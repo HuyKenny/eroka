@@ -95,6 +95,7 @@ export const RULES: Rule[] = [
       ...(f.key && f.key !== 'brand' ? [{ within: [f.base], param: { key: f.key, values: [f.value!] } }] : []),
       ...(f.key === 'brand' ? [{ within: [f.base], brand: [f.value!] }] : []),
       ...(f.re ? [{ within: [f.base], name: f.re }] : []),
+      ...(f.also ? [f.also] : []),
     ],
   })),
 ];
