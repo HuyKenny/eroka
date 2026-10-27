@@ -53,7 +53,10 @@ export function descFrom(custom: string, html: string, v: Vars = {}): string {
   return custom ? rmVars(custom, { ...v, excerpt: stripTags(html) }) : stripTags(html);
 }
 
-/** Rank Math robots meta (index,follow + the max-* defaults the site uses). */
-export function robots(noindex: boolean): string[] {
-  return noindex ? ['follow', 'noindex'] : ['follow', 'index', 'max-snippet:-1', 'max-video-preview:-1', 'max-image-preview:large'];
+/** Rank Math robots meta: follow/nofollow, index/noindex, extra flags from the object (noimageindex …), max-* defaults. */
+export function robots(noindex: boolean, extra = ''): string[] {
+  const flags = extra.split(',').map((x) => x.trim()).filter((x) => x && !['index', 'noindex', 'follow', 'nofollow'].includes(x));
+  const nofollow = extra.split(',').map((x) => x.trim()).includes('nofollow');
+  const head = [nofollow ? 'nofollow' : 'follow', noindex ? 'noindex' : 'index', ...flags];
+  return noindex ? head : [...head, 'max-snippet:-1', 'max-video-preview:-1', 'max-image-preview:large'];
 }

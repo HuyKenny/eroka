@@ -2,6 +2,7 @@
 """SEO parity: live eroka.cz (WordPress, fetched from the WEDOS origin) vs a new environment.
 
     python3 scripts/seo-parity.py <base-url> [--products N] [--brands N] [--paged N] [--out report.json]
+    python3 scripts/seo-parity.py <base-url> --only report.json      # re-check only the URLs that differed last time
 
 Hard fields (count toward parity): status, redirect target, canonical path, robots, title, description, H1.
 Soft fields (reported, expected to differ by design): H2 count, JSON-LD types.
@@ -72,8 +73,9 @@ def meta(body):
 HARD = ['title', 'description', 'canonical', 'robots', 'h1']
 SOFT = ['h2', 'ld']
 
-# URL sample from the LIVE sitemaps
-idx = fetch('https://eroka.cz/sitemap_index.xml', live=True)[2]
+only = sys.argv[sys.argv.index('--only') + 1] if '--only' in sys.argv else None
+# URL sample from the LIVE sitemaps (or the failures of a previous report)
+idx = '' if only else fetch('https://eroka.cz/sitemap_index.xml', live=True)[2]
 files = re.findall(r'<loc>([^<]+)</loc>', idx)
 by = {}
 for f in files:
@@ -89,6 +91,8 @@ sample = (pick('post-sitemap', 999) + pick('page-sitemap', 99) + pick('category-
           + ['/blog/page/2/', '/znacka/satisfyer/page/2/', '/neexistuje-xyz/', '/kategorie-produktu/vibratory/', '/brandstore/satisfyer/',
              '/satisfyer-pro-2-next-generation/', '/feed/', '/domov/', '/vibratory/page/1/'])
 sample = [p for p in dict.fromkeys(sample) if p not in ('/produkt/',)]
+if only:
+    sample = [r['path'] for r in json.load(open(only)) if r['diff']]
 print(f'live sitemap files: {len(files)}, URLs: {sum(len(v) for v in by.values())}; checking {len(sample)}', flush=True)
 
 

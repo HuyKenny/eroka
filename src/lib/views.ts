@@ -7,7 +7,7 @@ import {
 } from './db';
 import { BASE, OG_DEFAULT, PER_PAGE, POSTS_PER_PAGE, isoPrague } from './site';
 import { categoryTitle, descFrom, postTitle, productTitle, robots, searchTitle, termTitle } from './seo';
-import { decode, stripTags } from './format';
+import { decode, stripTags, untexturize } from './format';
 import { validImage } from './img';
 import links from '../data/prolinkovani.json';
 
@@ -80,7 +80,7 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
   const magSlugs = (links.magbox as Record<string, string[]>)[cat.slug] ?? links.magbox_default;
   const meta: Meta = {
     title, description: descFrom(cat.seo_desc, cat.description_html, { term: decode(cat.name) }),
-    canonical: url, robots: robots(noindex),
+    ...(noindex ? {} : { canonical: url }), robots: robots(noindex, cat.seo_robots),
     ...(page > 1 ? { prev: abs(pagePath(base, page - 1)) } : {}),
     ...(page < pages ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)],
@@ -106,7 +106,7 @@ export async function brandView(db: D1Database, slug: string, page: number, sp: 
   const title = termTitle(b.name);
   const crumbs: Crumb[] = [{ name: 'Domů', url: '/' }, { name: decode(b.name), url: base }];
   const meta: Meta = {
-    title, description: stripTags(b.description_html), canonical: url, robots: robots(b.noindex === 1),
+    title, description: stripTags(b.description_html), ...(b.noindex ? {} : { canonical: url }), robots: robots(b.noindex === 1),
     ...(page > 1 ? { prev: abs(pagePath(base, page - 1)) } : {}),
     ...(page < pages ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)], adultOnly: true,
@@ -134,7 +134,8 @@ export async function productView(db: D1Database, id: number) {
   const chain = primary ? ancestry(tree, primary.id) : [];
   const url = abs(`/${p.slug}/`);
   const title = productTitle(p.name, p.seo_title);
-  const description = descFrom(p.seo_desc, p.short_html, { title: name });
+  // Rank Math printed the raw short description; the REST export has it texturized (– „“ …)
+  const description = p.seo_desc ? descFrom(p.seo_desc, p.short_html, { title: name }) : untexturize(stripTags(p.short_html));
   const inStock = offers.filter((o) => o.stock !== -1);
   const best: Offer | undefined = (inStock.length ? inStock : offers)[0];
   const prices = offers.map((o) => o.price);
@@ -164,7 +165,7 @@ export async function productView(db: D1Database, id: number) {
     },
   ];
   const meta: Meta = {
-    title, description, canonical: url, robots: robots(p.noindex === 1), ogType: 'product', ogImage: img || OG_DEFAULT, graph,
+    title, description, ...(p.noindex ? {} : { canonical: url }), robots: robots(p.noindex === 1), ogType: 'product', ogImage: img || OG_DEFAULT, graph,
     jsonLd: [breadcrumbLd(crumbs)],
     extraMeta: [
       { property: 'og:updated_time', content: isoPrague(p.updated_at) },
@@ -208,7 +209,7 @@ export async function postView(db: D1Database, id: number) {
   const img = post.image;
   if (post.type === 'page') {
     const meta: Meta = {
-      title, description, canonical: url, robots: robots(post.noindex === 1), ogImage: img || OG_DEFAULT,
+      title, description, ...(post.noindex ? {} : { canonical: url }), robots: robots(post.noindex === 1, post.seo_robots), ogImage: img || OG_DEFAULT,
       graph: [{ '@type': 'WebPage', '@id': url + '#webpage', url, name: title, datePublished: isoPrague(post.published_at), dateModified: isoPrague(post.modified_at), isPartOf: { '@id': BASE + '/#website' }, inLanguage: 'cs' }],
       jsonLd: [],
     };
@@ -227,7 +228,7 @@ export async function postView(db: D1Database, id: number) {
     },
   ];
   const meta: Meta = {
-    title, description, canonical: url, robots: robots(post.noindex === 1), ogImage: img || OG_DEFAULT, graph, jsonLd: [],
+    title, description, ...(post.noindex ? {} : { canonical: url }), robots: robots(post.noindex === 1, post.seo_robots), ogImage: img || OG_DEFAULT, graph, jsonLd: [],
     extraMeta: [{ property: 'article:published_time', content: isoPrague(post.published_at) }, { property: 'article:modified_time', content: isoPrague(post.modified_at) }],
   };
   // "Kde vybrat a koupit za nejlepší cenu" (eroka_article_cat_targets): explicit map, else reverse of the magbox map

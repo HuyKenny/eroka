@@ -43,3 +43,17 @@ export function excerpt(html: string | null | undefined, max = 160): string {
   const i = cut.lastIndexOf(' ');
   return (i > 80 ? cut.slice(0, i) : t.slice(0, max)).replace(/[\s,;:–-]+$/, '');
 }
+
+/** Subset of WordPress wptexturize() for displayed titles (Czech quotes „…“, en dash, ellipsis, apostrophe). Rank Math
+ *  titles/descriptions use the raw text, H1 and listings the texturized one — both are kept so parity holds. */
+export function texturize(s: string): string {
+  return s
+    .replace(/(^|[\s(\[])"(?=\S)/g, '$1„').replace(/"/g, '“')
+    .replace(/(\w)'(\w)/g, '$1’$2')
+    .replace(/ - /g, ' – ').replace(/ -- /g, ' — ')
+    .replace(/\.\.\./g, '…');
+}
+/** Inverse for text that only exists texturized (WooCommerce REST short_description) where Rank Math printed the raw one. */
+export function untexturize(s: string): string {
+  return s.replace(/ – /g, ' - ').replace(/ — /g, ' -- ').replace(/[„“”]/g, '"').replace(/[‚‘’]/g, "'").replace(/…/g, '...');
+}

@@ -3,12 +3,12 @@
 // more offers → "Porovnat N nabídek" on the product page (same rule as the WordPress v2 theme).
 import Ik from './Ik.astro';
 import type { Card } from '../lib/db';
-import { cena, nabidek, decode } from '../lib/format';
+import { cena, nabidek, decode, texturize } from '../lib/format';
 import { imgUrl, validImage } from '../lib/img';
 
 interface Props { p: Card; cat?: { slug: string; name: string } | undefined; idx?: number }
 const { p, cat, idx = 99 } = Astro.props;
-const name = decode(p.name);
+const name = texturize(decode(p.name));
 const img = validImage(p.image);
 const href = `/${p.slug}/`;
 ---

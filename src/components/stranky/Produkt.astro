@@ -8,7 +8,7 @@ import Nabidky from '../Nabidky.astro';
 import GrafCen from '../GrafCen.astro';
 import Mrizka from '../Mrizka.astro';
 import { splitDescription, type productView } from '../../lib/views';
-import { cena, cislo, decode, esc, eshopu } from '../../lib/format';
+import { cena, cislo, decode, esc, eshopu, texturize } from '../../lib/format';
 import { imgUrl } from '../../lib/img';
 
 interface Props { v: NonNullable<Awaited<ReturnType<typeof productView>>> }
@@ -30,7 +30,7 @@ const offersHeading = d.offersHeading || `<h3>Kde koupit ${esc(v.name)} nejlevnƒ
 			</div>
 			<div class="erk-prod__info">
 				<div class="erk-prod__hl">
-					<h1>{v.name}</h1>
+					<h1>{texturize(v.name)}</h1>
 					<p class="erk-prod__meta">
 						{v.primary && <a href={`/${v.primary.slug}/`}>{decode(v.primary.name)}</a>}
 						{v.brand && v.brand.slug !== 'ostatni' && <span>Znaƒçka: <a href={`/znacka/${v.brand.slug}/`}>{decode(v.brand.name)}</a></span>}

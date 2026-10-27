@@ -23,7 +23,7 @@ export interface Brand { id: number; slug: string; name: string; description_htm
 export interface Post {
   id: number; type: 'post' | 'page'; slug: string; title: string; content_html: string; excerpt: string;
   published_at: string; modified_at: string; cat_id: number; image: string; image_card: string; image_alt: string; image_w: number; image_h: number;
-  noindex: number; seo_title: string; seo_desc: string;
+  noindex: number; seo_title: string; seo_desc: string; seo_robots: string;
 }
 export type PostCard = Pick<Post, 'id' | 'slug' | 'title' | 'excerpt' | 'published_at' | 'image' | 'image_card' | 'image_alt' | 'image_w' | 'image_h' | 'cat_id'>;
 export interface PostCat { id: number; slug: string; name: string; description: string; count: number }

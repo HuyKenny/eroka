@@ -335,6 +335,10 @@ def main():
     media = {m["id"]: m for m in nd(exp / "media.ndjson")}
     pcats = {c["id"]: c for c in nd(exp / "postcats.ndjson")}
     post_rows = []
+    # Rank Math generated post descriptions from content in ways the export cannot reproduce for every post
+    # (first paragraph, sometimes a later one) → the live descriptions are kept as a snapshot (what Google knows)
+    lp = exp / "live-post-descriptions.json"
+    live_desc = json.load(open(lp)) if lp.exists() else {}
     for typ, fn in (("post", "posts.ndjson"), ("page", "pages.ndjson")):
         for p in nd(exp / fn):
             if p.get("status") != "publish":
@@ -350,7 +354,7 @@ def main():
                               p["content"]["rendered"], strip_tags(p["excerpt"].get("raw") or p["excerpt"]["rendered"]),
                               p["date"], p["modified"], (p.get("categories") or [0])[0] if typ == "post" else 0,
                               m.get("source_url", ""), card, m.get("alt_text", ""), int(md.get("width") or 0), int(md.get("height") or 0),
-                              "", 1 if "noindex" in robots else 0, rm.get("rank_math_title", ""), rm.get("rank_math_description", ""), "publish"])
+                              "", 1 if "noindex" in robots else 0, rm.get("rank_math_title", ""), rm.get("rank_math_description", "") or (live_desc.get(p["slug"]) or "").strip(), "publish", robots])
     rep["posts"] = sum(1 for r in post_rows if r[1] == "post")
     rep["pages"] = sum(1 for r in post_rows if r[1] == "page")
     pc_rows = [[cid, c["slug"], html.unescape(c["name"]), c.get("description") or "", int(c.get("count") or 0)] for cid, c in pcats.items()]
@@ -433,7 +437,7 @@ def main():
     W.table("offers", ["id", "product_id", "feed", "unique_id", "title", "domain", "price", "price_old", "currency", "target_url", "orig_url", "stock", "ean", "img", "go_slug", "updated_at", "active", "content_hash"], offer_rows)
     W.table("go_legacy", ["slug", "product_id"], gl_rows)
     W.table("price_history", ["product_id", "day", "min_price"], ph_rows)
-    W.table("posts", ["id", "type", "slug", "title", "content_html", "excerpt", "published_at", "modified_at", "cat_id", "image", "image_card", "image_alt", "image_w", "image_h", "author", "noindex", "seo_title", "seo_desc", "status"], post_rows)
+    W.table("posts", ["id", "type", "slug", "title", "content_html", "excerpt", "published_at", "modified_at", "cat_id", "image", "image_card", "image_alt", "image_w", "image_h", "author", "noindex", "seo_title", "seo_desc", "status", "seo_robots"], post_rows)
     W.table("post_categories", ["id", "slug", "name", "description", "count"], pc_rows)
     W.table("comments", ["id", "post_id", "author", "created_at", "content_html"], com_rows)
     W.table("slugs", ["slug", "kind", "ref_id"], [[s, k, i] for s, (k, i) in slugs.items()])

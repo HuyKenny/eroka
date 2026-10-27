@@ -6,7 +6,7 @@ import Drobky from '../Drobky.astro';
 import PostKarta from '../PostKarta.astro';
 import PartnerBox from '../PartnerBox.astro';
 import type { postView } from '../../lib/views';
-import { datum, decode } from '../../lib/format';
+import { datum, decode, texturize } from '../../lib/format';
 
 interface Props { v: NonNullable<Awaited<ReturnType<typeof postView>>> }
 const { v } = Astro.props;
@@ -20,7 +20,7 @@ const crumbs = isPost ? [{ name: 'Domů', url: '/' }, { name: 'Magazín', url: '
 		<Drobky items={crumbs} />
 		<article class={isPost ? 'erk-clanek' : 'erk-stranka'}>
 			{isPost && v.cat && <a class="erk-clanek__kat" href={`/${v.cat.slug}/`}>{decode(v.cat.name)}</a>}
-			<h1>{decode(p.title)}</h1>
+			<h1>{texturize(decode(p.title))}</h1>
 			{isPost && <p class="erk-clanek__meta">Ester · <time datetime={p.published_at.slice(0, 10)}>{datum(p.published_at)}</time>{p.modified_at.slice(0, 10) > p.published_at.slice(0, 10) && <> · aktualizováno <time datetime={p.modified_at.slice(0, 10)}>{datum(p.modified_at)}</time></>}</p>}
 			{isPost && p.image && <figure class="erk-clanek__foto"><img src={p.image} alt={p.image_alt} width={p.image_w || 1400} height={p.image_h || 788} fetchpriority="high" decoding="async" /></figure>}
 			<div class="erk-obsah" set:html={p.content_html} />
