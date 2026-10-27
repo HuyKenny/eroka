@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-"""SEO parity: live eroka.cz (WordPress, fetched from the WEDOS origin) vs a new environment.
+"""SEO parity: a reference (default: production on workers.dev = what eroka.cz serves) vs a new environment.
+Until 27. 10. 2026 the reference was the WordPress origin; WordPress is deleted, use --ref for another reference.
 
     python3 scripts/seo-parity.py <base-url> [--products N] [--brands N] [--paged N] [--out report.json]
     python3 scripts/seo-parity.py <base-url> --only report.json      # re-check only the URLs that differed last time
@@ -23,7 +24,7 @@ base = sys.argv[1].rstrip('/')
 arg = lambda k, d: int(sys.argv[sys.argv.index(k) + 1]) if k in sys.argv else d
 N_PRODUCTS, N_BRANDS, N_PAGED = arg('--products', 600), arg('--brands', 150), arg('--paged', 40)
 out = sys.argv[sys.argv.index('--out') + 1] if '--out' in sys.argv else None
-ORIGIN = '46.28.105.127'
+REF = (sys.argv[sys.argv.index('--ref') + 1] if '--ref' in sys.argv else 'https://eroka.huy-kenny.workers.dev').rstrip('/')
 
 
 def creds(f):
@@ -42,8 +43,8 @@ UA = 'Mozilla/5.0 (X11; Linux aarch64) AppleWebKit/537.36 Chrome/141.0 Safari/53
 
 def fetch(url, access=False, live=False):
     cmd = ['curl', '-s', '-m', '90', '-A', UA, '-o', '-', '-w', '\n__STATUS__%{http_code} %{redirect_url}', '--max-redirs', '0', url]
-    if live:
-        cmd[1:1] = ['--resolve', f'eroka.cz:443:{ORIGIN}']
+    if live and url.startswith('https://eroka.cz'):
+        cmd[-1] = REF + url[len('https://eroka.cz'):]
     if access:
         cmd[1:1] = ['-H', 'CF-Access-Client-Id: ' + sk['ACCESS_CLIENT_ID_STAGING'], '-H', 'CF-Access-Client-Secret: ' + sk['ACCESS_CLIENT_SECRET_STAGING']]
     for attempt in range(4):

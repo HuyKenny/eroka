@@ -43,7 +43,8 @@ p { margin: 0 0 1em; }
 .lnk:hover { color: var(--c-d); }
 
 /* header */
-.hl { position: sticky; top: 0; z-index: 50; background: #fff; border-bottom: 1px solid var(--line); }
+.hl { position: relative; z-index: 50; background: #fff; border-bottom: 1px solid var(--line); }
+@media (min-width: 900px) { .hl { position: sticky; top: 0; } }
 .hl__in { display: grid; grid-template-columns: auto 1fr auto; align-items: center; gap: 10px 14px; padding-top: 10px; padding-bottom: 10px; }
 .logo { display: inline-flex; color: var(--ink); padding: 6px 0; }
 .logo svg { width: 92px; height: auto; }

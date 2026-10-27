@@ -1,5 +1,9 @@
 # Deploy a přepnutí
 
+## Worker eroka-img (fotky)
+`npx wrangler deploy -c workers/img/wrangler.jsonc` (bez routy, pro staging/service binding) a v produkci
+`--env production` (přidá routu `eroka.cz/img/*`). Musí existovat dřív než web (service binding `IMG`).
+
 ## Staging
 `npx tsx scripts/deploy.ts --env staging [--secrets] [--no-import]` — záložka D1 Time Travel (do `backups/`),
 migrace, import Worker, build (`CLOUDFLARE_ENV=staging`, `BUILD_ID=<git sha>`), kontrola tajemství, deploy, smoke test

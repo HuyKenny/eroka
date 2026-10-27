@@ -28,3 +28,20 @@ D1 eroka-production / eroka-staging (schéma migrations/0001, 0002)
 - Obrázky produktů se hotlinkují jako na WP: proxy wsrv.nl erotické domény odmítá; Růžový slon má variantu
   `/product/detail/` (≤1000 px). Další krok by byly Cloudflare Image Transformations (placené).
 - Uploads článků (497 souborů, 58 MB) jsou statické assety ve `public/wp-content/uploads/` (stejné URL jako na WP).
+
+## Redesign „srovnávač“ (27. 10. 2026)
+- **Vzhled:** bílá + neutrální šedé, jediná barva višňová `#B0103A`, systémové písmo (žádné webfonty), styl v jednom
+  souboru `src/styles/app.css`, logo = monolinkový wordmark `src/data/logo.svg`, ikony v externím sprite `public/a/i1.svg`
+  (při změně ikon přejmenovat soubor, cache je immutable), favicony a OG obrázek v `public/a/`.
+- **Fotky (nic se neukládá):** `src/lib/img.ts` → wsrv.nl pro obchody, které přijímá; pro Růžového slona, ErosStar,
+  Vibratory.net a Sexshop.cz (wsrv.nl je blokuje) Worker `eroka-img` (`workers/img`, WASM jsquash, `/img/<w>/<base64url>.webp`,
+  jen edge cache + prohlížeč). Web ho volá přes service binding `IMG`, produkce navíc routou `eroka.cz/img/*`.
+  Seznam blokovaných hostů je ve dvou souborech (`img.ts` OWN a `workers/img` HOSTS) — držet stejný.
+- **Data z feedů (migrace 0004):** `offers.delivery_price`, `offers.extra` (kanonické parametry + až 3 fotky),
+  `product_params` (8 klíčů, `workers/import/src/params.ts`), `products.images/disc_pct/in_stock/pop`, řadicí klíče
+  v `cat_products` (`min_price`, `pop`, `disc` + indexy). Sleva = jen stará cena obchodu (historie cen dávala falešné −80 %).
+- **Noční předpočet** (`workers/import/src/facets.ts`, ve `finalizeDay`): fasety `f:<kategorie>` / `fb:<značka>`,
+  bloky homepage `home`, fotka ke kategorii `cats:img`. Ručně: `POST /facets`, doplnění produktů `POST /recompute?offset=&limit=`.
+- **Filtry** (`src/lib/filters.ts`): `?orderby= &min_price= &max_price= &znacka= &obchod= &skladem=1 &sleva=1 &kat= &p_<klíč>=`;
+  filtrovaná/přeřazená stránka = `noindex, follow` bez canonicalu. Výchozí řazení = oblíbenost.
+- **Našeptávač** `GET /api/suggest?q=` (kategorie a značky z paměti, produkty z FTS5), cache 10 min.
