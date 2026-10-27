@@ -11,6 +11,7 @@
   // the Růžový slon feed (~12k items) is CPU heavy to parse
   "limits": { "cpu_ms": 300000 },
   "d1_databases": [{ "binding": "DB", "database_name": "eroka-local", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "../../migrations" }],
+  "r2_buckets": [{ "binding": "FEED_MIRROR", "bucket_name": "eroka-feeds" }],
   "triggers": { "crons": [] },
   "vars": {
     "ALLOWED_FEED_HOSTS": "affiliateport.scaletrk.com,feeds.mergado.com,flagranti.cz,storage.feedyio.com,store.virtshop.prod.inspishop.cz,vibratory.net,www.deeplove.cz,www.dialekarna.cz,www.erosstar.cz,www.lekarnaave.cz,www.ruzovyslon.cz,www.sexicekshop.cz,www.sexshop.cz,www.sexshop51.cz",
@@ -27,6 +28,7 @@
       "triggers": { "crons": [] },
       "limits": { "cpu_ms": 300000 },
       "d1_databases": [{ "binding": "DB", "database_name": "eroka-staging", "database_id": "e70c0f9c-f877-4c4d-b2be-440c9e594633", "migrations_dir": "../../migrations" }],
+      "r2_buckets": [{ "binding": "FEED_MIRROR", "bucket_name": "eroka-feeds" }],
       "vars": {
         "ALLOWED_FEED_HOSTS": "affiliateport.scaletrk.com,feeds.mergado.com,flagranti.cz,storage.feedyio.com,store.virtshop.prod.inspishop.cz,vibratory.net,www.deeplove.cz,www.dialekarna.cz,www.erosstar.cz,www.lekarnaave.cz,www.ruzovyslon.cz,www.sexicekshop.cz,www.sexshop.cz,www.sexshop51.cz",
         "MAX_DROP_PCT": "40",
@@ -41,6 +43,7 @@
       "triggers": { "crons": ["*/10 1-5 * * *"] },
       "limits": { "cpu_ms": 300000 },
       "d1_databases": [{ "binding": "DB", "database_name": "eroka-production", "database_id": "f62bfa2e-1e2c-4a3f-b100-f88220c25592", "migrations_dir": "../../migrations" }],
+      "r2_buckets": [{ "binding": "FEED_MIRROR", "bucket_name": "eroka-feeds" }],
       "vars": {
         "ALLOWED_FEED_HOSTS": "affiliateport.scaletrk.com,feeds.mergado.com,flagranti.cz,storage.feedyio.com,store.virtshop.prod.inspishop.cz,vibratory.net,www.deeplove.cz,www.dialekarna.cz,www.erosstar.cz,www.lekarnaave.cz,www.ruzovyslon.cz,www.sexicekshop.cz,www.sexshop.cz,www.sexshop51.cz",
         "MAX_DROP_PCT": "40",

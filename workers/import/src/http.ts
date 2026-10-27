@@ -59,3 +59,16 @@ async function once(start: string, allowed: string | undefined, cond: { etag?: s
   }
   throw new FeedFetchError('too many redirects', false);
 }
+
+/** Feed mirrored to R2 by the Pi (bin/eroka-feed-mirror.py) for hosts that refuse Cloudflare's egress (Affiliateport
+ *  answers Workers with 403). `r2:<key>` secrets point here; the R2 etag plays the conditional request. */
+export async function openMirror(bucket: R2Bucket | undefined, key: string, etag: string | null | undefined, maxAgeH = 36): Promise<OpenResult> {
+  if (!bucket) throw new FeedFetchError('FEED_MIRROR binding missing', false);
+  const head = await bucket.head(key);
+  if (!head) throw new FeedFetchError('mirror object missing', false);
+  if (Date.now() - head.uploaded.getTime() > maxAgeH * 3600_000) throw new FeedFetchError(`mirror older than ${maxAgeH} h`, false);
+  if (etag && head.etag === etag) return { status: 'not_modified' };
+  const obj = await bucket.get(key);
+  if (!obj) throw new FeedFetchError('mirror object missing', false);
+  return { status: 'ok', body: obj.body, etag: obj.etag, lastModified: obj.uploaded.toUTCString() };
+}

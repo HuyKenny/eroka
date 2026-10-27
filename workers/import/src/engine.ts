@@ -4,7 +4,7 @@
 import { decodeXmlStream, parseXmlItems, XmlError } from './xml/stream';
 import { FEEDS, feedKey, type FeedDef } from './feeds';
 import { itemHash, parseItem, type Item } from './parse';
-import { openFeed, FeedFetchError } from './http';
+import { openFeed, openMirror, FeedFetchError } from './http';
 import { rebuildSitemaps } from '../../../src/lib/sitemap';
 import { mergeParams, type Params } from './params';
 import { rebuildFacets } from './facets';
@@ -15,6 +15,7 @@ export interface Env {
   ALLOWED_FEED_HOSTS?: string;
   MAX_DROP_PCT?: string;
   STALE_DAYS?: string;
+  FEED_MIRROR?: R2Bucket; // feeds the Pi mirrors (FEED_URL_<n> = r2:<key>)
   [k: string]: unknown;   // FEED_URL_<n>
 }
 export interface RunResult { feed: string; status: 'ok' | 'skipped' | 'error' | 'suspicious'; read: number; matched: number; created: number; rekeyed: number; changed: number; deactivated: number; message?: string; ms: number }
@@ -143,7 +144,9 @@ export async function runFeed(env: Env, f: FeedDef, opts: { force?: boolean } = 
 
   let body;
   try {
-    const o = await openFeed(url, env.ALLOWED_FEED_HOSTS, opts.force ? {} : { etag: st?.etag ?? null, lastModified: st?.last_modified ?? null });
+    const o = url.startsWith('r2:')
+      ? await openMirror(env.FEED_MIRROR, url.slice(3), opts.force ? null : st?.etag)
+      : await openFeed(url, env.ALLOWED_FEED_HOSTS, opts.force ? {} : { etag: st?.etag ?? null, lastModified: st?.last_modified ?? null });
     if (o.status === 'not_modified') { res.matched = st?.last_count ?? 0; return finish('ok', 'not modified'); }
     body = o.body;
     await db.prepare('UPDATE feed_state SET etag = ?, last_modified = ? WHERE feed = ?').bind(o.etag, o.lastModified, key).run();

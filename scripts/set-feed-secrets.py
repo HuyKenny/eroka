@@ -37,7 +37,9 @@ def main():
         sys.exit("production needs ERK_PRODUCTION_APPROVED=yes")
     feeds = json.load(open(ROOT / "credentials/.eroka-feeds.json"))["feeds"]
     c = creds()
-    secrets = {f"FEED_URL_{k.split('__')[1]}": v["feed_url"] for k, v in feeds.items() if v.get("feed_url")}
+    # "mirror": true = the Pi mirrors the feed to R2 (bin/eroka-feed-mirror.py); the Worker reads r2:feed-<n>.xml
+    secrets = {f"FEED_URL_{k.split('__')[1]}": (f"r2:feed-{k.split('__')[1]}.xml" if v.get("mirror") else v["feed_url"])
+               for k, v in feeds.items() if v.get("feed_url")}
     secrets["IMPORT_SHARED_SECRET"] = c.get(f"IMPORT_SHARED_SECRET_{env.upper()}", "")
     if len(secrets["IMPORT_SHARED_SECRET"]) < 24:
         sys.exit("IMPORT_SHARED_SECRET missing in credentials")
