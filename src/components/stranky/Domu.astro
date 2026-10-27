@@ -20,8 +20,8 @@ const description = 'Porovnejte ceny tisíců erotických hraček z prověřený
 const celkem = cislo(Math.floor((v.home.products || 11000) / 1000) * 1000);
 const TILES: Array<[string, string]> = [
 	['vibratory', 'Vibrátory'], ['dilda', 'Dilda'], ['umele-vaginy-a-masturbatory', 'Masturbátory'], ['analni-koliky', 'Anální kolíky'],
-	['erekcni-krouzky-na-penis-a-varlata', 'Erekční kroužky'], ['damske-eroticke-pradlo', 'Dámské prádlo'], ['panske-eroticke-pradlo', 'Pánské prádlo'], ['lubrikacni-gely-a-oleje', 'Lubrikanty'],
-	['kondomy', 'Kondomy'], ['fetis-kink', 'BDSM a fetiš'], ['masazni-oleje-a-svicky', 'Masážní oleje'], ['vakuove-pumpy', 'Vakuové pumpy'],
+	['tlakove-pomucky', 'Tlakové vibrátory'], ['damske-eroticke-pradlo', 'Dámské prádlo'], ['eroticke-pomucky-pro-pary', 'Pro páry'], ['lubrikacni-gely-a-oleje', 'Lubrikanty'],
+	['kondomy', 'Kondomy'], ['fetis-kink', 'BDSM a fetiš'], ['venusiny-kulicky', 'Venušiny kuličky'], ['erekcni-krouzky-na-penis-a-varlata', 'Erekční kroužky'],
 ];
 const tiles = TILES.map(([slug, label]) => { const c = v.tree.bySlug.get(slug); return c && c.count_total > 0 ? { slug, label, count: c.count_total, img: v.imgs[String(c.id)] } : null; }).filter((x): x is NonNullable<typeof x> => !!x);
 const POPULAR: Array<[string, string]> = [['/znacka/satisfyer/', 'Satisfyer'], ['/vibratory/', 'vibrátor'], ['/umele-vaginy-a-masturbatory/', 'masturbátor'], ['/znacka/we-vibe/', 'We-Vibe'], ['/lubrikacni-gely-a-oleje/', 'lubrikační gel'], ['/znacka/lelo/', 'LELO'], ['/parove-vibratory/', 'pro páry']];

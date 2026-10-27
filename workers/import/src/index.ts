@@ -2,7 +2,7 @@
 // finalised (stale feeds, price history, sitemaps, data_version). HTTP API behind IMPORT_SHARED_SECRET for ops.
 import { FEEDS, feedKey } from './feeds';
 import { finalizeDay, nextDueFeed, recomputeProducts, runFeed, type Env } from './engine';
-import { rebuildFacets } from './facets';
+import { applyCategoryRules, rebuildFacets } from './facets';
 
 /** Constant-time comparison of SHA-256 digests (does not leak the secret's length). */
 async function safeEqual(a: string, b: string): Promise<boolean> {
@@ -50,6 +50,8 @@ export default {
       await env.DB.prepare("INSERT INTO site_cache (key, value, updated_at) VALUES ('data_version', ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at").bind(stamp, stamp).run();
       return json(out);
     }
+    // category rules only (members per rule category) — check after editing category-rules.ts
+    if (request.method === 'POST' && parts[0] === 'rules') return json(await applyCategoryRules(env.DB));
     // recompute gallery/params/stock of a slice of products (?offset=&limit=) — backfill after migration 0004
     if (request.method === 'POST' && parts[0] === 'recompute') {
       const off = Number(url.searchParams.get('offset') ?? 0), lim = Math.min(3000, Number(url.searchParams.get('limit') ?? 1000));

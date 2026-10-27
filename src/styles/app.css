@@ -97,6 +97,9 @@ p { margin: 0 0 1em; }
 	.mm__p { position: absolute; inset: auto 0 auto 0; top: 100%; border-bottom: 1px solid var(--line); box-shadow: 0 18px 30px rgba(23, 21, 26, .08); padding: 22px max(24px, calc((100vw - var(--wrap)) / 2 + 24px)) 26px; max-height: calc(100vh - 140px); }
 	.mm__top { display: none; }
 	.mm__g { grid-template-columns: repeat(4, 1fr); }
+}
+@media (min-width: 1200px) {
+	.mm__g { grid-template-columns: repeat(6, 1fr); }
 	.mm__sk { border: 0; padding: 6px 0 14px; }
 	.mm__sk ul { display: block; }
 	.kn ul { padding: 0 24px; }
@@ -143,7 +146,21 @@ p { margin: 0 0 1em; }
 .intro.je-zav { max-height: 4.65em; overflow: hidden; }
 .intro.je-zav::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1.6em; background: linear-gradient(rgba(255, 255, 255, 0), #fff); }
 .vice { border: 0; background: none; padding: 4px 0; color: var(--c); font-weight: 600; cursor: pointer; font-size: .92rem; }
-.pk { list-style: none; margin: 16px 0 6px; padding: 0 0 4px; display: flex; gap: 8px; overflow-x: auto; scrollbar-width: thin; }
+.pk { list-style: none; margin: 16px 0 6px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+/* subcategory grid (like alza.cz): wraps into rows, never scrolls sideways */
+.podk { margin: 18px 0 4px; }
+.podk ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+@media (min-width: 640px) { .podk ul { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); } }
+.podk details ul { margin-top: 8px; }
+.podk a { display: flex; align-items: center; gap: 10px; height: 100%; min-height: 72px; padding: 8px 10px; border: 1px solid var(--line); border-radius: var(--r2); background: #fff; transition: border-color .15s, box-shadow .15s; }
+.podk a:hover { border-color: var(--line2); box-shadow: var(--sh); }
+.podk img, .podk__x { width: 56px; height: 56px; flex: none; object-fit: contain; }
+@media (max-width: 639px) { .podk a { min-height: 64px; padding: 6px 8px; gap: 8px; } .podk img, .podk__x { width: 44px; height: 44px; } .podk__t { font-size: .82rem; } }
+.podk__t { font-size: .88rem; font-weight: 600; line-height: 1.3; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.podk__t small { color: var(--ink3); font-weight: 400; font-size: .78rem; }
+.podk summary { list-style: none; cursor: pointer; display: inline-block; margin-top: 10px; color: var(--c); font-weight: 600; font-size: .92rem; }
+.podk summary::-webkit-details-marker { display: none; }
+.podk details[open] summary { display: none; }
 .pk a { display: flex; align-items: center; gap: 10px; padding: 6px 14px 6px 6px; border: 1px solid var(--line); border-radius: var(--r2); white-space: nowrap; font-size: .9rem; font-weight: 550; background: #fff; }
 .pk a:hover { border-color: var(--ink3); }
 .pk img, .pk .pk__x { width: 40px; height: 40px; object-fit: contain; border-radius: 6px; background: #fff; }

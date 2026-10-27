@@ -11,6 +11,7 @@ import { brandTitle, categoryTitle, descFrom, postTitle, productTitle, robots, s
 import { cislo, decode } from './format';
 import { validImage } from './img';
 import links from '../data/prolinkovani.json';
+import menu from '../data/menu.json';
 
 export interface Meta {
   title: string; description: string; canonical?: string; prev?: string; next?: string; robots: string[];
@@ -51,18 +52,27 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
   const pages = Math.max(1, Math.ceil(total / PER_PAGE));
   if (page > pages) return null;
   const chain = ancestry(tree, cat.id);
-  let kids = (tree.kids.get(cat.id) ?? []).filter((c) => c.count_total > 0);
+  // subcategory tiles: indexable categories with at least 3 products (merged clones are noindex), all of them
+  const tile = (c: Cat) => c.count_total >= 3 && !c.noindex;
+  let kids = (tree.kids.get(cat.id) ?? []).filter(tile);
   let kidsTitle = 'Podkategorie';
+  // audience hubs (pro muže / ženy / páry) have no children: their tiles are the categories of their menu group
+  if (!kids.length) {
+    const group = (menu as Array<{ id: number; parent: number; url: string }>).find((m) => m.parent === 0 && m.url === `/${cat.slug}/`);
+    if (group) kids = (menu as Array<{ parent: number; url: string }>).filter((m) => m.parent === group.id)
+      .map((m) => tree.bySlug.get(m.url.replace(/^\/|\/$/g, ''))).filter((c): c is Cat => !!c && tile(c));
+  }
   if (!kids.length && cat.parent) {
-    kids = (tree.kids.get(cat.parent) ?? []).filter((c) => c.count_total > 0 && c.id !== cat.id);
+    kids = (tree.kids.get(cat.parent) ?? []).filter((c) => tile(c) && c.id !== cat.id);
     kidsTitle = 'Související kategorie';
   }
-  kids = kids.sort((a, b) => b.count_total - a.count_total).slice(0, 16);
+  kids = kids.sort((a, b) => b.count_total - a.count_total);
   const base = `/${cat.slug}/`;
   const url = abs(pagePath(base, page));
   const title = categoryTitle(cat.name, cat.seo_title, page);
   const crumbs: Crumb[] = [{ name: 'Domů', url: '/' }, ...chain.map((c) => ({ name: decode(c.name), url: `/${c.slug}/` }))];
-  const noindex = cat.noindex === 1 || cat.seo_robots.includes('noindex');
+  // fewer than 5 products = thin page: noindex until the feeds/rules fill it (sitemap.ts uses the same limit)
+  const noindex = cat.noindex === 1 || cat.seo_robots.includes('noindex') || cat.count_total < 5;
   const magSlugs = (links.magbox as Record<string, string[]>)[cat.slug] ?? links.magbox_default;
   const meta: Meta = {
     title, description: descFrom(cat.seo_desc, cat.description_html, { term: decode(cat.name) },

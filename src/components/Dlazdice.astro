@@ -1,0 +1,12 @@
+---
+// Subcategory tile (grid like alza.cz): product photo left, name, number of products.
+import { cislo } from '../lib/format';
+import { picture } from '../lib/img';
+interface Props { t: { slug: string; name: string; count: number; img?: string | undefined }; eager?: boolean }
+const { t, eager = false } = Astro.props;
+const im = picture(t.img, 160);
+---
+<li><a href={`/${t.slug}/`}>
+	{im ? <img src={im.src} srcset={im.srcset} alt="" width="56" height="56" loading={eager ? 'eager' : 'lazy'} decoding="async" /> : <span class="podk__x" />}
+	<span class="podk__t">{t.name.replace(/\s*\([^)]*\)$/, '')}<small>{cislo(t.count)}</small></span>
+</a></li>

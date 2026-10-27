@@ -25,7 +25,7 @@ export async function collect(db: D1Database): Promise<Record<string, U[]>> {
     all<{ slug: string; m: string }>(`SELECT slug, MAX(updated_at, COALESCE((SELECT MAX(h.day) || ' 00:00:00' FROM price_history h WHERE h.product_id = p.id), '')) AS m
        FROM products p WHERE status = 'publish' AND noindex = 0 AND offer_count > 0 ORDER BY m DESC, id DESC`),
     all<{ slug: string; m: string }>(`SELECT c.slug, (SELECT MAX(p.updated_at) FROM cat_products x JOIN products p ON p.id = x.product_id WHERE x.cat_id = c.id) AS m
-       FROM categories c WHERE c.noindex = 0 AND c.count_total > 0 AND c.seo_robots NOT LIKE '%noindex%'
+       FROM categories c WHERE c.noindex = 0 AND c.count_total >= 5 AND c.seo_robots NOT LIKE '%noindex%'
          AND NOT EXISTS (SELECT 1 FROM slugs s WHERE s.slug = c.slug AND s.kind <> 'category')
          AND NOT EXISTS (SELECT 1 FROM redirects r WHERE r.from_path = '/' || c.slug || '/') ORDER BY c.count_total DESC`),
     all<{ slug: string; m: string }>(`SELECT b.slug, (SELECT MAX(p.updated_at) FROM brand_products x JOIN products p ON p.id = x.product_id WHERE x.brand_id = b.id) AS m

@@ -10,19 +10,21 @@ import type { BrandLite, Card, Cat, Facets } from '../../lib/db';
 import { SORTS, toQuery, withFilter, type FilterState } from '../../lib/filters';
 import { BUCKETS, PARAM_LABEL, PARAM_ORDER, valueSlug } from '../../lib/params';
 import { cislo, decode, produktu, stripTags } from '../../lib/format';
-import { picture } from '../../lib/img';
 import { shopName } from '../../lib/shops';
+import Dlazdice from '../Dlazdice.astro';
+const TILE_FIRST = 12;
 
 interface Props {
 	crumbs: Array<{ name: string; url?: string }>;
 	h1: string;
 	introHtml?: string | undefined;
 	tiles?: Array<{ slug: string; name: string; count: number; img?: string | undefined }> | undefined;
+	tilesTitle?: string | undefined;
 	links?: { title: string; items: Array<{ slug: string; name: string; count: number }>; current?: string } | undefined;
 	f: FilterState; fc: Facets | null; brands: { byId: Map<number, BrandLite>; bySlug: Map<string, BrandLite> }; cats?: Map<number, Cat> | undefined;
 	items: Card[]; total: number; page: number; pages: number; base: string; qs: string; empty?: string | undefined;
 }
-const { crumbs, h1, introHtml, tiles = [], links, f, fc, brands, cats, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.' } = Astro.props;
+const { crumbs, h1, introHtml, tiles = [], tilesTitle = 'Podkategorie', links, f, fc, brands, cats, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.' } = Astro.props;
 // active filters as removable chips
 const chips: Array<[string, string]> = [];
 const url = (s: FilterState) => base + toQuery(s);
@@ -43,9 +45,16 @@ const plain = withFilter(f, { min: undefined, max: undefined, znacka: [], obchod
 	<div class="lh"><h1>{h1}</h1><span class="lh__n">{cislo(total)} {produktu(total)}</span></div>
 	{introHtml && (stripTags(introHtml).length > 260 ? <><div class="intro je-zav" set:html={introHtml} /><button type="button" class="vice" aria-expanded="false" data-vice>Zobrazit více</button></> : <div class="intro" set:html={introHtml} />)}
 	{tiles.length > 0 && (
-		<ul class="pk" aria-label="Podkategorie">
-			{tiles.map((t) => { const im = picture(t.img, 160); return <li><a href={`/${t.slug}/`}>{im ? <img src={im.src} srcset={im.srcset} alt="" width="40" height="40" loading="lazy" decoding="async" /> : <span class="pk__x" />}<span>{t.name} <small>{cislo(t.count)}</small></span></a></li>; })}
-		</ul>
+		<nav class="podk" aria-label={tilesTitle}>
+			<h2 class="vh">{tilesTitle}</h2>
+			<ul>{tiles.slice(0, TILE_FIRST).map((t, i) => <Dlazdice t={t} eager={i < 6} />)}</ul>
+			{tiles.length > TILE_FIRST && (
+				<details>
+					<summary>Zobrazit všechny podkategorie ({tiles.length})</summary>
+					<ul>{tiles.slice(TILE_FIRST).map((t) => <Dlazdice t={t} eager={false} />)}</ul>
+				</details>
+			)}
+		</nav>
 	)}
 	<div class="lv">
 		<Filtry action={base} f={f} fc={fc} brands={brands} links={links} cats={cats} />

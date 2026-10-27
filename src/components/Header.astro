@@ -1,6 +1,7 @@
 ---
 // Header: logo, mega menu (one markup: desktop dropdown / mobile full screen, <details> works without JS), search with
-// suggestions (/api/suggest, src/scripts/ui.ts) and a row of the main categories. Menu = data/menu.json (old WP menu 70).
+// suggestions (/api/suggest, src/scripts/ui.ts) and a row of the main categories. Menu = data/menu.json (27. 10. 2026:
+// grouped by product type and audience from the category analysis + content gap; a group with url '' has no link).
 import Ik from './Ik.astro';
 import logo from '../data/logo.svg?raw';
 import menu from '../data/menu.json';
@@ -9,9 +10,9 @@ interface Item { id: number; parent: number; title: string; url: string; order: 
 const items = (menu as Item[]).slice().sort((a, b) => a.order - b.order);
 const tree = items.filter((i) => i.parent === 0).map((i) => ({ it: i, kids: items.filter((k) => k.parent === i.id) }));
 const QUICK: Array<[string, string]> = [
-	['/vibratory/', 'Vibrátory'], ['/dilda/', 'Dilda'], ['/umele-vaginy-a-masturbatory/', 'Masturbátory'], ['/eroticke-pradlo/', 'Erotické prádlo'],
-	['/vibracni-koliky-a-dalsi/', 'Anální pomůcky'], ['/erekcni-krouzky-na-penis-a-varlata/', 'Erekční kroužky'], ['/parove-vibratory/', 'Pro páry'],
-	['/lubrikacni-gely-a-oleje/', 'Lubrikanty'], ['/kondomy/', 'Kondomy'], ['/fetis-kink/', 'BDSM a fetiš'], ['/eroticke-darky/', 'Dárky'], ['/blog/', 'Magazín'],
+	['/vibratory/', 'Vibrátory'], ['/dilda/', 'Dilda'], ['/umele-vaginy-a-masturbatory/', 'Masturbátory'], ['/vibracni-koliky-a-dalsi/', 'Anální'],
+	['/fetis-kink/', 'BDSM'], ['/eroticke-pradlo/', 'Prádlo'], ['/lubrikacni-gely-a-oleje/', 'Lubrikanty'], ['/kondomy/', 'Kondomy'],
+	['/eroticke-pomucky-pro-pary/', 'Pro páry'], ['/venusiny-kulicky/', 'Venušiny kuličky'], ['/eroticke-darky/', 'Dárky'], ['/blog/', 'Magazín'],
 ];
 const q = (Astro.url.searchParams.get('s') ?? '').trim().toLowerCase();
 ---
@@ -25,11 +26,11 @@ const q = (Astro.url.searchParams.get('s') ?? '').trim().toLowerCase();
 				<div class="mm__g">
 					{tree.map((n) => (
 						<div class="mm__sk">
-							{n.it.url === '/ostatni/' ? <b>Další kategorie</b> : <a href={n.it.url}>{n.it.title}</a>}
+							{n.it.url ? <a href={n.it.url}>{n.it.title}</a> : <b>{n.it.title}</b>}
 							{n.kids.length > 0 && <ul>{n.kids.map((k) => <li><a href={k.url}>{k.title}</a></li>)}</ul>}
 						</div>
 					))}
-					<div class="mm__sk"><a href="/eroticke-darky/">Erotické dárky</a><ul><li><a href="/blog/">Magazín a rady</a></li></ul></div>
+					<div class="mm__sk"><a href="/eroticke-darky/">Erotické dárky</a><ul><li><a href="/blog/">Magazín a rady</a></li><li><a href="/eroticke-pomucky-pro-zeny/">Dárky pro ni</a></li><li><a href="/eroticke-pomucky-pro-muze/">Dárky pro něj</a></li></ul></div>
 				</div>
 			</nav>
 		</details>
