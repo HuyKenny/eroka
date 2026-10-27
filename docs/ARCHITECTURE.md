@@ -54,3 +54,10 @@ D1 eroka-production / eroka-staging (schéma migrations/0001, 0002)
   HEAD se neukládá, CSP `script-src` s nonce (HTMLRewriter), `_headers` s nosniff/HSTS i pro statiku.
 - SEO: nové šablony title/description (`src/lib/seo.ts`), noindex produktů bez nabídky a značek < 3 produkty, 21 zdvojených
   kategorií sloučeno (301), `guessSlug` jen pro jednoznačné pokračování, nový robots.txt, sitemapy bez kolizí a noindex.
+
+## Kategorie (27. 10. 2026)
+- Členství: `cat_products.direct` 1 = hlavní kategorie produktu, 0 = předek, **2 = pravidlo** (`workers/import/src/category-rules.ts`,
+  noční diff v `facets.ts applyCategoryRules`, ručně `POST /rules`). Pravidlo = cíl + `within` (podstrom) + název/parametr/značka.
+- Kategorie pod 5 produktů = noindex a mimo sitemapu; dlaždice podkategorií od 3 produktů (`views.ts`, `Dlazdice.astro`).
+- Rozcestníky Pro muže/ženy/páry nemají potomky — dlaždice berou ze skupiny v `src/data/menu.json` se stejnou URL.
+- Menu `src/data/menu.json`: skupina s `url: ''` je jen nadpis (např. Oblíbené značky).
