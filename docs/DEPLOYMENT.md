@@ -8,7 +8,9 @@ a `POST /finalize`.
 
 D1 `export` neumí databáze s FTS5 → zálohou je Time Travel: `wrangler d1 time-travel restore DB --env <env> --bookmark <b>`.
 
-## Produkce (jen se souhlasem Kennyho, `ERK_PRODUCTION_APPROVED=yes`)
+## Produkce — živě na eroka.cz od 27. 10. 2026 (jen se souhlasem Kennyho, `ERK_PRODUCTION_APPROVED=yes`)
+Přepnutí/návrat: `scripts/cutover.py apply|rollback|status` (routy, WP Cache Rules ze zálohy
+`backups/eroka-cf-zone-<datum>/cache-ruleset.json`, browser TTL, purge). Postup, který proběhl:
 1. `scripts/load-d1.sh production <sql>` (čerstvý export z WP), `set-feed-secrets.py production`, deploy → test na
    `https://eroka.huy-kenny.workers.dev` (SEO parita, vizuál, `/go/` každého partnera, výkon).
 2. Zóna eroka.cz: zálohovat a smazat Cache Rules z doby WP (vypínají Cache API Workeru), browser TTL = respektovat.
