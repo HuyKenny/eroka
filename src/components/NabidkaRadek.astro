@@ -3,15 +3,16 @@ import Ik from './Ik.astro';
 import type { Offer } from '../lib/db';
 import { cena } from '../lib/format';
 import { shopIcon, shopName } from '../lib/shops';
-interface Props { o: Offer; nej: boolean }
-const { o, nej } = Astro.props;
+interface Props { o: Offer; nej: boolean; n?: number | undefined }
+const { o, nej, n = 1 } = Astro.props;
+const varianty = n > 1 ? ` · ${n} ${n < 5 ? 'varianty' : 'variant'} v obchodě` : '';
 const stav = o.stock === 1 ? ['ok', 'Skladem'] : o.stock === -1 ? ['no', 'Není skladem'] : ['', 'Dostupnost ověřte v obchodě'];
 const doprava = o.delivery_price === null || o.delivery_price === undefined ? '' : o.delivery_price === 0 ? 'Doprava zdarma' : `Doprava od ${cena(o.delivery_price)}`;
 ---
 <li class={o.stock === -1 ? 'je-ne' : undefined}>
 	<div class="ot__s">
 		<img src={shopIcon(o.domain)} alt="" width="28" height="28" loading="lazy" decoding="async" />
-		<div><b>{shopName(o.domain)}{nej && <span class="ot__nej">Nejlevněji</span>}</b><small>{o.title}</small></div>
+		<div><b>{shopName(o.domain)}{nej && <span class="ot__nej">Nejlevněji</span>}</b><small>{o.title}{varianty}</small></div>
 	</div>
 	<div class="ot__dv">
 		<span class={stav[0]}>{o.stock === 1 && <Ik id="ok" size={16} />}{stav[1]}</span>

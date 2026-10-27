@@ -142,6 +142,11 @@ export async function runFeed(env: Env, f: FeedDef, opts: { force?: boolean } = 
     return m;
   };
 
+  // keys of feed-created products for this feed (uid:<feed>:*) and all their EANs
+  const keyMap = new Map<string, number>();
+  for (const r of (await db.prepare("SELECT key, product_id FROM product_keys WHERE key >= ? AND key < ? OR key >= 'ean:' AND key < 'ean;'")
+    .bind(`uid:${key}:`, `uid:${key};`).all<{ key: string; product_id: number }>()).results) keyMap.set(r.key, r.product_id);
+
   let body;
   try {
     const o = url.startsWith('r2:')
@@ -176,9 +181,10 @@ export async function runFeed(env: Env, f: FeedDef, opts: { force?: boolean } = 
   for (const it of items.values()) {
     const hash = itemHash(it);
     let rows = existing.get(it.uid);
-    if (!rows && it.ean) {
-      eanMap ??= await loadEans();
-      const pid = eanMap.get(it.ean);
+    if (!rows && it.ean) eanMap ??= await loadEans();
+    if (!rows && (it.ean || keyMap.size)) {
+      // catalogue EAN, else the keys of products created from the feeds (scripts/katalog-novinky.py): variant item id, EAN
+      const pid = (it.ean ? eanMap!.get(it.ean) : undefined) ?? keyMap.get(`uid:${key}:${it.uid}`) ?? (it.ean ? keyMap.get(`ean:${it.ean}`) : undefined);
       // the product already has an offer from this shop under an item id the feed no longer has → re-key it (keeps /go/)
       const old = pid ? (byProduct.get(pid) ?? []).find((r) => !items.has(r.unique_id) && !rekeyed.has(r.id)) : undefined;
       if (pid && old) {

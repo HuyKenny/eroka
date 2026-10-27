@@ -1,0 +1,1064 @@
+{
+  "_": "Feed category path + product name → eroka category (scripts/katalog-novinky.py, 27. 10. 2026). Path and name are folded (no diacritics, lowercase, words separated by spaces). Groups are tried in order; the first group whose 'p' matches the path decides: its rules [name regex, slug] are tried in order ('' = any name), slug null = not our assortment (skip). No rule hit = next group. 'typ' = shared rule lists.",
+  "typ": {
+    "pradlo": [
+      [
+        "bodystocking|body stocking",
+        "bodystocking"
+      ],
+      [
+        "bodystocking|catsuit|overal|kombinez",
+        "catsuity-a-eroticke-overaly"
+      ],
+      [
+        "\\bbody\\b|bodycka|bodicko",
+        "damske-body"
+      ],
+      [
+        "korzet|korset|corset|kosilka s kostic|bustier",
+        "damske-korzety"
+      ],
+      [
+        "puncoch|stocking|pantyhose|puncochac",
+        "damske-puncochy"
+      ],
+      [
+        "podvaz|garter",
+        "podvazky-a-podvazkove-pasy"
+      ],
+      [
+        "kalhotk|tanga\\b|tangy|string|brazilk|\\bslip|panties|thong",
+        "damske-kalhotky-a-tanga"
+      ],
+      [
+        "podprsen|\\bbra\\b|bralette",
+        "eroticke-saty-topy-a-podprsenky"
+      ],
+      [
+        "kosilk|negliz|babydoll|baby doll|chemise",
+        "damske-kosilky"
+      ],
+      [
+        "zupan|kimono|zupanek",
+        "zupanky-a-kimona"
+      ],
+      [
+        "kostym|uniform|sestricka|policist|kralicek",
+        "damske-eroticke-kostymy"
+      ],
+      [
+        "komplet|souprav|\\bset\\b|dvoudil|tridil",
+        "eroticky-komplet"
+      ],
+      [
+        "\\bsaty|minisat|satecky|\\btop\\b|\\btopy|tilko|tricko",
+        "eroticke-saty-topy-a-podprsenky"
+      ],
+      [
+        "sukn|kalhot|leggin|legin|sortk",
+        "eroticke-kalhoty-a-sukne"
+      ],
+      [
+        "plavk|bikin",
+        "damske-plavky"
+      ],
+      [
+        "pyzam",
+        "pyzama"
+      ],
+      [
+        "maska|skrabosk|pasek pres oci|paska pres oci",
+        "eroticke-masky-a-skrabosky"
+      ],
+      [
+        "sperk|nalepk|pasties|bradavk|retizek",
+        "eroticke-sperky"
+      ],
+      [
+        "paruk|\\brasy",
+        "paruky-a-rasy"
+      ],
+      [
+        "rukavic|navlek|kravat|doplnek|ponozk|cepic|celenk",
+        "doplnky-pradla"
+      ]
+    ],
+    "panske": [
+      [
+        "boxer|slip|tang|jock|suspenzor|trenyrk|string",
+        "boxerky-slipy-a-tanga"
+      ],
+      [
+        "\\bbody\\b",
+        "panske-body"
+      ],
+      [
+        "kostym|uniform",
+        "panske-eroticke-kostymy"
+      ],
+      [
+        "kalhot|sortk|leggin",
+        "panske-kalhoty"
+      ],
+      [
+        "",
+        "panske-eroticke-pradlo"
+      ]
+    ],
+    "fetis_obleceni": [
+      [
+        "pouta|cuffs|manzet",
+        "eroticka-pouta"
+      ],
+      [
+        "gumov|rubber",
+        "latex"
+      ],
+      [
+        "latex",
+        "latex"
+      ],
+      [
+        "wetlook|wet look|lak|lakov|vinyl|pvc",
+        "wetlook"
+      ],
+      [
+        "kuze|kozen|kozenk|leather",
+        "kuze-a-kozenka"
+      ],
+      [
+        "",
+        "bdsm-pradlo"
+      ]
+    ],
+    "bdsm": [
+      [
+        "pas cudnost|chastity|klec na penis|cock cage|\\bcage\\b",
+        "pasy-cudnosti"
+      ],
+      [
+        "rozperk|rozpern|spreader",
+        "rozperne-tyce"
+      ],
+      [
+        "pouta|pout\\b|cuffs|manzet",
+        "eroticka-pouta"
+      ],
+      [
+        "\\blano\\b|\\brope\\b|bondage pask|bondage tape|svazov|provaz|sit na postel|postelov",
+        "bondage"
+      ],
+      [
+        "bic|dutk|placack|plesk|rakosk|flogger|paddle|crop|bicik",
+        "dutky-biciky-a-placacky"
+      ],
+      [
+        "kukla|hood|maska|mask|skrabosk|pasky pres oci|paska pres oci|blindfold",
+        "bdsm-masky"
+      ],
+      [
+        "roubik|gag|uzda",
+        "roubiky"
+      ],
+      [
+        "obojek|obojk|voditk|collar|leash",
+        "obojky-a-voditka"
+      ],
+      [
+        "skripc|svork|klips|clamp|bradav",
+        "skripce-a-svorky-na-bradavky"
+      ],
+      [
+        "elektro|\\be ?stim\\b|electro",
+        "elektrostimulace"
+      ],
+      [
+        "klinik|speculum|zrcadl|katetr|dilatat|urethr|sonda",
+        "klinik"
+      ],
+      [
+        "svick",
+        "bdsm-svicky"
+      ],
+      [
+        "sada|\\bset\\b|\\bkit\\b|souprav",
+        "bdsm-sady"
+      ],
+      [
+        "latex|wetlook|vinyl|pvc|kozen|kuze|leather|korzet|body|saty|kalhot|top",
+        "bdsm-pradlo"
+      ],
+      [
+        "vibra",
+        "@vibratory"
+      ],
+      [
+        "dild",
+        "@dilda"
+      ],
+      [
+        "kolik|plug|\\banal",
+        "@analni"
+      ],
+      [
+        "tilko|tricko|shirt|gumov|rubber|harness|postroj",
+        "bdsm-pradlo"
+      ],
+      [
+        "",
+        "fetis-kink"
+      ]
+    ],
+    "analni": [
+      [
+        "stroker|masturb|tenga|torzo|vagin",
+        "@muzi"
+      ],
+      [
+        "prostat",
+        "masaz-prostaty"
+      ],
+      [
+        "kulick|beads|retez",
+        "analni-kulicky"
+      ],
+      [
+        "klystyr|sprch|douche|vyplach",
+        "klystyr-a-analni-sprchy"
+      ],
+      [
+        "ocas|tail|lisk",
+        "analni-koliky-s-ocasem"
+      ],
+      [
+        "sperk|jewel|kamen|krystal",
+        "analni-sperky"
+      ],
+      [
+        "nafuk|inflat",
+        "nafukovaci-dilda-a-koliky"
+      ],
+      [
+        "vibra",
+        "vibracni-analni-koliky"
+      ],
+      [
+        "kolik|plug|stopk",
+        "analni-koliky"
+      ],
+      [
+        "dild",
+        "analni-dilda"
+      ],
+      [
+        "",
+        "vibracni-koliky-a-dalsi"
+      ]
+    ],
+    "dilda": [
+      [
+        "kolik|\\bplug\\b",
+        "analni-koliky"
+      ],
+      [
+        "strap|pripinac|postroj|harness",
+        "pripinaci-penisy-strap-on"
+      ],
+      [
+        "monster|fantasy|dragon|drak|alien|tentacle|chapad",
+        "monster-dilda"
+      ],
+      [
+        "oboustr|dvojit|double",
+        "oboustranna-dilda"
+      ],
+      [
+        "sklenen|sklo|glass",
+        "sklenena-dilda"
+      ],
+      [
+        "\\bxxl\\b|obri|giant|huge",
+        "xxl-dilda"
+      ],
+      [
+        "prisav|suction",
+        "dilda-s-prisavkou"
+      ],
+      [
+        "realist|penis|cock|dong|varlat",
+        "realisticka-dilda"
+      ],
+      [
+        "anal",
+        "analni-dilda"
+      ],
+      [
+        "",
+        "dilda"
+      ]
+    ],
+    "vibratory": [
+      [
+        "strap|pripinac",
+        "pripinaci-penisy-strap-on"
+      ],
+      [
+        "tlakov|podtlak|womaniz|satisfyer pro|air ?pulse|pleasure air|saci stimul|sani klitor",
+        "tlakove-pomucky"
+      ],
+      [
+        "parov|pro pary|couple",
+        "parove-vibratory"
+      ],
+      [
+        "vajic|egg",
+        "vibracni-vajicka"
+      ],
+      [
+        "kalhotk|panty|panties",
+        "vibratory-do-kalhotek"
+      ],
+      [
+        "motyl|butterfly",
+        "vibracni-motylci"
+      ],
+      [
+        "anal|prostat",
+        "analni-vibratory"
+      ],
+      [
+        "wand|masazni hlavic|masazni vibr|magic",
+        "masazni-vibratory"
+      ],
+      [
+        "rabbit|kralic|vybezk",
+        "vibratory-s-vybezkem-na-klitoris"
+      ],
+      [
+        "rotac|rotuj",
+        "rotacni-vibratory"
+      ],
+      [
+        "bod g|g bod|g spot|gspot",
+        "vibratory-na-bod-g"
+      ],
+      [
+        "pulz|puls|prirazec|thrust",
+        "pulzatory-pulzacni-vibratory"
+      ],
+      [
+        "klitor|clit",
+        "vibratory-na-klitoris"
+      ],
+      [
+        "realist|penis|cock",
+        "realisticke-vibratory"
+      ],
+      [
+        "aplikac|app|bluetooth|dalkov|remote|chytr|smart",
+        "vibratory-na-dalkove-ovladani"
+      ],
+      [
+        "mini|bullet|maly|mala|male\\b|tuzk|rtenk|lipstick",
+        "male-vibratory"
+      ],
+      [
+        "",
+        "vibratory"
+      ]
+    ],
+    "muzi": [
+      [
+        "krem|cream|\\bgel\\b|sprej|spray|kapsl|tablet|kapky",
+        "@kosmetika"
+      ],
+      [
+        "vakuov|pump",
+        "vakuove-pumpy-pro-muze-na-penis"
+      ],
+      [
+        "vibracni krouz|vibrating ring|krouzek s vibr|krouzek vibr",
+        "vibracni-erekcni-krouzky-na-penis-a-varlata"
+      ],
+      [
+        "krouz|ring|smycka|lasso",
+        "erekcni-krouzky-na-penis-a-varlata"
+      ],
+      [
+        "navlek|nastav|sleeve|extender|prodluz|nadstav|penis sheath",
+        "navleky-na-penis-prst"
+      ],
+      [
+        "prostat",
+        "masaz-prostaty"
+      ],
+      [
+        "automat|robot|the handy",
+        "automaticke-masturbatory"
+      ],
+      [
+        "vibra",
+        "vibracni-umele-vaginy-a-masturbatory"
+      ],
+      [
+        "masturb|vagin|pusink|zadecek|anus|anal|torzo|fleshlight|tenga|egg|vajic|kapsa|pocket|stroker",
+        "umele-vaginy-a-masturbatory"
+      ],
+      [
+        "panna|panny|doll",
+        "umele-panny"
+      ],
+      [
+        "zvets|prodluz|enlarg",
+        "zvetseni-penisu-pomucky-a-pripravky"
+      ],
+      [
+        "",
+        "eroticke-pomucky-pro-muze"
+      ]
+    ],
+    "lubrikanty": [
+      [
+        "\\bnuru\\b",
+        "nuru-gely"
+      ],
+      [
+        "krem|cream|balzam|bleach|beleni",
+        "kremy"
+      ],
+      [
+        "fist",
+        "fistingove-lubrikacni-gely-a-oleje"
+      ],
+      [
+        "anal|anus",
+        "analni-lubrikacni-gely-a-oleje"
+      ],
+      [
+        "hrej|warm|tepl|chlad|cool|stimul|tingl|brn",
+        "stimulacni-lubrikacni-gely-a-oleje"
+      ],
+      [
+        "prich|jahod|malin|cokol|vanil|tresn|banan|ovoc|flavo|oral|aroma|vone",
+        "oralni-lubrikacni-gely-a-oleje-s-prichuti"
+      ],
+      [
+        "silikon|silicone",
+        "silikonove-lubrikacni-gely-a-oleje"
+      ],
+      [
+        "",
+        "lubrikacni-gely-a-oleje-na-vodni-bazi"
+      ]
+    ],
+    "afro": [
+      [
+        "poppers|amyl|pentyl|nitrit|jungle juice|iron fist|\\brush\\b|push original|locker room",
+        "poppers"
+      ],
+      [
+        "spanel|musk",
+        "spanelske-musky"
+      ],
+      [
+        "feromon|pheromon|parfem|vune|toaletni|eau de",
+        "feromonove-parfemy-a-eroticke-vune"
+      ],
+      [
+        "pro zeny|zensk|women|female|her\\b|lady",
+        "feromony-a-afrodiziaka-pro-zeny"
+      ],
+      [
+        "pro muze|pansk|men\\b|male|him\\b|erekc|potenc",
+        "feromony-a-afrodiziaka-pro-muze"
+      ],
+      [
+        "",
+        "feromony-a-afrodiziaka"
+      ]
+    ],
+    "kosmetika": [
+      [
+        "poppers|amyl|pentyl|nitrit|jungle juice|iron fist|\\brush\\b|push original|locker room",
+        "poppers"
+      ],
+      [
+        "\\bnuru\\b",
+        "nuru-gely"
+      ],
+      [
+        "oddal|delay|prodlouz|znecitl|desensit|ejakul",
+        "kosmetika-na-oddaleni-ejakulace"
+      ],
+      [
+        "cistic|cleaner|dezinf|cisteni",
+        "cistice-erotickych-pomucek"
+      ],
+      [
+        "masazni svic|svicka|svick|candle",
+        "masazni-svicky"
+      ],
+      [
+        "masazni olej|massage oil|masazni gel|olej",
+        "masazni-oleje"
+      ],
+      [
+        "lubrik|lubric|\\bgel\\b|\\bglide",
+        "lubrikacni-gely-a-oleje"
+      ],
+      [
+        "kondom|prezerv|condom",
+        "kondomy"
+      ],
+      [
+        "feromon|afrodiz|spanel",
+        "feromony-a-afrodiziaka"
+      ],
+      [
+        "parfem|eau de|toaletni voda|vune",
+        "parfemy"
+      ],
+      [
+        "zvets|zpevn|prsa|penis|erekc",
+        "zvetseni-penisu-pomucky-a-pripravky"
+      ],
+      [
+        "krem|cream|balzam|mleko|lotion",
+        "kremy"
+      ],
+      [
+        "stimul|tingl|orgas|libid",
+        "slibatelna-stimulacni-kosmetika"
+      ],
+      [
+        "koupel|bath bomb|pena do koupele|sul do koupele",
+        "do-koupele"
+      ],
+      [
+        "",
+        "kosmetika-a-pece-o-telo"
+      ]
+    ],
+    "podle_nazvu": [
+      [
+        "poppers|amyl|pentyl|nitrit|jungle juice|iron fist|\\brush\\b|push original|locker room",
+        "poppers"
+      ],
+      [
+        "maska na oci|paska pres oci|skrabosk",
+        "eroticke-masky-a-skrabosky"
+      ],
+      [
+        "vibrat|vibrac|vibro",
+        "@vibratory"
+      ],
+      [
+        "dildo|dilda|dild\\b|penis ",
+        "@dilda"
+      ],
+      [
+        "anal|kolik|plug",
+        "@analni"
+      ],
+      [
+        "pouta|bic|roubik|obojek|bdsm|bondage|kukla|fetis",
+        "@bdsm"
+      ],
+      [
+        "masturb|vagin|\\bpanna|krouz.*penis|erekcni|navlek",
+        "@muzi"
+      ],
+      [
+        "lubrik|lubric",
+        "@lubrikanty"
+      ],
+      [
+        "kondom|prezerv",
+        "kondomy"
+      ],
+      [
+        "feromon|afrodiz",
+        "@afro"
+      ],
+      [
+        "masaz.*olej|svick|olej",
+        "@kosmetika"
+      ],
+      [
+        "body|korzet|puncoch|podvaz|kalhotk|tanga|podprsen|kosilk|negliz|komplet|kostym|catsuit|saty|zupan",
+        "@pradlo"
+      ],
+      [
+        "venusin|gejs|kegel",
+        "venusiny-kulicky"
+      ],
+      [
+        "hra\\b|hry\\b|kostky|karty|game",
+        "eroticke-hry-pro-dospele"
+      ],
+      [
+        "maska|skrabosk|paska pres oci",
+        "eroticke-masky-a-skrabosky"
+      ],
+      [
+        "placack|bic",
+        "dutky-biciky-a-placacky"
+      ],
+      [
+        "stimulator",
+        "@vibratory"
+      ]
+    ]
+  },
+  "groups": [
+    {
+      "p": "menstrua|tampon|kalisk|intimni hygien|hygiena a hygien|intimni myci|inkontinen|tehotens|ovulac|epil|holen|holic|depil|reklamni predmet|veletrh|\\bdvd\\b|zdravotni potreby|zdravotni prostred|\\bleky\\b|vitamin|doplnky stravy|doplnek stravy|domacnost|potraviny|sprchove gely|pece o plet|odlicov|peeling|vlhcene ubrousk|kosmeticke sady|vlas",
+      "rules": [
+        [
+          "",
+          null
+        ]
+      ]
+    },
+    {
+      "p": "pece o telo|telova kosmetik|kosmetika a parfemy",
+      "rules": [
+        [
+          "lubrik|masaz|svick|feromon|afrodiz|stimul|intim|erot|oddal|delay",
+          "@kosmetika"
+        ],
+        [
+          "",
+          null
+        ]
+      ]
+    },
+    {
+      "p": "bater|adapter|nabije|napaj",
+      "rules": [
+        [
+          "bater|nabije|kabel|adapter|usb|akumul|cr20|\\baa\\b|\\baaa\\b|zdroj|napaj",
+          "baterie-a-napajeni-do-erotickych-pomucek"
+        ],
+        [
+          "",
+          "@podle_nazvu"
+        ]
+      ]
+    },
+    {
+      "p": "panske (eroticke )?pradlo|panske obleceni|pro muze pradlo|panske boxerky|panske sexy|pansk[ae] eroticka",
+      "rules": [
+        [
+          "",
+          "@panske"
+        ]
+      ]
+    },
+    {
+      "p": "bdsm a fetis obleceni|bdsm obleceni|fetis obleceni|vinylove obleceni|latexove obleceni|wetlook|lakove obleceni|kozene obleceni",
+      "rules": [
+        [
+          "",
+          "@fetis_obleceni"
+        ]
+      ]
+    },
+    {
+      "p": "klinik",
+      "rules": [
+        [
+          "",
+          "klinik"
+        ]
+      ]
+    },
+    {
+      "p": "elektro",
+      "rules": [
+        [
+          "glove|rukavic",
+          "@podle_nazvu"
+        ],
+        [
+          "",
+          "elektrostimulace"
+        ]
+      ]
+    },
+    {
+      "p": "pas(y)? cudnost|chastity",
+      "rules": [
+        [
+          "",
+          "pasy-cudnosti"
+        ]
+      ]
+    },
+    {
+      "p": "nabytek|sexualni polstar|polstare|houpack|swing",
+      "rules": [
+        [
+          "houpa|swing|zaves|sling",
+          "eroticke-houpacky"
+        ],
+        [
+          "",
+          "eroticky-nabytek"
+        ]
+      ]
+    },
+    {
+      "p": "sexualni stroj|sex stroj|sex machine|sukaci",
+      "rules": [
+        [
+          "",
+          "sexualni-stroje"
+        ]
+      ]
+    },
+    {
+      "p": "bdsm|fetis|\\bsm\\b|bondage|pouta|bice|roubik|obojk",
+      "rules": [
+        [
+          "",
+          "@bdsm"
+        ]
+      ]
+    },
+    {
+      "p": "spodni pradlo|eroticke pradlo|eroticke obleceni|damske eroticke|sexy pradlo|pradlo pro|obleceni|kostym|puncoch|body|korzet|podprsen|kosilk|tanga|kalhotk",
+      "rules": [
+        [
+          "",
+          "@pradlo"
+        ],
+        [
+          "",
+          "damske-eroticke-pradlo"
+        ]
+      ]
+    },
+    {
+      "p": "venusin|kegel|vibracni vajic",
+      "rules": [
+        [
+          "vajic|egg|vibra",
+          "vibracni-vajicka"
+        ],
+        [
+          "",
+          "venusiny-kulicky"
+        ]
+      ]
+    },
+    {
+      "p": "kondom|prezerv",
+      "rules": [
+        [
+          "lubrik|\\blube|gel\\b|glide",
+          "@lubrikanty"
+        ],
+        [
+          "",
+          "kondomy"
+        ]
+      ]
+    },
+    {
+      "p": "lubrik",
+      "rules": [
+        [
+          "",
+          "@lubrikanty"
+        ]
+      ]
+    },
+    {
+      "p": "afrodiz|feromon|libid",
+      "rules": [
+        [
+          "",
+          "@afro"
+        ]
+      ]
+    },
+    {
+      "p": "masazni olej|masazni svic|masazni prip|masazni pomuck|masazni gel|masaz(?!ni hlavic|ni vibr)",
+      "rules": [
+        [
+          "vibr|hlavic|wand",
+          "@vibratory"
+        ],
+        [
+          "svick|candle",
+          "masazni-svicky"
+        ],
+        [
+          "olej|oil|gel",
+          "masazni-oleje"
+        ],
+        [
+          "",
+          "doplnky-na-masaz"
+        ]
+      ]
+    },
+    {
+      "p": "cistic|udrzba|cisteni|pece o eroticke",
+      "rules": [
+        [
+          "",
+          "cistice-erotickych-pomucek"
+        ]
+      ]
+    },
+    {
+      "p": "oddaleni ejakul|delay|prodlouzeni",
+      "rules": [
+        [
+          "",
+          "kosmetika-na-oddaleni-ejakulace"
+        ]
+      ]
+    },
+    {
+      "p": "kosmetika|drogerie",
+      "rules": [
+        [
+          "",
+          "@kosmetika"
+        ]
+      ]
+    },
+    {
+      "p": "anal",
+      "rules": [
+        [
+          "",
+          "@analni"
+        ]
+      ]
+    },
+    {
+      "p": "vakuov|pump",
+      "rules": [
+        [
+          "klitor|bradav|prsa|vagin|pro zeny|pussy|nipple",
+          "vakuove-pumpy-pro-zeny-na-prsa-bradavky-a-klitoris"
+        ],
+        [
+          "",
+          "vakuove-pumpy"
+        ]
+      ]
+    },
+    {
+      "p": "navlek|nastavc",
+      "rules": [
+        [
+          "krouz|ring",
+          "erekcni-krouzky-na-penis-a-varlata"
+        ],
+        [
+          "",
+          "navleky-na-penis-prst"
+        ]
+      ]
+    },
+    {
+      "p": "krouz|kroužk|erekc",
+      "rules": [
+        [
+          "krem|cream|\\bgel\\b|sprej|spray|kapsl|tablet",
+          "@kosmetika"
+        ],
+        [
+          "vibra",
+          "vibracni-erekcni-krouzky-na-penis-a-varlata"
+        ],
+        [
+          "",
+          "erekcni-krouzky-na-penis-a-varlata"
+        ]
+      ]
+    },
+    {
+      "p": "panny|panna|torza|torzo",
+      "rules": [
+        [
+          "torz",
+          "umele-vaginy-a-masturbatory"
+        ],
+        [
+          "nafuk",
+          "nafukovaci-panny"
+        ],
+        [
+          "",
+          "umele-panny"
+        ]
+      ]
+    },
+    {
+      "p": "masturb|vagin|pro muze",
+      "rules": [
+        [
+          "",
+          "@muzi"
+        ]
+      ]
+    },
+    {
+      "p": "dild|penisy|strap",
+      "rules": [
+        [
+          "vibra",
+          "@vibratory"
+        ],
+        [
+          "",
+          "@dilda"
+        ]
+      ]
+    },
+    {
+      "p": "vibrat|womaniz|stimulator klitor|stimulatory na klitor|pulzator|wand|masazni hlavic",
+      "rules": [
+        [
+          "",
+          "@vibratory"
+        ]
+      ]
+    },
+    {
+      "p": "dilatat",
+      "rules": [
+        [
+          "",
+          "dilatatory"
+        ]
+      ]
+    },
+    {
+      "p": "sady eroticky|sada eroticky|sady pomucek",
+      "rules": [
+        [
+          "",
+          "sady-erotickych-pomucek"
+        ]
+      ]
+    },
+    {
+      "p": "hry|hra pro|spolecensk",
+      "rules": [
+        [
+          "pro pary|par\\b|pary\\b",
+          "eroticke-hry-pro-pary"
+        ],
+        [
+          "",
+          "eroticke-hry-pro-dospele"
+        ]
+      ]
+    },
+    {
+      "p": "zertov|darky|darek|party|zabava|legrac|sladkost",
+      "rules": [
+        [
+          "",
+          "zertovne-eroticke-predmety"
+        ]
+      ]
+    },
+    {
+      "p": "literatur|kniha|knihy",
+      "rules": [
+        [
+          "",
+          "eroticka-literatura"
+        ]
+      ]
+    },
+    {
+      "p": "darkov|adventni kalendar|kalendar",
+      "rules": [
+        [
+          "adventn|calendar|kalendar",
+          "eroticke-adventni-kalendare"
+        ],
+        [
+          "",
+          "sady-erotickych-pomucek"
+        ]
+      ]
+    },
+    {
+      "p": "boxy na|skladovani|sacky|taska",
+      "rules": [
+        [
+          "",
+          "skladovani-pomucek"
+        ]
+      ]
+    },
+    {
+      "p": "nafukovaci muz|panak",
+      "rules": [
+        [
+          "",
+          "umele-panny"
+        ]
+      ]
+    },
+    {
+      "p": "paruk",
+      "rules": [
+        [
+          "",
+          "paruky-a-rasy"
+        ]
+      ]
+    },
+    {
+      "p": "kacenk",
+      "rules": [
+        [
+          "",
+          "vibratory"
+        ]
+      ]
+    },
+    {
+      "p": "zvetseni penis",
+      "rules": [
+        [
+          "",
+          "zvetseni-penisu-pomucky-a-pripravky"
+        ]
+      ]
+    },
+    {
+      "p": "na predehru",
+      "rules": [
+        [
+          "",
+          "@podle_nazvu"
+        ],
+        [
+          "",
+          "sady-erotickych-pomucek"
+        ]
+      ]
+    },
+    {
+      "p": "pro zeny|pro pary|eroticke pomucky|sexualni a eroticke|sex a erotika|erotika|doplnky|ostatni|hobby|^$",
+      "rules": [
+        [
+          "",
+          "@podle_nazvu"
+        ]
+      ]
+    }
+  ]
+}
