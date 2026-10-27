@@ -40,7 +40,7 @@ function shortHash(s: string): string {
 const PARAM_PRIORITY = ['Feed__2', 'Feed__15', 'Feed__9', 'Feed__8', 'Feed__1', 'Feed__7', 'Feed__12', 'Feed__13', 'Feed__16'];
 const imgKey = (u: string) => u.replace(/\/product\/(original|detail)\//, '/product/x/').replace(/^https?:\/\//, '');
 
-/** Gallery (up to 4 images besides the main one) and canonical params of products, merged from their active offers. */
+/** Gallery (up to 4 images besides the main one, from one shop) and canonical params of products, merged from their active offers. */
 async function recomputeDetails(db: D1Database, part: number[]) {
   const ph = part.map(() => '?').join(',');
   const [prods, offs] = await db.batch([
@@ -56,9 +56,14 @@ async function recomputeDetails(db: D1Database, part: number[]) {
     const extras = list.map((o) => { try { return o.extra ? JSON.parse(o.extra) as { p?: Params; i?: string[] } : {}; } catch { return {}; } });
     const params = mergeParams(extras.map((e) => e.p ?? {}));
     for (const [k, vals] of Object.entries(params)) for (const v of vals ?? []) rows.push([pr.id, k, v]);
-    const seen = new Set([imgKey(pr.image)]);
+    // gallery = the extra photos of ONE shop (the one whose photo is the main image, else the first with extras):
+    // the main photos of the other shops are nearly always the same packshot under another URL (3× the same photo)
+    const main = imgKey(pr.image);
+    const own = list.findIndex((o, i) => imgKey(o.img) === main && extras[i]!.i?.length);
+    const src = own >= 0 ? own : extras.findIndex((e) => e.i?.length);
+    const seen = new Set([main]);
     const gallery: string[] = [];
-    for (const u of [...list.map((o) => o.img), ...extras.flatMap((e) => e.i ?? [])]) {
+    for (const u of src >= 0 ? extras[src]!.i! : []) {
       if (gallery.length >= 4 || !/^https:\/\/[^\s/]+\.[^\s/]+\//i.test(u ?? '')) continue;
       const k = imgKey(u);
       if (!seen.has(k)) { seen.add(k); gallery.push(u); }
