@@ -8,7 +8,7 @@ const NAMES: Record<string, string> = {
   'rohlik.cz': 'Rohlík.cz', 'lekarnalemon.cz': 'Lékárna Lemon', 'intimfitness.cz': 'Intimfitness', 'knihydobrovsky.cz': 'Knihy Dobrovský',
   'vip-pradlo.cz': 'VIP prádlo', 'albi.cz': 'Albi', 'mojelekarna.cz': 'Moje lékárna', 'martinus.cz': 'Martinus', '4kids.cz': '4kids',
   'kvelektro.cz': 'KV Elektro', 'xxxlutz.cz': 'XXXLutz', 'hubatacernoska.cz': 'Hubatá černoška', 'activa.cz': 'Activa',
-  'sephora.cz': 'Sephora', 'rajhracky.cz': 'Ráj hraček', 'lanotte.cz': 'La Notte', 'baumax.cz': 'Baumax', 'aukro.cz': 'Aukro',
+  'sephora.cz': 'Sephora', 'myaustria.cz': 'MyAustria', 'rajhracky.cz': 'Ráj hraček', 'lanotte.cz': 'La Notte', 'baumax.cz': 'Baumax', 'aukro.cz': 'Aukro',
   'benu.cz': 'BENU', 'krasa.cz': 'Krása.cz', 'dialekarna.cz': 'Dialékárna',
 };
 export const shopName = (domain: string) => NAMES[domain] ?? domain;

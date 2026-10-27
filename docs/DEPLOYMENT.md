@@ -1,8 +1,11 @@
 # Deploy a přepnutí
 
 ## Worker eroka-img (fotky)
-`npx wrangler deploy -c workers/img/wrangler.jsonc` (bez routy, pro staging/service binding) a v produkci
-`--env production` (přidá routu `eroka.cz/img/*`). Musí existovat dřív než web (service binding `IMG`).
+Jeden kód, dvě instance: `npx wrangler deploy -c workers/img/wrangler.jsonc` = produkce (routa `eroka.cz/img/*`,
+service binding webu) a `--env staging` = `eroka-img-staging` bez routy (binding stagingu). Musí existovat dřív než web.
+Secret `IMG_SECRET` (HMAC podpis `/img/` URL, `credentials/.eroka-credentials.env`) musí být stejný na webu
+(`deploy.ts --secrets` ho nahraje) i na img Workeru: `wrangler secret put IMG_SECRET -c workers/img/wrangler.jsonc [--env staging]`.
+Při první změně formátu URL (27. 10. 2026) běžel img Worker chvíli s `--var IMG_LEGACY:1` (přijímal i staré nepodepsané URL).
 
 ## Staging
 `npx tsx scripts/deploy.ts --env staging [--secrets] [--no-import]` — záložka D1 Time Travel (do `backups/`),
@@ -13,9 +16,9 @@ a `POST /finalize`.
 D1 `export` neumí databáze s FTS5 → zálohou je Time Travel: `wrangler d1 time-travel restore DB --env <env> --bookmark <b>`.
 
 ## Produkce — živě na eroka.cz od 27. 10. 2026 (jen se souhlasem Kennyho, `ERK_PRODUCTION_APPROVED=yes`)
-**WordPress smazán 27. 10. 2026** (`bin/eroka-wp-smazat.py`, zálohy `backups/eroka-wp-final-*`, DNS Worker-only) → `rollback` už nemá kam vést.
-Přepnutí/návrat: `scripts/cutover.py apply|rollback|status` (routy, WP Cache Rules ze zálohy
-`backups/eroka-cf-zone-<datum>/cache-ruleset.json`, browser TTL, purge). Postup, který proběhl:
+**WordPress smazán 27. 10. 2026** (`bin/eroka-wp-smazat.py`, zálohy `backups/eroka-wp-final-*`, DNS Worker-only).
+Skripty migrace z WP (`export-from-wp.py`, `migrate-from-wp.py`, `load-d1.sh`, `cutover.py`) jsou v
+`backups/eroka-wp-migrace-skripty-2026-10-27.zip`. Postup, který proběhl:
 1. `scripts/load-d1.sh production <sql>` (čerstvý export z WP), `set-feed-secrets.py production`, deploy → test na
    `https://eroka.huy-kenny.workers.dev` (SEO parita, vizuál, `/go/` každého partnera, výkon).
 2. Zóna eroka.cz: zálohovat a smazat Cache Rules z doby WP (vypínají Cache API Workeru), browser TTL = respektovat.

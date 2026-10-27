@@ -10,7 +10,7 @@ export default defineConfig({
   session: false,
   // WordPress URL shape (/<slug>/ with a trailing slash); canonicalisation lives in the middleware.
   trailingSlash: 'ignore',
-  build: { format: 'directory', inlineStylesheets: 'never' },
+  build: { format: 'directory', inlineStylesheets: 'always' },
   security: { checkOrigin: false },
   vite: {
     build: { assetsInlineLimit: 0 },

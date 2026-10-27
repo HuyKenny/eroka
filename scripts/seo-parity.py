@@ -72,7 +72,10 @@ def meta(body):
 
 
 HARD = ['title', 'description', 'canonical', 'robots', 'h1']
-SOFT = ['h2', 'ld']
+# --skip title,description: fields changed on purpose in this release are reported as soft
+SKIP = (sys.argv[sys.argv.index('--skip') + 1].split(',') if '--skip' in sys.argv else [])
+HARD = [k for k in HARD if k not in SKIP]
+SOFT = SOFT_BASE = ['h2', 'ld'] + SKIP
 
 only = sys.argv[sys.argv.index('--only') + 1] if '--only' in sys.argv else None
 # URL sample from the LIVE sitemaps (or the failures of a previous report)

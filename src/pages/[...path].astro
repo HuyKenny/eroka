@@ -22,7 +22,7 @@ else if (r.kind === 'category') view = await categoryView(db, r.id, r.page, url.
 else if (r.kind === 'post' || r.kind === 'page') view = await postView(db, r.id);
 else if (r.kind === 'postcat') view = await blogView(db, r.page, r.id);
 else if (r.kind === 'blog') view = await blogView(db, r.page);
-else if (r.kind === 'search') view = await searchView(db, (url.searchParams.get('s') ?? '').trim().slice(0, 100), r.page);
+else if (r.kind === 'search') view = await searchView(db, (url.searchParams.get('s') ?? '').trim().toLowerCase().slice(0, 100), r.page);
 if (!view) Astro.response.status = 404;
 ---
 {!view && <Nenalezeno />}

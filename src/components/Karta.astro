@@ -17,7 +17,7 @@ const shops = p.shop_count || p.offer_count;
 <li>
 	<article class="k">
 		<div class="k__img">
-			{img ? <img src={img.src} srcset={img.srcset} alt={name} width="240" height="240" loading={idx < 4 ? 'eager' : 'lazy'} fetchpriority={idx < 2 ? 'high' : undefined} decoding="async" /> : <Ik id="foto" />}
+			{img ? <img src={img.src} srcset={img.srcset} alt={name} width="240" height="240" loading={idx < 4 ? 'eager' : 'lazy'} fetchpriority={idx === 0 ? 'high' : undefined} decoding="async" /> : <Ik id="foto" />}
 			{p.disc_pct >= 10 && <span class="k__s">−{p.disc_pct} %</span>}
 		</div>
 		<H class="k__n"><a href={href}>{name}</a></H>

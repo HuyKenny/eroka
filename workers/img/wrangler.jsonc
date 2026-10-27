@@ -1,8 +1,8 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
   // Product photo thumbnails for shops wsrv.nl refuses (src/index.ts). Stateless, no bindings, nothing stored.
-  // The web Worker calls it through the IMG service binding (all environments); production also gets the route
-  // eroka.cz/img/* so cached thumbnails skip the Astro Worker.
+  // The web Worker calls it through the IMG service binding (all environments); the route eroka.cz/img/* lets
+  // cached thumbnails skip the Astro Worker.
   "name": "eroka-img",
   "main": "./src/index.ts",
   "compatibility_date": "2026-10-01",
@@ -10,11 +10,13 @@
   "preview_urls": false,
   "limits": { "cpu_ms": 10000 },
   "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
+  // secret IMG_SECRET (same value as on the web Worker): wrangler secret put IMG_SECRET -c workers/img/wrangler.jsonc
+  "ratelimits": [{ "name": "RL_IMG", "namespace_id": "74025", "simple": { "limit": 300, "period": 60 } }],
   "observability": { "enabled": true, "head_sampling_rate": 0.05 },
+  // one Worker for all environments (staging and local reach it through the IMG service binding of the web Worker)
+  "routes": [{ "pattern": "eroka.cz/img/*", "zone_name": "eroka.cz" }],
   "env": {
-    "production": {
-      "name": "eroka-img",
-      "routes": [{ "pattern": "eroka.cz/img/*", "zone_name": "eroka.cz" }]
-    }
+    // separate copy for staging (no route), so a staging test never touches the live thumbnails
+    "staging": { "name": "eroka-img-staging", "routes": [], "ratelimits": [{ "name": "RL_IMG", "namespace_id": "74025", "simple": { "limit": 300, "period": 60 } }] }
   }
 }

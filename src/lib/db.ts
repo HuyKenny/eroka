@@ -55,12 +55,14 @@ export async function resolveSlug(db: D1Database, slug: string): Promise<{ kind:
   return db.prepare('SELECT kind, ref_id FROM slugs WHERE slug = ?').bind(slug).first();
 }
 
-/** WordPress redirect_guess_404_permalink: a published object whose slug starts with the requested one. */
+/** Unknown slug → a page only when the match is unambiguous: exactly one slug continues it with "-" and the requested
+ *  slug is at least half of it (a cut-off or shortened URL). WordPress guessed any prefix match, which sent dead or mistyped URLs to unrelated
+ *  products (/vibrator/ → a random vibrator) — Google treats such redirects as soft 404s. */
 export async function guessSlug(db: D1Database, slug: string): Promise<string | null> {
-  if (slug.length < 4) return null;
-  const r = await db.prepare("SELECT slug FROM slugs WHERE slug > ? AND slug < ? AND kind IN ('product','post','page') ORDER BY slug LIMIT 1")
-    .bind(slug, slug + '￿').first<{ slug: string }>();
-  return r?.slug ?? null;
+  if (slug.length < 8) return null;
+  const rows = (await db.prepare("SELECT slug FROM slugs WHERE slug > ? AND slug < ? AND kind IN ('product','category','post','page') ORDER BY slug LIMIT 2")
+    .bind(slug + '-', slug + '-￿').all<{ slug: string }>()).results;
+  return rows.length === 1 && slug.length >= rows[0]!.slug.length * 0.5 ? rows[0]!.slug : null;
 }
 
 export type Sort = 'pop' | 'price' | 'price-desc' | 'date' | 'disc';

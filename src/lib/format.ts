@@ -11,9 +11,6 @@ export function cena(n: number | string | null | undefined): string {
 export function produktu(n: number): string {
   return n === 1 ? 'produkt' : n >= 2 && n <= 4 ? 'produkty' : 'produktů';
 }
-export function nabidek(n: number): string {
-  return n === 1 ? 'nabídka' : n >= 2 && n <= 4 ? 'nabídky' : 'nabídek';
-}
 export function eshopu(n: number): string {
   return n === 1 ? 'eshopu' : 'eshopů';
 }
@@ -54,4 +51,21 @@ export function texturize(s: string): string {
     .replace(/(\w)'(\w)/g, '$1’$2').replace(/(\w)'(?=\s)/g, '$1‘')
     .replace(/ - /g, ' – ').replace(/ -- /g, ' — ')
     .replace(/\.\.\./g, '…');
+}
+
+/** Comment HTML from WordPress (originally visitor input): only p, br, b/strong, i/em and plain http(s) links survive. */
+export function safeCommentHtml(html: string): string {
+  return String(html ?? '')
+    .replace(/<(script|style|iframe|object|embed|svg|math)\b[\s\S]*?<\/\1\s*>/gi, '')
+    .replace(/<\/?([a-z0-9]+)([^>]*)>/gi, (tag, name: string, attrs: string) => {
+      const n = name.toLowerCase();
+      const close = tag.startsWith('</');
+      if (['p', 'br', 'b', 'strong', 'i', 'em'].includes(n)) return close ? `</${n}>` : `<${n}>`;
+      if (n === 'a') {
+        if (close) return '</a>';
+        const href = /href\s*=\s*["']?(https?:\/\/[^"'\s>]+)/i.exec(attrs)?.[1];
+        return href ? `<a href="${esc(decode(href))}" rel="nofollow ugc noopener" target="_blank">` : '<a>';
+      }
+      return '';
+    });
 }

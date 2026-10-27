@@ -79,7 +79,7 @@ p { margin: 0 0 1em; }
 .mm__x { display: inline-flex; padding: 8px; border-radius: var(--r); cursor: pointer; }
 .mm__g { display: grid; gap: 4px 28px; }
 .mm__sk { padding: 10px 0; border-bottom: 1px solid var(--line); }
-.mm__sk > a { display: block; font-weight: 700; padding: 4px 0; }
+.mm__sk > a, .mm__sk > b { display: block; font-weight: 700; padding: 4px 0; }
 .mm__sk ul { list-style: none; margin: 2px 0 0; padding: 0; display: flex; flex-wrap: wrap; gap: 2px 14px; }
 .mm__sk li a { display: inline-block; padding: 3px 0; color: var(--ink2); font-size: .93rem; }
 .mm__sk a:hover { color: var(--c); }
@@ -129,6 +129,10 @@ p { margin: 0 0 1em; }
 .dot--no { background: var(--line2); }
 .k__b { position: relative; z-index: 2; min-height: 36px; font-size: .86rem; padding: 0 10px; }
 @media (min-width: 640px) { .k { padding: 12px 14px 14px; } }
+
+/* render below-the-fold blocks lazily (layout/paint only when scrolled near) */
+.g > li:nth-child(n+9), .sek, .pa-t { content-visibility: auto; contain-intrinsic-size: auto 420px; }
+.g > li:nth-child(n+9) { contain-intrinsic-size: auto 360px; }
 
 /* listing */
 .lh { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 12px; margin-bottom: 6px; }

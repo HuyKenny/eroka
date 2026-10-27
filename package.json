@@ -11,10 +11,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "check": "astro check",
-    "test": "vitest run",
     "preview": "wrangler dev -c dist/server/wrangler.json --local --persist-to .wrangler/state",
     "db:migrate:local": "wrangler d1 migrations apply DB --local --persist-to .wrangler/state",
-    "migrate:wp": "tsx scripts/migrate-from-wp.ts",
     "verify:secrets": "tsx scripts/verify-no-secrets.ts"
   },
   "dependencies": {
@@ -30,7 +28,6 @@
     "@types/node": "22.20.4",
     "tsx": "4.23.15",
     "typescript": "6.0.3",
-    "vitest": "4.1.11",
     "wrangler": "4.152.0"
   }
 }

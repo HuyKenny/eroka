@@ -54,7 +54,7 @@ if (!argv.includes('--no-import')) wr(['deploy', '-c', 'workers/import/wrangler.
 let webSecrets: Record<string, string> | null = null;
 if (argv.includes('--secrets')) {
   // ACCESS_AUD is optional in production: without it /admin stays closed (the public site does not use Access)
-  const w: Record<string, string | undefined> = { IP_HASH_SALT: er[`IP_HASH_SALT${sfx}`], ACCESS_AUD: er[`ACCESS_AUD${sfx}`] };
+  const w: Record<string, string | undefined> = { IP_HASH_SALT: er[`IP_HASH_SALT${sfx}`], ACCESS_AUD: er[`ACCESS_AUD${sfx}`], IMG_SECRET: er.IMG_SECRET };
   const missing = Object.entries(w).filter(([k, v]) => !v && !(k === 'ACCESS_AUD' && envName === 'production')).map(([k]) => k);
   if (missing.length) throw new Error(`missing secret values ${missing.join(', ')}`);
   webSecrets = Object.fromEntries(Object.entries(w).filter(([, v]) => v)) as Record<string, string>;
@@ -77,7 +77,7 @@ if (webSecrets) { wr(['secret', 'bulk', '-c', 'dist/server/wrangler.json'], { in
   await new Promise((r) => setTimeout(r, 5000));
   const results = envName === 'staging'
     ? [await check('/', {}, [302, 401, 403]), await check('/', h, [200]), await check('/vibratory/', h, [200]), await check('/robots.txt', h, [200]), await check('/sitemap_index.xml', h, [200])]
-    : [await check('/', {}, [200]), await check('/robots.txt', {}, [200]), await check('/vibratory/', {}, [200])];
+    : [await check('/api/health', {}, [200]), await check('/', {}, [301])];
   if (results.includes(false)) process.exit(2);
 }
 console.log(`deployed ${envName} @ ${sha}`);

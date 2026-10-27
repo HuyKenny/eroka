@@ -18,13 +18,11 @@ if (mm) {
 }
 
 // category intro: three lines + "Více"
-for (const el of $$('.intro[data-zav]')) {
-  el.classList.add('je-zav');
-  if (el.scrollHeight <= el.clientHeight + 6) { el.classList.remove('je-zav'); continue; }
-  const b = document.createElement('button');
-  b.type = 'button'; b.className = 'vice'; b.textContent = 'Zobrazit více'; b.setAttribute('aria-expanded', 'false');
+// (collapsed by the server only when the text is long — no layout reads on load)
+for (const b of $$<HTMLButtonElement>('[data-vice]')) {
+  const el = b.previousElementSibling;
+  if (!el) continue;
   b.addEventListener('click', () => { const o = el.classList.toggle('je-zav'); b.textContent = o ? 'Zobrazit více' : 'Zobrazit méně'; b.setAttribute('aria-expanded', String(!o)); });
-  el.insertAdjacentElement('afterend', b);
 }
 
 // filters: bottom sheet on mobile; values of one name joined by commas (?znacka=a,b); desktop submits on change

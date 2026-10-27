@@ -6,7 +6,7 @@ import Drobky from '../Drobky.astro';
 import PostKarta from '../PostKarta.astro';
 import PartnerBox from '../PartnerBox.astro';
 import type { postView } from '../../lib/views';
-import { datum, decode, texturize } from '../../lib/format';
+import { datum, decode, safeCommentHtml, texturize } from '../../lib/format';
 import { ownUpload } from '../../lib/img';
 
 interface Props { v: NonNullable<Awaited<ReturnType<typeof postView>>> }
@@ -32,7 +32,7 @@ const crumbs = isPost ? [{ name: 'Domů', url: '/' }, { name: 'Magazín', url: '
 			{v.comments.length > 0 && (
 				<section class="ko">
 					<h2>Komentáře ({v.comments.length})</h2>
-					<ol>{v.comments.map((c) => <li><b>{c.author}</b><time datetime={c.created_at.slice(0, 10)}>{datum(c.created_at)}</time><div set:html={c.content_html} /></li>)}</ol>
+					<ol>{v.comments.map((c) => <li><b>{c.author}</b><time datetime={c.created_at.slice(0, 10)}>{datum(c.created_at)}</time><div set:html={safeCommentHtml(c.content_html)} /></li>)}</ol>
 				</section>
 			)}
 		</article>

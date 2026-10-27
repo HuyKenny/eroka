@@ -2,7 +2,7 @@
 //   /<slug>/                → product | product category | post | page | blog category (slugs table, product wins)
 //   /<slug>/page/<n>/       → paged product category / blog category / the blog page
 //   /page/<n>/?s=…          → paged search
-//   unknown /<slug>/        → redirect_guess_404_permalink (a published slug starting with it) or 404
+//   unknown /<slug>/        → 301 only to an unambiguous continuation of a cut-off slug (db.guessSlug), else 404
 import { guessSlug, resolveSlug } from './db';
 
 export type Route =

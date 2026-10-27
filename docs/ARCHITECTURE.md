@@ -45,3 +45,12 @@ D1 eroka-production / eroka-staging (schéma migrations/0001, 0002)
 - **Filtry** (`src/lib/filters.ts`): `?orderby= &min_price= &max_price= &znacka= &obchod= &skladem=1 &sleva=1 &kat= &p_<klíč>=`;
   filtrovaná/přeřazená stránka = `noindex, follow` bez canonicalu. Výchozí řazení = oblíbenost.
 - **Našeptávač** `GET /api/suggest?q=` (kategorie a značky z paměti, produkty z FTS5), cache 10 min.
+
+## Technický audit 27. 10. 2026 (shrnutí změn)
+- Fotky: všechny přes `eroka-img` (wsrv.nl zrušen — cold p90 9 s), podepsané URL (`src/lib/sign.ts`, HMAC), seznam hostů
+  `src/lib/image-hosts.ts` (sdílí web i img Worker), limit pixelů/bajtů, ruční redirecty, rate limit `RL_IMG`.
+- Middleware: jeden 301 (www, velká písmena, legacy, lomítko, tabulka redirects), production workers.dev → 301 na eroka.cz
+  (kromě `/api/health`), cache klíč z normalizovaných filtrů, rate limit `RL_SEARCH` na každý cache MISS s parametry,
+  HEAD se neukládá, CSP `script-src` s nonce (HTMLRewriter), `_headers` s nosniff/HSTS i pro statiku.
+- SEO: nové šablony title/description (`src/lib/seo.ts`), noindex produktů bez nabídky a značek < 3 produkty, 21 zdvojených
+  kategorií sloučeno (301), `guessSlug` jen pro jednoznačné pokračování, nový robots.txt, sitemapy bez kolizí a noindex.

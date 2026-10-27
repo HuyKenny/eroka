@@ -21,18 +21,23 @@ export async function collect(db: D1Database): Promise<Record<string, U[]>> {
   const [posts, pages, products, cats, brands, pcats] = await Promise.all([
     all<{ slug: string; m: string }>("SELECT slug, modified_at AS m FROM posts WHERE type = 'post' AND status = 'publish' AND noindex = 0 ORDER BY published_at DESC"),
     all<{ slug: string; m: string }>("SELECT slug, modified_at AS m FROM posts WHERE type = 'page' AND status = 'publish' AND noindex = 0 AND slug NOT IN ('domov','produkt','blog') ORDER BY published_at DESC"),
-    all<{ slug: string; m: string }>("SELECT slug, updated_at AS m FROM products WHERE status = 'publish' AND noindex = 0 ORDER BY updated_at DESC, id DESC"),
+    // only indexable products (with offers); lastmod = content change or the last change of the lowest price
+    all<{ slug: string; m: string }>(`SELECT slug, MAX(updated_at, COALESCE((SELECT MAX(h.day) || ' 00:00:00' FROM price_history h WHERE h.product_id = p.id), '')) AS m
+       FROM products p WHERE status = 'publish' AND noindex = 0 AND offer_count > 0 ORDER BY m DESC, id DESC`),
     all<{ slug: string; m: string }>(`SELECT c.slug, (SELECT MAX(p.updated_at) FROM cat_products x JOIN products p ON p.id = x.product_id WHERE x.cat_id = c.id) AS m
-       FROM categories c WHERE c.noindex = 0 AND c.count_total > 0 AND c.seo_robots NOT LIKE '%noindex%' ORDER BY c.count_total DESC`),
+       FROM categories c WHERE c.noindex = 0 AND c.count_total > 0 AND c.seo_robots NOT LIKE '%noindex%'
+         AND NOT EXISTS (SELECT 1 FROM slugs s WHERE s.slug = c.slug AND s.kind <> 'category')
+         AND NOT EXISTS (SELECT 1 FROM redirects r WHERE r.from_path = '/' || c.slug || '/') ORDER BY c.count_total DESC`),
     all<{ slug: string; m: string }>(`SELECT b.slug, (SELECT MAX(p.updated_at) FROM brand_products x JOIN products p ON p.id = x.product_id WHERE x.brand_id = b.id) AS m
-       FROM brands b WHERE b.noindex = 0 AND b.count > 0 ORDER BY b.count DESC`),
+       FROM brands b WHERE b.noindex = 0 AND b.count >= 3 AND NOT EXISTS (SELECT 1 FROM slugs s WHERE s.slug = b.slug AND s.kind = 'product') ORDER BY b.count DESC`),
     all<{ slug: string; m: string }>(`SELECT c.slug, (SELECT MAX(modified_at) FROM posts p WHERE p.cat_id = c.id AND p.type = 'post' AND p.status = 'publish') AS m FROM post_categories c WHERE c.count > 0`),
   ]);
   const map = (rows: Array<{ slug: string; m: string }>, pre = '/') => rows.map((r) => ({ loc: `${BASE}${pre}${r.slug}/`, mod: utc(r.m) }));
   const out: Record<string, U[]> = {};
   out['post-sitemap'] = map(posts);
   const pg = map(pages);
-  out['page-sitemap'] = [{ loc: BASE + '/', mod: latest([...pg, ...out['post-sitemap']!]) }, ...pg];
+  const lastPost = latest(out['post-sitemap']!);
+  out['page-sitemap'] = [{ loc: BASE + '/', mod: latest([...pg, ...out['post-sitemap']!]) }, { loc: BASE + '/blog/', mod: lastPost }, ...pg];
   const chunk = (name: string, list: U[]) => { for (let i = 0, n = 1; i < list.length; i += PER_FILE, n++) out[`${name}${n}`] = list.slice(i, i + PER_FILE); };
   chunk('product-sitemap', map(products));
   out['category-sitemap'] = map(pcats);

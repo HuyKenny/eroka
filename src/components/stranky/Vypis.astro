@@ -9,7 +9,7 @@ import Ik from '../Ik.astro';
 import type { BrandLite, Card, Cat, Facets } from '../../lib/db';
 import { SORTS, toQuery, withFilter, type FilterState } from '../../lib/filters';
 import { BUCKETS, PARAM_LABEL, PARAM_ORDER, valueSlug } from '../../lib/params';
-import { cislo, decode, produktu } from '../../lib/format';
+import { cislo, decode, produktu, stripTags } from '../../lib/format';
 import { picture } from '../../lib/img';
 import { shopName } from '../../lib/shops';
 
@@ -41,7 +41,7 @@ const plain = withFilter(f, { min: undefined, max: undefined, znacka: [], obchod
 <div class="w">
 	<Drobky items={crumbs} />
 	<div class="lh"><h1>{h1}</h1><span class="lh__n">{cislo(total)} {produktu(total)}</span></div>
-	{introHtml && <div class="intro" data-zav set:html={introHtml} />}
+	{introHtml && (stripTags(introHtml).length > 260 ? <><div class="intro je-zav" set:html={introHtml} /><button type="button" class="vice" aria-expanded="false" data-vice>Zobrazit více</button></> : <div class="intro" set:html={introHtml} />)}
 	{tiles.length > 0 && (
 		<ul class="pk" aria-label="Podkategorie">
 			{tiles.map((t) => { const im = picture(t.img, 160); return <li><a href={`/${t.slug}/`}>{im ? <img src={im.src} srcset={im.srcset} alt="" width="40" height="40" loading="lazy" decoding="async" /> : <span class="pk__x" />}<span>{t.name} <small>{cislo(t.count)}</small></span></a></li>; })}
@@ -53,7 +53,7 @@ const plain = withFilter(f, { min: undefined, max: undefined, znacka: [], obchod
 			<div class="lt">
 				<button type="button" class="btn btn--g fbtn" data-filtry><Ik id="filtr" />Filtry{chips.length > 0 && ` (${chips.length})`}</button>
 				<nav class="rz" aria-label="Řazení">
-					{SORTS.map(([k, label]) => <a href={url(withFilter(f, { sort: k }))} rel="nofollow" aria-current={f.sort === k ? 'true' : undefined}>{label}</a>)}
+					{SORTS.map(([k, label]) => { const u = url(withFilter(f, { sort: k })); return <a href={u} rel={u.includes('?') ? 'nofollow' : undefined} aria-current={f.sort === k ? 'true' : undefined}>{label}</a>; })}
 				</nav>
 			</div>
 			{chips.length > 0 && (

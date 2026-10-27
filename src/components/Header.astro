@@ -13,7 +13,7 @@ const QUICK: Array<[string, string]> = [
 	['/vibracni-koliky-a-dalsi/', 'Anální pomůcky'], ['/erekcni-krouzky-na-penis-a-varlata/', 'Erekční kroužky'], ['/parove-vibratory/', 'Pro páry'],
 	['/lubrikacni-gely-a-oleje/', 'Lubrikanty'], ['/kondomy/', 'Kondomy'], ['/fetis-kink/', 'BDSM a fetiš'], ['/eroticke-darky/', 'Dárky'], ['/blog/', 'Magazín'],
 ];
-const q = Astro.url.searchParams.get('s') ?? '';
+const q = (Astro.url.searchParams.get('s') ?? '').trim().toLowerCase();
 ---
 <a class="skip" href="#obsah">Přeskočit na obsah</a>
 <header class="hl">
@@ -25,7 +25,7 @@ const q = Astro.url.searchParams.get('s') ?? '';
 				<div class="mm__g">
 					{tree.map((n) => (
 						<div class="mm__sk">
-							<a href={n.it.url}>{n.it.title}</a>
+							{n.it.url === '/ostatni/' ? <b>Další kategorie</b> : <a href={n.it.url}>{n.it.title}</a>}
 							{n.kids.length > 0 && <ul>{n.kids.map((k) => <li><a href={k.url}>{k.title}</a></li>)}</ul>}
 						</div>
 					))}

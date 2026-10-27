@@ -1,14 +1,13 @@
 /**
- * Cloudflare Access JWT verification (admin, and the whole staging host). We verify the signed
+ * Cloudflare Access JWT verification (the whole staging host; there is no admin route). We verify the signed
  * `Cf-Access-Jwt-Assertion` ourselves — RS256 against the team JWKS, issuer, audience, expiry, not-before —
- * and never trust an e-mail header on its own. Without ACCESS_TEAM_DOMAIN + ACCESS_AUD the admin stays closed.
- * The local bypass works only when ENVIRONMENT is local/test AND ADMIN_DEV_BYPASS=1.
+ * and never trust an e-mail header on its own. Without ACCESS_TEAM_DOMAIN + ACCESS_AUD access is refused.
  */
-import { isLocal, type AppEnv } from './env';
+import type { AppEnv } from './env';
 
-export type AdminAuth = { ok: true; email: string; via: 'access' | 'local-bypass' } | { ok: false; status: 401 | 403 | 503; reason: string };
+type AdminAuth = { ok: true; email: string; via: 'access' } | { ok: false; status: 401 | 403 | 503; reason: string };
 
-export interface Jwk { kid: string; kty: string; n: string; e: string; alg?: string }
+interface Jwk { kid: string; kty: string; n: string; e: string; alg?: string }
 let jwksCache: { team: string; at: number; keys: Jwk[] } | null = null;
 let lastForced = 0;
 
@@ -30,7 +29,7 @@ async function getJwks(team: string, fetchImpl: typeof fetch, force = false): Pr
   return keys;
 }
 
-export async function verifyAccessJwt(
+async function verifyAccessJwt(
   token: string,
   opts: { team: string; aud: string; now?: number; fetchImpl?: typeof fetch; jwks?: Jwk[] },
 ): Promise<{ ok: true; email: string } | { ok: false; reason: string }> {
@@ -69,7 +68,6 @@ export async function verifyAccessJwt(
 }
 
 export async function authenticateAdmin(request: Request, env: AppEnv, fetchImpl?: typeof fetch): Promise<AdminAuth> {
-  if (isLocal(env) && env.ADMIN_DEV_BYPASS === '1') return { ok: true, email: 'local-dev@localhost', via: 'local-bypass' };
   if (!env.ACCESS_TEAM_DOMAIN || !env.ACCESS_AUD) return { ok: false, status: 503, reason: 'Přihlášení není nastavené.' };
   const token = request.headers.get('cf-access-jwt-assertion');
   if (!token) return { ok: false, status: 401, reason: 'Nepřihlášený.' };

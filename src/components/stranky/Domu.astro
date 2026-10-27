@@ -38,7 +38,7 @@ const graph = [
 	{ '@type': 'WebPage', '@id': BASE + '/#webpage', url: BASE + '/', name: title, isPartOf: { '@id': BASE + '/#website' }, about: { '@id': BASE + '/#organization' }, inLanguage: 'cs' },
 ];
 const jsonLd = [
-	{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, , a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
+	{ '@context': 'https://schema.org', '@type': 'FAQPage', mainEntity: FAQ.map(([q, a]) => ({ '@type': 'Question', name: q, acceptedAnswer: { '@type': 'Answer', text: a } })) },
 ];
 ---
 <Base title={title} description={description} canonical={BASE + '/'} robots={robots(false)} ogType="website" ogImage={OG_HOME} graph={graph} jsonLd={jsonLd} pageType="home" searchAction={true}>

@@ -7,8 +7,8 @@ import {
 } from './db';
 import { isFiltered, parseFilters, toListQuery, toQuery } from './filters';
 import { BASE, OG_DEFAULT, PER_PAGE, POSTS_PER_PAGE, isoPrague } from './site';
-import { categoryTitle, descFrom, postTitle, productTitle, robots, searchTitle, termTitle } from './seo';
-import { decode, stripTags } from './format';
+import { brandTitle, categoryTitle, descFrom, postTitle, productTitle, robots, searchTitle, termTitle } from './seo';
+import { cislo, decode } from './format';
 import { validImage } from './img';
 import links from '../data/prolinkovani.json';
 
@@ -60,12 +60,13 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
   kids = kids.sort((a, b) => b.count_total - a.count_total).slice(0, 16);
   const base = `/${cat.slug}/`;
   const url = abs(pagePath(base, page));
-  const title = categoryTitle(cat.name, cat.seo_title);
+  const title = categoryTitle(cat.name, cat.seo_title, page);
   const crumbs: Crumb[] = [{ name: 'Domů', url: '/' }, ...chain.map((c) => ({ name: decode(c.name), url: `/${c.slug}/` }))];
   const noindex = cat.noindex === 1 || cat.seo_robots.includes('noindex');
   const magSlugs = (links.magbox as Record<string, string[]>)[cat.slug] ?? links.magbox_default;
   const meta: Meta = {
-    title, description: descFrom(cat.seo_desc, cat.description_html, { term: decode(cat.name) }),
+    title, description: descFrom(cat.seo_desc, cat.description_html, { term: decode(cat.name) },
+      fc?.n ? `Porovnejte ceny ${cislo(fc.n)} produktů z kategorie ${decode(cat.name)} v ${fc.s.length} ověřených e-shopech.${fc.lo ? ` Nejlevněji od ${cislo(fc.lo)} Kč.` : ''}` : '', page),
     // filtered / re-sorted listings: noindex, follow and no canonical (the indexable listing is the plain URL)
     ...(noindex || filtered ? {} : { canonical: url }), robots: filtered ? ['noindex', 'follow'] : robots(noindex, cat.seo_robots),
     ...(page > 1 && !filtered ? { prev: abs(pagePath(base, page - 1)) } : {}),
@@ -94,10 +95,13 @@ export async function brandView(db: D1Database, slug: string, page: number, sp: 
   if (page > pages && page > 1) return null;
   const base = `/znacka/${b.slug}/`;
   const url = abs(pagePath(base, page));
-  const title = termTitle(b.name);
+  const title = brandTitle(b.name, page);
+  // brands with fewer than 3 products are thin pages: noindex (and left out of the sitemap)
+  const thin = b.noindex === 1 || b.count < 3;
   const crumbs: Crumb[] = [{ name: 'Domů', url: '/' }, { name: decode(b.name), url: base }];
   const meta: Meta = {
-    title, description: stripTags(b.description_html), ...(b.noindex || filtered ? {} : { canonical: url }), robots: filtered ? ['noindex', 'follow'] : robots(b.noindex === 1),
+    title, description: descFrom('', b.description_html, {}, fc?.n ? `${decode(b.name)}: porovnejte ceny ${cislo(fc.n)} produktů v ${fc.s.length} ověřených e-shopech.${fc.lo ? ` Nejlevněji od ${cislo(fc.lo)} Kč.` : ''}` : '', page),
+    ...(thin || filtered ? {} : { canonical: url }), robots: filtered ? ['noindex', 'follow'] : robots(thin),
     ...(page > 1 && !filtered ? { prev: abs(pagePath(base, page - 1)) } : {}),
     ...(page < pages && !filtered ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)], adultOnly: true,
@@ -133,12 +137,18 @@ export async function productView(db: D1Database, id: number) {
   if (!data) return null;
   const { product: p, offers, catIds, history, brand, params } = data;
   const name = decode(p.name);
-  const primary = tree.byId.get(p.primary_cat) ?? tree.byId.get(catIds[0] ?? 0);
+  // breadcrumb/category: a noindex category (e.g. "Ostatní") only when the product has no other
+  const cats = [p.primary_cat, ...catIds].map((i) => tree.byId.get(i)).filter((c): c is Cat => !!c);
+  const primary = cats.find((c) => !c.noindex) ?? cats[0];
   const chain = primary ? ancestry(tree, primary.id) : [];
   const url = abs(`/${p.slug}/`);
   const title = productTitle(p.name, p.seo_title);
   // seo_desc = Rank Math description or the raw (untexturized) short description from the migration
-  const description = p.seo_desc ? descFrom(p.seo_desc, p.short_html, { title: name }) : stripTags(p.short_html);
+  const prices0 = offers.map((o) => o.price);
+  const description = descFrom(p.seo_desc, p.short_html, { title: name },
+    offers.length ? `${name} – porovnejte ceny v ${new Set(offers.map((o) => o.domain)).size} obchodech, nejlevněji od ${cislo(Math.min(...prices0))} Kč.` : '');
+  // without any offer the page is thin and a Product snippet without offers is invalid → noindex, no Product node
+  const noindex = p.noindex === 1 || offers.length === 0;
   const inStock = offers.filter((o) => o.stock !== -1);
   const best: Offer | undefined = (inStock.length ? inStock : offers)[0];
   const prices = offers.map((o) => o.price);
@@ -153,8 +163,8 @@ export async function productView(db: D1Database, id: number) {
   const graph: unknown[] = [
     ...(img ? [{ '@type': 'ImageObject', '@id': img, url: img, inLanguage: 'cs' }] : []),
     { '@type': 'ItemPage', '@id': url + '#webpage', url, name: title, datePublished: isoPrague(p.created_at), dateModified: isoPrague(p.updated_at), isPartOf: { '@id': BASE + '/#website' }, ...(img ? { primaryImageOfPage: { '@id': img } } : {}), inLanguage: 'cs' },
-    {
-      '@type': 'Product', '@id': url + '#richSnippet', name, description,
+    ...(offers.length ? [{
+      '@type': 'Product', '@id': url + '#richSnippet', name, description, sku: String(p.id),
       ...(brand && brand.slug !== 'ostatni' ? { brand: { '@type': 'Brand', name: decode(brand.name) } } : {}),
       ...(primary ? { category: decode(primary.name) } : {}),
       mainEntityOfPage: { '@id': url + '#webpage' },
@@ -167,10 +177,10 @@ export async function productView(db: D1Database, id: number) {
           availability: inStock.length ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock', itemCondition: 'https://schema.org/NewCondition', url,
         },
       } : {}),
-    },
+    }] : []),
   ];
   const meta: Meta = {
-    title, description, ...(p.noindex ? {} : { canonical: url }), robots: robots(p.noindex === 1), ogType: 'product', ogImage: img || OG_DEFAULT, graph,
+    title, description, ...(noindex ? {} : { canonical: url }), robots: robots(noindex), ogType: 'product', ogImage: img || OG_DEFAULT, graph,
     jsonLd: [breadcrumbLd(crumbs)],
     extraMeta: [
       { property: 'og:updated_time', content: isoPrague(p.updated_at) },
@@ -221,7 +231,7 @@ export async function postView(db: D1Database, id: number) {
     return { meta, post, cat: null, related: [] as PostCard[], comments: [], shopCats: [] as Cat[] };
   }
   const [cat, related, coms, tree] = await Promise.all([postCat(db, post.cat_id), relatedPosts(db, post), comments(db, post.id), catTree(db)]);
-  const author = { '@type': 'Person', '@id': BASE + '/author/openclaw/', name: 'Ester', url: BASE + '/author/openclaw/' };
+  const author = { '@type': 'Person', '@id': BASE + '/#autor-ester', name: 'Ester' };
   const graph: unknown[] = [
     ...(img ? [{ '@type': 'ImageObject', '@id': img, url: img, ...(post.image_w ? { width: String(post.image_w), height: String(post.image_h) } : {}), ...(post.image_alt ? { caption: post.image_alt } : {}), inLanguage: 'cs' }] : []),
     { '@type': 'WebPage', '@id': url + '#webpage', url, name: title, datePublished: isoPrague(post.published_at), dateModified: isoPrague(post.modified_at), isPartOf: { '@id': BASE + '/#website' }, ...(img ? { primaryImageOfPage: { '@id': img } } : {}), inLanguage: 'cs' },
@@ -250,9 +260,10 @@ export async function blogView(db: D1Database, page: number, catId?: number) {
   const cat = catId ? await postCat(db, catId) : null;
   const base = cat ? `/${cat.slug}/` : '/blog/';
   const url = abs(pagePath(base, page));
-  const title = termTitle(cat ? cat.name : 'Blog');
+  const title = cat ? termTitle(cat.name, page) : termTitle('Magazín: rady a tipy o erotických pomůckách', page);
   const meta: Meta = {
-    title, description: cat ? stripTags(cat.description) : '', canonical: url, robots: robots(false),
+    title, description: descFrom('', cat ? cat.description : '', {}, cat ? `Články z rubriky ${decode(cat.name)} v magazínu Eroka.cz: praktické rady, tipy a průvodci výběrem.` : 'Praktické rady bez mýtů a zbytečného studu: průvodci výběrem erotických pomůcek, tipy pro páry, recenze a novinky.', page),
+    canonical: url, robots: robots(false),
     ...(page > 1 ? { prev: abs(pagePath(base, page - 1)) } : {}),
     ...(page < pages ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)], jsonLd: [],

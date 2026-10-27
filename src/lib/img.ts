@@ -1,13 +1,13 @@
-// Product photos are taken from the partners' feeds and resized on the fly — nothing is stored (Kenny, 27. 10. 2026).
-//  - wsrv.nl (Kenny's choice) for every shop it accepts
-//  - our Worker eroka-img (/img/<w>/<base64url>.webp, workers/img) for the shops wsrv.nl refuses with
-//    "Domain or TLD blocked by policy" (checked 27. 10. 2026: Růžový slon, ErosStar, Vibratory.net, Sexshop.cz)
+// Product photos are taken from the partners' feeds and resized on the fly by our Worker eroka-img (workers/img):
+// /img/<w>/<sig>/<base64url(source)>.webp, signed with IMG_SECRET (HMAC) so nobody else can use the resizer.
+// Nothing is stored (Kenny, 27. 10. 2026) — only the edge cache and the browser keep the result. wsrv.nl was used until
+// 27. 10.: it refuses adult shop domains and its cold responses took 2.7 s (median) / 9 s (p90), our Worker 0.23 s.
 // Růžový slon also has a smaller source variant (/product/detail/, ≤1000 px) — less to download and decode.
+import { DEAD_IMAGE_HOSTS, WIDTHS, imageHostAllowed } from './image-hosts';
+import { hmac16 } from './sign';
+import { getEnv } from './server/env';
 
-/** Hosts wsrv.nl refuses; keep in sync with HOSTS in workers/img/src/index.ts. */
-const OWN = new Set(['cdn.ruzovyslon.cz', 'www.erosstar.cz', 'erosstar.cz', 'vibratory.net', 'www.vibratory.net', 'www.sexshop.cz', 'pictures.sexshop.cz']);
-/** Widths both resizers are asked for (eroka-img accepts only these). */
-export const WIDTHS = [160, 320, 480, 640, 960] as const;
+export { WIDTHS };
 export type Width = (typeof WIDTHS)[number];
 
 export function imgUrl(url: string | null | undefined): string {
@@ -29,14 +29,16 @@ function b64url(s: string): string {
   return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
 }
 
-/** URL of the photo fitted inside w × w px (never enlarged), WebP. */
+/** URL of the photo fitted inside w × w px (never enlarged), WebP. Unknown hosts are shown as they are, dead ones not at all. */
 export function thumb(url: string | null | undefined, w: Width): string {
   const src = imgUrl(validImage(url));
   if (!src) return '';
-  let host = '';
-  try { host = new URL(src).hostname; } catch { return ''; }
-  if (OWN.has(host)) return src.startsWith('https://') ? `/img/${w}/${b64url(src)}.webp` : src;
-  return `https://wsrv.nl/?url=${encodeURIComponent(src)}&w=${w}&h=${w}&fit=inside&we&output=webp&q=76`;
+  let u: URL;
+  try { u = new URL(src); } catch { return ''; }
+  if (DEAD_IMAGE_HOSTS.includes(u.hostname)) return '';
+  if (u.protocol !== 'https:' || !imageHostAllowed(u.hostname)) return src;
+  const b = b64url(src);
+  return `/img/${w}/${hmac16(getEnv().IMG_SECRET ?? '', `${w}/${b}`)}/${b}.webp`;
 }
 
 /** src + srcset (1× / 2×) for an image shown at `css` px. */

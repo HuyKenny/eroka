@@ -1,8 +1,15 @@
-/** Security headers for SSR responses. No CSP yet: the WordPress site had none and Alpine needs unsafe-eval (tracked in docs/SEO-MIGRATION.md). */
-export function securityHeaders(_analytics: boolean): Record<string, string> {
+// Security headers. HTML responses get a strict CSP: scripts only with the per-response nonce ('strict-dynamic' lets
+// the nonce'd GA4 loader add gtag.js; Cloudflare's injected challenge script picks the nonce from this header). The
+// https:/'unsafe-inline' entries are ignored by browsers that support strict-dynamic and keep very old ones working.
+const BASE_CSP = "object-src 'none'; base-uri 'self'; frame-ancestors 'self'; form-action 'self' https://*.cloudflareaccess.com; upgrade-insecure-requests";
+
+export function htmlCsp(nonce: string): string {
+  return `script-src 'nonce-${nonce}' 'strict-dynamic' https: 'unsafe-inline'; ${BASE_CSP}`;
+}
+
+export function securityHeaders(): Record<string, string> {
   return {
-    // No script-src restriction on purpose (Alpine.js evaluates expressions); the rest hardens framing, plugins, base and forms.
-    'Content-Security-Policy': "frame-ancestors 'self'; object-src 'none'; base-uri 'self'; form-action 'self' https://*.cloudflareaccess.com; upgrade-insecure-requests",
+    'Content-Security-Policy': BASE_CSP,
     'Cross-Origin-Opener-Policy': 'same-origin-allow-popups',
     'X-Content-Type-Options': 'nosniff',
     'Referrer-Policy': 'strict-origin-when-cross-origin',

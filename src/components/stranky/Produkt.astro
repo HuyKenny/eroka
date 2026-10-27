@@ -22,7 +22,8 @@ const best = v.best;
 const bestGo = best ? `/go/${best.go_slug}/` : '';
 const shops = v.stats.shops;
 const offersHeading = d.offersHeading || `<h3>Kde koupit ${esc(v.name)} nejlevněji</h3>`;
-const photos = [v.img, ...v.gallery].filter(Boolean).slice(0, 5);
+// dead image hosts give no thumbnail → the next photo becomes the main one
+const photos = [v.img, ...v.gallery].filter((u) => !!u && !!picture(u, 160)).slice(0, 5);
 const main = picture(photos[0], 480);
 const specs = PARAM_ORDER.filter((k) => v.params[k]?.length).map((k) => [PARAM_LABEL[k], paramText(k, v.params[k]!)] as const);
 const disc = best && best.price_old > best.price ? Math.round((1 - best.price / best.price_old) * 100) : 0;

@@ -7,13 +7,13 @@
 import { sha256Hex } from './http';
 import { isLocal, type AppEnv } from './env';
 
-export const DEFAULT_ALLOWED_HOSTS = [
+const DEFAULT_ALLOWED_HOSTS = [
   'go.dognet.com', 'ehub.cz', 'tracking.affiliateport.eu', 'anrdoezrs.net', 'jdoqocy.com', 'tkqlhce.com', 'dpbolvw.net', 'kqzyfj.com',
   'ruzovyslon.cz', 'sexshop.cz', 'sexshop51.cz', 'erosstar.cz', 'intimfitness.cz', 'desirel.cz', 'lovesexshop.cz', 'vibratory.net',
   'flagranti.cz', 'deeplove.cz', 'sexicekshop.cz', 'lekarnaave.cz', 'dialekarna.cz', 'benu.cz', 'krasa.cz', 'eroticcity.cz',
 ];
 
-export function isSafeTarget(url: unknown, extra = ''): url is string {
+function isSafeTarget(url: unknown, extra = ''): url is string {
   if (typeof url !== 'string' || url.length === 0 || url.length > 8192) return false;
   if (!/^[\x21-\x7e]+$/.test(url)) return false;
   let u: URL;
@@ -25,7 +25,7 @@ export function isSafeTarget(url: unknown, extra = ''): url is string {
 }
 
 const CRAWLER = /bot\b|bot\/|crawl|spider|slurp|preview|monitor|lighthouse|pingdom|uptime|whatsapp|telegram|discord|slack|curl\/|wget|python|go-http-client|java\/|okhttp|axios|node-fetch|scrapy|httpclient|headless|bytespider|petalbot|facebookexternalhit/i;
-export const isCrawlerLike = (ua: string | null) => !ua || CRAWLER.test(ua);
+const isCrawlerLike = (ua: string | null) => !ua || CRAWLER.test(ua);
 const isPrefetch = (r: Request) => r.headers.get('purpose') === 'prefetch' || (r.headers.get('sec-purpose') ?? '').includes('prefetch');
 
 async function ipHash(ip: string, env: AppEnv): Promise<string> {
@@ -37,9 +37,10 @@ async function ipHash(ip: string, env: AppEnv): Promise<string> {
 const NO_STORE = { 'cache-control': 'private, no-store, max-age=0', 'x-robots-tag': 'noindex, nofollow', 'referrer-policy': 'strict-origin-when-cross-origin' };
 
 export async function handleGo(slug: string | undefined, request: Request, env: AppEnv, waitUntil?: (p: Promise<unknown>) => void): Promise<Response> {
-  if (!slug || !/^[a-z0-9-]{3,140}$/.test(slug)) return new Response('Nabídka neexistuje.', { status: 404, headers: { ...NO_STORE, 'content-type': 'text/plain; charset=utf-8' } });
+  // Content Egg slugs of a few SexShop51 offers are up to 155 characters long
+  if (!slug || !/^[a-z0-9-]{3,200}$/.test(slug)) return new Response('Nabídka neexistuje.', { status: 404, headers: { ...NO_STORE, 'content-type': 'text/plain; charset=utf-8' } });
   if (isCrawlerLike(request.headers.get('user-agent')) || isPrefetch(request)) {
-    return new Response(null, { status: 204, headers: { ...NO_STORE, 'cache-control': 'public, max-age=3600' } });
+    return new Response(null, { status: 204, headers: NO_STORE });
   }
   const ip = request.headers.get('cf-connecting-ip') ?? '0.0.0.0';
   if (env.RL_GO && !(await env.RL_GO.limit({ key: ip })).success) {

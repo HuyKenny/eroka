@@ -2,15 +2,11 @@ import type { APIRoute } from 'astro';
 import { getEnv } from '../lib/server/env';
 
 export const prerender = false;
-// Production serves the WordPress robots.txt byte for byte (parity); staging is closed.
+// Production robots.txt (27. 10. 2026; the WordPress/WooCommerce rules are gone with WordPress): affiliate exits and the
+// API are not for crawlers (thumbnails under /img/ stay crawlable for image search). Staging is closed.
 const PROD = `User-agent: *
-Disallow: /wp-content/uploads/wc-logs/
-Disallow: /wp-content/uploads/woocommerce_transient_files/
-Disallow: /wp-content/uploads/woocommerce_uploads/
-Disallow: /*?add-to-cart=
-Disallow: /*?*add-to-cart=
-Disallow: /wp-admin/
-Allow: /wp-admin/admin-ajax.php
+Disallow: /go/
+Disallow: /api/
 
 Sitemap: https://eroka.cz/sitemap_index.xml
 `;

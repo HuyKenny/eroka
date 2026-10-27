@@ -4,10 +4,12 @@ import { FEEDS, feedKey } from './feeds';
 import { finalizeDay, nextDueFeed, recomputeProducts, runFeed, type Env } from './engine';
 import { rebuildFacets } from './facets';
 
-function safeEqual(a: string, b: string): boolean {
-  if (a.length !== b.length) return false;
+/** Constant-time comparison of SHA-256 digests (does not leak the secret's length). */
+async function safeEqual(a: string, b: string): Promise<boolean> {
+  const h = async (s: string) => new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)));
+  const [x, y] = await Promise.all([h(a), h(b)]);
   let d = 0;
-  for (let i = 0; i < a.length; i++) d |= a.charCodeAt(i) ^ b.charCodeAt(i);
+  for (let i = 0; i < x.length; i++) d |= x[i]! ^ y[i]!;
   return d === 0;
 }
 const json = (data: unknown, status = 200) => new Response(JSON.stringify(data, null, 1), { status, headers: { 'content-type': 'application/json', 'cache-control': 'no-store' } });
@@ -21,7 +23,7 @@ export async function tick(env: Env) {
 export default {
   async fetch(request: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const secret = env.IMPORT_SHARED_SECRET ?? '';
-    if (secret.length < 24 || !safeEqual(request.headers.get('authorization') ?? '', `Bearer ${secret}`)) return json({ error: 'unauthorized' }, 401);
+    if (secret.length < 24 || !(await safeEqual(request.headers.get('authorization') ?? '', `Bearer ${secret}`))) return json({ error: 'unauthorized' }, 401);
     const url = new URL(request.url);
     const parts = url.pathname.replace(/^\/+|\/+$/g, '').split('/');
     if (request.method === 'GET' && parts[0] === 'status') {

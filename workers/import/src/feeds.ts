@@ -24,7 +24,8 @@ export const FEEDS: FeedDef[] = [
   { id: 7, name: 'LovesexShop', domain: 'lovesexshop.cz', format: 'google', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
   { id: 8, name: 'Vibratory.net', domain: 'vibratory.net', format: 'heureka', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
   { id: 9, name: 'Flagranti', domain: 'flagranti.cz', format: 'heureka', deeplink: 'https://go.dognet.com/?chid=gUNqvkOT&url=', tracking: '' },
-  { id: 10, name: 'Dialekarna', domain: 'dialekarna.cz', format: 'heureka', deeplink: 'https://ehub.cz/system/scripts/click.php?a_aid=052443b7&a_bid=d90f8294&desturl=', tracking: '' },
+  // 27. 10. 2026: 544 items, none matches a catalogue product (pharmacy assortment) — switched off
+  { id: 10, name: 'Dialekarna', domain: 'dialekarna.cz', format: 'heureka', deeplink: 'https://ehub.cz/system/scripts/click.php?a_aid=052443b7&a_bid=d90f8294&desturl=', tracking: '', enabled: false },
   { id: 11, name: 'Krása', domain: 'krasa.cz', format: 'heureka', deeplink: '', tracking: '', enabled: false },
   { id: 12, name: 'Sexshop', domain: 'sexshop.cz', format: 'google', deeplink: '', tracking: 'a_box=rbrcvpst&a_ch=eroka' },
   { id: 13, name: 'Intimfitness', domain: 'intimfitness.cz', format: 'heureka', deeplink: '', tracking: 'a_box=rbrcvpst' },
