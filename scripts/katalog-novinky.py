@@ -22,6 +22,7 @@ import re
 import subprocess
 import sys
 import tempfile
+import time
 import unicodedata
 import urllib.request
 import xml.etree.ElementTree as ET
@@ -65,7 +66,12 @@ WENV = {**os.environ, "PATH": f"{NODE}:{os.environ.get('PATH', '')}", "CLOUDFLAR
 
 def d1(sql=None, file=None):
     cmd = ["npx", "wrangler", "d1", "execute", "DB", "--env", ENV, "--remote", "--json", "-y"] + (["--command", sql] if sql else ["--file", file])
-    r = subprocess.run(cmd, cwd=APP, env=WENV, capture_output=True, text=True)
+    for attempt in range(4):
+        r = subprocess.run(cmd, cwd=APP, env=WENV, capture_output=True, text=True)
+        # D1 file import now and then answers "Not currently importing anything" — transient, the file was not applied
+        if r.returncode == 0 or "Not currently importing" not in (r.stdout + r.stderr):
+            break
+        time.sleep(20 * (attempt + 1))
     if r.returncode:
         raise SystemExit(f"D1 error: {r.stderr[-600:]}{r.stdout[-600:]}")
     return json.loads(r.stdout)[0]["results"] if sql else r.stdout
