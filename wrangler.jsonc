@@ -7,6 +7,7 @@
   "workers_dev": false,
   "preview_urls": false,
   "assets": { "binding": "ASSETS", "directory": "./dist/client", "html_handling": "auto-trailing-slash", "not_found_handling": "none" },
+  "services": [{ "binding": "IMG", "service": "eroka-img" }],
   "d1_databases": [{ "binding": "DB", "database_name": "eroka-local", "database_id": "00000000-0000-0000-0000-000000000000", "migrations_dir": "migrations" }],
   "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "eroka-media-local" }],
   "ratelimits": [
@@ -22,6 +23,7 @@
       // eroka-staging.huy-kenny.workers.dev behind Cloudflare Access (whole host); the Worker re-checks the JWT.
       "workers_dev": true,
       "preview_urls": false,
+      "services": [{ "binding": "IMG", "service": "eroka-img" }],
       "d1_databases": [{ "binding": "DB", "database_name": "eroka-staging", "database_id": "e70c0f9c-f877-4c4d-b2be-440c9e594633", "migrations_dir": "migrations" }],
       "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "eroka-media-staging" }],
       "ratelimits": [
@@ -43,6 +45,7 @@
       // Routes eroka.cz/* + www.eroka.cz/* are added at the cutover via the CF API (deleting them = instant rollback).
       "workers_dev": true,
       "preview_urls": false,
+      "services": [{ "binding": "IMG", "service": "eroka-img" }],
       "d1_databases": [{ "binding": "DB", "database_name": "eroka-production", "database_id": "f62bfa2e-1e2c-4a3f-b100-f88220c25592", "migrations_dir": "migrations" }],
       "r2_buckets": [{ "binding": "MEDIA", "bucket_name": "eroka-media" }],
       "ratelimits": [

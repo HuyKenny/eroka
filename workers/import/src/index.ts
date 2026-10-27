@@ -1,7 +1,8 @@
 // eroka-import: cron every 10 min in the night window imports the next due feed; after all feeds the day is
 // finalised (stale feeds, price history, sitemaps, data_version). HTTP API behind IMPORT_SHARED_SECRET for ops.
 import { FEEDS, feedKey } from './feeds';
-import { finalizeDay, nextDueFeed, runFeed, type Env } from './engine';
+import { finalizeDay, nextDueFeed, recomputeProducts, runFeed, type Env } from './engine';
+import { rebuildFacets } from './facets';
 
 function safeEqual(a: string, b: string): boolean {
   if (a.length !== b.length) return false;
@@ -39,6 +40,20 @@ export default {
     if (request.method === 'POST' && parts[0] === 'finalize') {
       if (url.searchParams.get('force') === '1') await env.DB.prepare("DELETE FROM site_cache WHERE key = 'import:finalized'").run();
       return json(await finalizeDay(env));
+    }
+    // facets/home blocks without the rest of the finalisation (after a deploy or a migration)
+    if (request.method === 'POST' && parts[0] === 'facets') {
+      const out = await rebuildFacets(env.DB, new Date().toISOString().slice(0, 10));
+      const stamp = new Date().toISOString();
+      await env.DB.prepare("INSERT INTO site_cache (key, value, updated_at) VALUES ('data_version', ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at").bind(stamp, stamp).run();
+      return json(out);
+    }
+    // recompute gallery/params/stock of a slice of products (?offset=&limit=) — backfill after migration 0004
+    if (request.method === 'POST' && parts[0] === 'recompute') {
+      const off = Number(url.searchParams.get('offset') ?? 0), lim = Math.min(3000, Number(url.searchParams.get('limit') ?? 1000));
+      const ids = (await env.DB.prepare('SELECT id FROM products ORDER BY id LIMIT ? OFFSET ?').bind(lim, off).all<{ id: number }>()).results.map((r) => r.id);
+      await recomputeProducts(env.DB, ids);
+      return json({ offset: off, done: ids.length });
     }
     void ctx;
     return json({ error: 'not found' }, 404);

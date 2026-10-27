@@ -1,9 +1,7 @@
 ---
 import Karta from './Karta.astro';
-import type { Card, Cat } from '../lib/db';
-interface Props { items: Card[]; cats?: Map<number, Cat>; cols?: 3 | 4 | 5 }
-const { items, cats, cols = 3 } = Astro.props;
+import type { Card } from '../lib/db';
+interface Props { items: Card[]; cols?: 4 | 5 | 6; h?: 'h2' | 'h3'; eager?: boolean }
+const { items, cols = 4, h = 'h3', eager = true } = Astro.props;
 ---
-<ul class={`erk-mriz${cols !== 3 ? ' erk-mriz--' + cols : ''}`}>
-	{items.map((p, i) => <Karta p={p} cat={cats?.get(p.primary_cat)} idx={i} />)}
-</ul>
+<ul class={`g${cols !== 4 ? ` g--${cols}` : ''}`}>{items.map((p, i) => <Karta p={p} idx={eager ? i : 99} h={h} />)}</ul>

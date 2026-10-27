@@ -1,30 +1,19 @@
 ---
-// 404 v2 (port of 404.php): Czech, with search and the main categories.
 import Base from '../../layouts/Base.astro';
 import Ik from '../Ik.astro';
+const CATS: Array<[string, string]> = [['/vibratory/', 'Vibrátory'], ['/dilda/', 'Dilda'], ['/eroticke-pradlo/', 'Erotické prádlo'], ['/lubrikacni-gely-a-oleje/', 'Lubrikanty'], ['/kondomy/', 'Kondomy'], ['/blog/', 'Magazín']];
 ---
 <Base title="Stránka nenalezena | Eroka" robots={['follow', 'noindex']} pageType="404">
-	<section class="erk-sek erk-404">
-		<div class="erk-wrap erk-wrap--uzky">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek erk-stitek--zl">Chyba 404</span>
-				<h1>Tady nic není</h1>
-				<p>Stránka, kterou hledáte, neexistuje nebo se přestěhovala. Zkuste vyhledávání, nebo si vyberte kategorii.</p>
-			</header>
-			<form class="erk-hledat erk-hledat--hero" role="search" method="get" action="/">
-				<label class="screen-reader-text" for="erk-q-404">Hledat pomůcku</label>
-				<input type="search" id="erk-q-404" name="s" placeholder="Hledejte: vibrátor, gel, prádlo…" />
-				<button type="submit"><Ik id="hledat" size={20} /><span>Hledat</span></button>
+	<div class="w e404">
+		<h1>Tuhle stránku jsme nenašli</h1>
+		<p class="intro" style="margin:0 auto">Možná se přesunula nebo už neexistuje. Zkuste vyhledávání, nebo začněte u kategorie.</p>
+		<div class="hs">
+			<form class="hs__f" role="search" method="get" action="/">
+				<label class="vh" for="q404">Hledat</label><Ik id="hledat" />
+				<input type="search" id="q404" name="s" placeholder="Hledat produkt, značku, kategorii…" />
+				<button type="submit">Hledat</button>
 			</form>
-			<ul class="erk-darek__chips erk-404__odkazy">
-				<li><a href="/vibratory/">Vibrátory</a></li>
-				<li><a href="/eroticke-pradlo/">Erotické prádlo</a></li>
-				<li><a href="/kosmetika-a-pece-o-telo/">Lubrikanty a kosmetika</a></li>
-				<li><a href="/kondomy/">Kondomy</a></li>
-				<li><a href="/eroticke-darky/">Dárky</a></li>
-				<li><a href="/blog/">Magazín</a></li>
-			</ul>
-			<p class="erk-404__dom"><a class="erk-tl" href="/">Zpět na úvod</a></p>
 		</div>
-	</section>
+		<ul class="hero__q" style="justify-content:center">{CATS.map(([u, t]) => <li><a href={u}>{t}</a></li>)}</ul>
+	</div>
 </Base>

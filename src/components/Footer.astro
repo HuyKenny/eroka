@@ -1,43 +1,41 @@
 ---
-// Footer v2 (port of footer.php). Links are hard-coded on purpose: legal pages and main categories must not
-// depend on menu edits.
-import logo from '../data/logo-negativ.svg?raw';
+// Footer: legal pages and main categories hard-coded (must not depend on menu edits), affiliate disclosure.
+import logo from '../data/logo.svg?raw';
 const year = new Date().getFullYear();
 ---
-<footer class="erk-pata">
-	<div class="erk-pata__in">
-		<div class="erk-pata__znacka">
-			<a class="erk-logo erk-logo--neg" href="/" aria-label="Eroka.cz — úvodní stránka" set:html={logo} />
-			<p>Srovnáváme ceny erotických pomůcek z ověřených českých eshopů. Vy si vyberete, my najdeme nejlepší cenu.</p>
-			<p class="erk-pata__18">Web je určen osobám starším 18 let.</p>
+<footer class="pa-t">
+	<div class="w pa-t__in">
+		<div>
+			<a class="logo" href="/" aria-label="Eroka.cz" set:html={logo} />
+			<p>Nezávislý srovnávač cen erotických pomůcek. Porovnáváme nabídky ověřených českých e-shopů, ceny aktualizujeme každý den.</p>
+			<p><span class="b18">18+</span>Web je určen pouze osobám starším 18 let.</p>
 		</div>
-		<nav class="erk-pata__sl" aria-label="Kategorie">
-			<h2>Nakupujte</h2>
+		<nav aria-label="Kategorie">
+			<h2>Kategorie</h2>
 			<ul>
 				<li><a href="/vibratory/">Vibrátory</a></li>
 				<li><a href="/dilda/">Dilda</a></li>
 				<li><a href="/umele-vaginy-a-masturbatory/">Masturbátory</a></li>
 				<li><a href="/eroticke-pradlo/">Erotické prádlo</a></li>
-				<li><a href="/kondomy/">Kondomy</a></li>
 				<li><a href="/vibracni-koliky-a-dalsi/">Anální pomůcky</a></li>
+				<li><a href="/kondomy/">Kondomy</a></li>
 				<li><a href="/kosmetika-a-pece-o-telo/">Lubrikanty a kosmetika</a></li>
 			</ul>
 		</nav>
-		<nav class="erk-pata__sl" aria-label="Magazín">
-			<h2>Čtěte</h2>
+		<nav aria-label="Magazín">
+			<h2>Rádce</h2>
 			<ul>
-				<li><a href="/eroticke-darky/">Erotické dárky</a></li>
 				<li><a href="/blog/">Magazín</a></li>
+				<li><a href="/eroticke-darky/">Erotické dárky</a></li>
 				<li><a href="/nejlepsi-sexualni-polohy/">Sexuální polohy</a></li>
 				<li><a href="/klitoris-jak-najit-a-stimulovat/">Klitoris a bod G</a></li>
 				<li><a href="/jak-ozivit-vztah/">Jak oživit vztah</a></li>
 			</ul>
 		</nav>
-		<nav class="erk-pata__sl" aria-label="O webu">
-			<h2>O webu</h2>
+		<nav aria-label="O webu">
+			<h2>O Eroka.cz</h2>
 			<ul>
 				<li><a href="/jak-nas-web-vydelava-a-proc-je-pro-vas-navzdy-zdarma/">Jak web vydělává</a></li>
-				<li><a href="/ruzovy-slon/">Růžový slon</a></li>
 				<li><a href="/kontakty/">Kontakty</a></li>
 				<li><a href="/vseobecne-obchodni-podminky/">Obchodní podmínky</a></li>
 				<li><a href="/zasady-ochrany-osobnich-udaju-gdpr/">Ochrana osobních údajů</a></li>
@@ -45,8 +43,8 @@ const year = new Date().getFullYear();
 			</ul>
 		</nav>
 	</div>
-	<div class="erk-pata__spodek">
+	<div class="w pa-t__sp">
 		<span>© {year} Eroka.cz</span>
-		<span>Nejsme eshop. Při nákupu přes naše odkazy můžeme dostat provizi, cena se pro vás nemění.</span>
+		<span>Nejsme e-shop. Při nákupu přes naše odkazy můžeme získat provizi, cena se pro vás nemění.</span>
 	</div>
 </footer>

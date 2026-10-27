@@ -9,15 +9,15 @@ export interface Cat {
 export interface CatFull extends Cat { description_html: string; second_html: string; seo_title: string; seo_desc: string; seo_robots: string }
 export interface Card {
   id: number; slug: string; name: string; image: string; min_price: number; offer_count: number; shop_count: number;
-  best_domain: string; primary_cat: number; go_slug: string | null;
+  best_domain: string; primary_cat: number; go_slug: string | null; disc_pct: number; in_stock: number;
 }
 export interface Product extends Card {
   short_html: string; desc_html: string; ean: string; brand_id: number; created_at: string; updated_at: string;
-  noindex: number; seo_title: string; seo_desc: string; max_price: number; best_offer_id: number;
+  noindex: number; seo_title: string; seo_desc: string; max_price: number; best_offer_id: number; images: string;
 }
 export interface Offer {
   id: number; feed: string; title: string; domain: string; price: number; price_old: number; stock: number;
-  go_slug: string; updated_at: string; img: string;
+  go_slug: string; updated_at: string; img: string; delivery_price: number | null;
 }
 export interface Brand { id: number; slug: string; name: string; description_html: string; count: number; noindex: number }
 export interface Post {
@@ -28,7 +28,7 @@ export interface Post {
 export type PostCard = Pick<Post, 'id' | 'slug' | 'title' | 'excerpt' | 'published_at' | 'image' | 'image_card' | 'image_alt' | 'image_w' | 'image_h' | 'cat_id'>;
 export interface PostCat { id: number; slug: string; name: string; description: string; count: number }
 
-const CARD_COLS = `p.id, p.slug, p.name, p.image, p.min_price, p.offer_count, p.shop_count, p.best_domain, p.primary_cat, o.go_slug`;
+const CARD_COLS = `p.id, p.slug, p.name, p.image, p.min_price, p.offer_count, p.shop_count, p.best_domain, p.primary_cat, o.go_slug, p.disc_pct, p.in_stock`;
 const CARD_JOIN = `LEFT JOIN offers o ON o.id = p.best_offer_id`;
 
 let catMemo: { at: number; byId: Map<number, Cat>; bySlug: Map<string, Cat>; kids: Map<number, Cat[]> } | null = null;
@@ -63,15 +63,24 @@ export async function guessSlug(db: D1Database, slug: string): Promise<string | 
   return r?.slug ?? null;
 }
 
-export type Sort = 'date' | 'price' | 'price-desc' | 'popularity';
-export interface ListQuery { page: number; sort: Sort; min?: number | undefined; max?: number | undefined }
+export type Sort = 'pop' | 'price' | 'price-desc' | 'date' | 'disc';
+export interface ListQuery {
+  page: number; sort: Sort; min?: number | undefined; max?: number | undefined;
+  brands: number[]; shops: string[]; stock: boolean; disc: boolean; kat?: number | undefined;
+  /** canonical param filters: exact values or numeric ranges [from, to) */
+  params: Array<{ key: string; values?: string[]; ranges?: Array<[number, number]> }>;
+}
 
-function sortSql(s: Sort): string {
+/** Sort keys live in cat_products (index range scans, see migration 0004); brand listings sort on products. */
+function sortSql(s: Sort, cat: boolean): string {
+  const t = cat ? 'x' : 'p';
+  const price = cat ? 'x.min_price' : 'p.min_price';
   switch (s) {
-    case 'price': return 'p.min_price = 0, p.min_price ASC, p.id DESC';
-    case 'price-desc': return 'p.min_price DESC, p.id DESC';
-    case 'popularity': return 'p.total_sales DESC, p.id DESC';
-    default: return 'x.created_at DESC, x.product_id DESC';
+    case 'price': return `${price} = 0, ${price} ASC, x.product_id DESC`;
+    case 'price-desc': return `${price} DESC, x.product_id DESC`;
+    case 'date': return 'x.created_at DESC, x.product_id DESC';
+    case 'disc': return `${cat ? 'x.disc' : 'p.disc_pct'} DESC, ${t}.pop DESC, x.product_id DESC`;
+    default: return `${t}.pop DESC, x.product_id DESC`;
   }
 }
 
@@ -80,11 +89,24 @@ export async function listProducts(db: D1Database, by: { cat?: number; brand?: n
   const [tbl, col, id] = by.cat ? ['cat_products', 'cat_id', by.cat] : ['brand_products', 'brand_id', by.brand!];
   const filt: string[] = [];
   const binds: unknown[] = [id];
+  const inList = (n: number) => Array(n).fill('?').join(',');
   if (q.min !== undefined) { filt.push('p.min_price >= ?'); binds.push(q.min); }
   if (q.max !== undefined) { filt.push('p.min_price <= ?'); binds.push(q.max); }
+  if (q.brands.length) { filt.push(`p.brand_id IN (${inList(q.brands.length)})`); binds.push(...q.brands); }
+  if (q.shops.length) { filt.push(`EXISTS (SELECT 1 FROM offers o2 WHERE o2.product_id = p.id AND o2.active = 1 AND o2.domain IN (${inList(q.shops.length)}))`); binds.push(...q.shops); }
+  if (q.stock) filt.push('p.in_stock = 1');
+  if (q.disc) filt.push('p.disc_pct >= 10');
+  if (q.kat) { filt.push('EXISTS (SELECT 1 FROM cat_products x2 WHERE x2.product_id = p.id AND x2.cat_id = ?)'); binds.push(q.kat); }
+  for (const f of q.params) {
+    if (f.values?.length) { filt.push(`EXISTS (SELECT 1 FROM product_params pp WHERE pp.product_id = p.id AND pp.key = ? AND pp.value IN (${inList(f.values.length)}))`); binds.push(f.key, ...f.values); }
+    else if (f.ranges?.length) {
+      filt.push(`EXISTS (SELECT 1 FROM product_params pp WHERE pp.product_id = p.id AND pp.key = ? AND (${f.ranges.map(() => '(CAST(pp.value AS REAL) >= ? AND CAST(pp.value AS REAL) < ?)').join(' OR ')}))`);
+      binds.push(f.key, ...f.ranges.flat());
+    }
+  }
   const where = `x.${col} = ? AND p.status = 'publish'` + (filt.length ? ' AND ' + filt.join(' AND ') : '');
   const off = (q.page - 1) * PER_PAGE;
-  const list = db.prepare(`SELECT ${CARD_COLS} FROM ${tbl} x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE ${where} ORDER BY ${sortSql(q.sort)} LIMIT ${PER_PAGE} OFFSET ${off}`).bind(...binds);
+  const list = db.prepare(`SELECT ${CARD_COLS} FROM ${tbl} x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE ${where} ORDER BY ${sortSql(q.sort, !!by.cat)} LIMIT ${PER_PAGE} OFFSET ${off}`).bind(...binds);
   if (knownTotal !== undefined && !filt.length) {
     return { items: (await list.all<Card>()).results, total: knownTotal };
   }
@@ -93,35 +115,66 @@ export async function listProducts(db: D1Database, by: { cat?: number; brand?: n
   return { items: a!.results as Card[], total: Number((b!.results[0] as { n: number }).n) };
 }
 
+export interface BrandLite { id: number; slug: string; name: string; count: number }
+let brandMemo: { at: number; byId: Map<number, BrandLite>; bySlug: Map<string, BrandLite> } | null = null;
+/** All brands (638 rows), memoised per isolate for 10 minutes — facet labels, suggestions, homepage. */
+export async function brandList(db: D1Database) {
+  if (brandMemo && Date.now() - brandMemo.at < 600_000) return brandMemo;
+  const rows = (await db.prepare("SELECT id, slug, name, count FROM brands WHERE noindex = 0 AND count > 0").all<BrandLite>()).results;
+  brandMemo = { at: Date.now(), byId: new Map(rows.map((b) => [b.id, b])), bySlug: new Map(rows.map((b) => [b.slug, b])) };
+  return brandMemo;
+}
+
+/** Facets precomputed nightly by the importer (workers/import/src/facets.ts). */
+export interface Facets { n: number; lo: number; hi: number; st: number; d: number; b: Array<[number, number]>; s: Array<[string, number]>; p: Record<string, Array<[string, number]>>; c?: Array<[number, number]> }
+export async function facets(db: D1Database, key: string): Promise<Facets | null> {
+  const v = await siteCache(db, key);
+  try { return v ? JSON.parse(v) as Facets : null; } catch { return null; }
+}
+let catImgMemo: { at: number; map: Record<string, string> } | null = null;
+/** One product photo per category (nightly, 'cats:img'). */
+export async function catImages(db: D1Database): Promise<Record<string, string>> {
+  if (catImgMemo && Date.now() - catImgMemo.at < 600_000) return catImgMemo.map;
+  let map: Record<string, string> = {};
+  try { map = JSON.parse((await siteCache(db, 'cats:img')) ?? '{}'); } catch { /* empty */ }
+  catImgMemo = { at: Date.now(), map };
+  return map;
+}
+
 export async function loadCategory(db: D1Database, id: number): Promise<CatFull | null> {
   return db.prepare('SELECT * FROM categories WHERE id = ?').bind(id).first<CatFull>();
 }
 
 export async function loadProduct(db: D1Database, id: number) {
-  const [p, offers, cats, hist] = await db.batch([
-    db.prepare(`SELECT p.*, o.go_slug FROM products p ${CARD_JOIN} WHERE p.id = ?`).bind(id),
-    db.prepare('SELECT id, feed, title, domain, price, price_old, stock, go_slug, updated_at, img FROM offers WHERE product_id = ? AND active = 1 ORDER BY price ASC').bind(id),
+  const [p, offers, cats, hist, params] = await db.batch([
+    db.prepare(`SELECT p.*, o.go_slug, b.slug AS b_slug, b.name AS b_name FROM products p ${CARD_JOIN} LEFT JOIN brands b ON b.id = p.brand_id WHERE p.id = ?`).bind(id),
+    db.prepare('SELECT id, feed, title, domain, price, price_old, stock, go_slug, updated_at, img, delivery_price FROM offers WHERE product_id = ? AND active = 1 ORDER BY (stock = -1), price ASC').bind(id),
     db.prepare('SELECT cat_id FROM cat_products WHERE product_id = ? AND direct = 1').bind(id),
     db.prepare('SELECT day, min_price FROM price_history WHERE product_id = ? ORDER BY day').bind(id),
+    db.prepare('SELECT key, value FROM product_params WHERE product_id = ?').bind(id),
   ]);
-  const product = (p!.results[0] as Product | undefined) ?? null;
-  if (!product) return null;
-  const brand = product.brand_id ? await db.prepare('SELECT id, slug, name FROM brands WHERE id = ?').bind(product.brand_id).first<Pick<Brand, 'id' | 'slug' | 'name'>>() : null;
+  const row = (p!.results[0] as (Product & { b_slug: string | null; b_name: string | null }) | undefined) ?? null;
+  if (!row) return null;
+  const { b_slug, b_name, ...product } = row;
+  const brand = product.brand_id && b_slug ? { id: product.brand_id, slug: b_slug, name: b_name ?? '' } : null;
+  const prm: Record<string, string[]> = {};
+  for (const r of params!.results as Array<{ key: string; value: string }>) (prm[r.key] ??= []).push(r.value);
   return {
-    product,
+    product: product as Product,
     offers: offers!.results as Offer[],
     catIds: (cats!.results as Array<{ cat_id: number }>).map((r) => r.cat_id),
     history: hist!.results as Array<{ day: string; min_price: number }>,
     brand,
+    params: prm,
   };
 }
 
-/** Related products (WooCommerce picks random products from the same categories; we take the neighbours by date). */
-export async function relatedProducts(db: D1Database, catId: number, exclude: number, createdAt: string, n = 8): Promise<Card[]> {
+/** Similar products: same primary category, closest in price (two range scans on idx_cp_price), with offers. */
+export async function relatedProducts(db: D1Database, catId: number, exclude: number, price: number, n = 8): Promise<Card[]> {
   if (!catId) return [];
   const [older, newer] = await db.batch([
-    db.prepare(`SELECT ${CARD_COLS} FROM cat_products x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE x.cat_id = ? AND x.created_at < ? AND p.status = 'publish' ORDER BY x.created_at DESC LIMIT ?`).bind(catId, createdAt, n),
-    db.prepare(`SELECT ${CARD_COLS} FROM cat_products x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE x.cat_id = ? AND x.created_at > ? AND p.status = 'publish' ORDER BY x.created_at ASC LIMIT ?`).bind(catId, createdAt, n),
+    db.prepare(`SELECT ${CARD_COLS} FROM cat_products x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE x.cat_id = ? AND x.min_price > 0 AND x.min_price < ? AND p.status = 'publish' ORDER BY x.min_price DESC LIMIT ?`).bind(catId, price, n),
+    db.prepare(`SELECT ${CARD_COLS} FROM cat_products x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE x.cat_id = ? AND x.min_price >= ? AND p.status = 'publish' ORDER BY x.min_price ASC LIMIT ?`).bind(catId, price, n + 1),
   ]);
   const a = older!.results as Card[];
   const b = newer!.results as Card[];
@@ -190,4 +243,13 @@ export async function searchProducts(db: D1Database, query: string, page: number
 
 export async function siteCache(db: D1Database, key: string): Promise<string | null> {
   return (await db.prepare('SELECT value FROM site_cache WHERE key = ?').bind(key).first<{ value: string }>())?.value ?? null;
+}
+
+/** Search suggestions: up to 6 products (FTS prefix match) as small cards. */
+export async function suggestProducts(db: D1Database, query: string): Promise<Card[]> {
+  const terms = query.toLowerCase().normalize('NFKC').split(/[^\p{L}\p{N}]+/u).filter((t) => t.length > 1).slice(0, 6);
+  if (!terms.length) return [];
+  const match = terms.map((t) => `"${t.replace(/"/g, '')}"*`).join(' ');
+  const ids = (await db.prepare('SELECT rowid AS id FROM product_fts WHERE product_fts MATCH ? ORDER BY rank LIMIT 6').bind(match).all<{ id: number }>()).results.map((r) => r.id);
+  return cardsByIds(db, ids);
 }

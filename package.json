@@ -3,7 +3,9 @@
   "type": "module",
   "version": "0.1.0",
   "private": true,
-  "engines": { "node": ">=22.12.0" },
+  "engines": {
+    "node": ">=22.12.0"
+  },
   "packageManager": "pnpm@11.15.1",
   "scripts": {
     "dev": "astro dev",
@@ -21,6 +23,10 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.10",
+    "@jsquash/jpeg": "1.6.0",
+    "@jsquash/png": "3.1.1",
+    "@jsquash/resize": "2.1.1",
+    "@jsquash/webp": "1.5.0",
     "@types/node": "22.20.4",
     "tsx": "4.23.15",
     "typescript": "6.0.3",

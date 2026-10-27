@@ -1,39 +1,33 @@
 ---
-// Homepage v2 — port of weby/eroka/child-theme/front-page.php. H1/H2, SEO paragraphs, FAQ and JSON-LD are the texts
-// of the old "domov" page (ID 11317) unchanged, so the platform switch does not touch what Google knows.
+// Homepage: search first (H1 + search + popular searches), category tiles with product photos, today's biggest
+// discounts, the most popular products, brands, shops, how the comparison works, magazine, SEO text and FAQ.
+// Title, description, H1, the SEO text and the FAQ (FAQPage JSON-LD) are the texts Google knows — unchanged.
 import Base from '../../layouts/Base.astro';
 import Ik from '../Ik.astro';
-import Mrizka from '../Mrizka.astro';
+import Karta from '../Karta.astro';
+import PostKarta from '../PostKarta.astro';
 import type { homeView } from '../../lib/views';
-import { cislo, decode, produktu } from '../../lib/format';
-import { ASSETS, BASE, OG_HOME } from '../../lib/site';
+import { cislo, decode } from '../../lib/format';
+import { picture } from '../../lib/img';
+import { shopIcon, shopName } from '../../lib/shops';
+import { BASE, OG_HOME } from '../../lib/site';
 import { robots } from '../../lib/seo';
 
 interface Props { v: Awaited<ReturnType<typeof homeView>> }
 const { v } = Astro.props;
 const title = 'Eroka.cz | Srovnání cen erotických pomůcek z ověřených eshopů';
 const description = 'Porovnejte ceny tisíců erotických hraček z prověřených českých eshopů. Nakupujte chytře, výhodně a 100% diskrétně. Vibrátory, dilda, prádlo i kondomy.';
-const celkem = cislo(Math.floor(v.total / 100) * 100) + '+';
-const pocet = (slug: string) => v.tree.bySlug.get(slug)?.count_total ?? 0;
-
-/* Kategorie: slug, popisek, ikona, barvy (--ic / --ic2), krátký slogan */
-const KATEGORIE: Array<[string, string, string, string, string, string]> = [
-	['vibratory', 'Vibrátory', 'vibr', '#FFC9B5', '#FFD66B', 'Pro chvíle jen pro vás'],
-	['eroticke-pradlo', 'Erotické prádlo', 'pradlo', '#E9DDF7', '#FFC9B5', 'Pro sebe i pro něj'],
-	['kosmetika-a-pece-o-telo', 'Lubrikanty a kosmetika', 'lubr', '#D3EEDD', '#FFD66B', 'Gely, oleje, svíčky'],
-	['dilda', 'Dilda', 'dildo', '#E9DDF7', '#FFD66B', 'Od skla po silikon'],
-	['umele-vaginy-a-masturbatory', 'Masturbátory', 'mast', '#D3EEDD', '#FFC9B5', 'Něco pro něj'],
-	['kondomy', 'Kondomy', 'kondom', '#FFC9B5', '#E9DDF7', 'Jistota na prvním místě'],
-	['vibracni-koliky-a-dalsi', 'Anální pomůcky', 'anal', '#FFD66B', '#FFC9B5', 'Pro zvědavé'],
-	['erekcni-krouzky-na-penis-a-varlata', 'Erekční kroužky', 'ring', '#FFD66B', '#D3EEDD', 'Pro páry'],
+const celkem = cislo(Math.floor((v.home.products || 11000) / 1000) * 1000);
+const TILES: Array<[string, string]> = [
+	['vibratory', 'Vibrátory'], ['dilda', 'Dilda'], ['umele-vaginy-a-masturbatory', 'Masturbátory'], ['analni-koliky', 'Anální kolíky'],
+	['erekcni-krouzky-na-penis-a-varlata', 'Erekční kroužky'], ['damske-eroticke-pradlo', 'Dámské prádlo'], ['panske-eroticke-pradlo', 'Pánské prádlo'], ['lubrikacni-gely-a-oleje', 'Lubrikanty'],
+	['kondomy', 'Kondomy'], ['fetis-kink', 'BDSM a fetiš'], ['masazni-oleje-a-svicky', 'Masážní oleje'], ['vakuove-pumpy', 'Vakuové pumpy'],
 ];
-/* „Komu to kupujete?" — rozcestník podle toho, kdo dárek dostane */
-const KOMU: Array<[string, string, string, string]> = [
-	['/vibratory/', 'Pro sebe', 'sebe', '#FFC9B5'],
-	['/parove-vibratory/', 'Pro nás dva', 'partner', '#E9DDF7'],
-	['/umele-vaginy-a-masturbatory/', 'Pro něj', 'mast', '#D3EEDD'],
-	['/eroticke-darky/', 'Jako dárek', 'darek', '#FFD66B'],
-];
+const tiles = TILES.map(([slug, label]) => { const c = v.tree.bySlug.get(slug); return c && c.count_total > 0 ? { slug, label, count: c.count_total, img: v.imgs[String(c.id)] } : null; }).filter((x): x is NonNullable<typeof x> => !!x);
+const POPULAR: Array<[string, string]> = [['/znacka/satisfyer/', 'Satisfyer'], ['/vibratory/', 'vibrátor'], ['/umele-vaginy-a-masturbatory/', 'masturbátor'], ['/znacka/we-vibe/', 'We-Vibe'], ['/lubrikacni-gely-a-oleje/', 'lubrikační gel'], ['/znacka/lelo/', 'LELO'], ['/parove-vibratory/', 'pro páry']];
+const popular = POPULAR.filter(([u]) => !u.startsWith('/znacka/') || v.brands.bySlug.has(u.split('/')[2]!));
+const brands = v.home.brands.map(([id, n]) => { const b = v.brands.byId.get(id); return b ? { slug: b.slug, name: decode(b.name), n } : null; }).filter((x): x is NonNullable<typeof x> => !!x).slice(0, 12);
+const shops = v.home.shops.filter(([, n]) => n >= 20).slice(0, 14);
 const FAQ: Array<[string, string, string]> = [
 	['Jak Eroka.cz vydělává a proč je pro mě zdarma?', 'Jsme affiliate srovnávač. Když přes nás přejdete k prodejci a nakoupíte, dostaneme malou provizi od eshopu. Vy nezaplatíte ani korunu navíc, ceny máte stejné jako přímo u prodejce.', 'Jsme affiliate srovnávač. Když přes nás přejdete k prodejci a nakoupíte, dostaneme malou provizi od eshopu. Vy nezaplatíte ani korunu navíc, ceny máte stejné jako přímo u prodejce.'],
 	['Je doručení opravdu diskrétní?', 'Ano. Naši partnerští prodejci posílají zboží v neutrálním balení bez jakéhokoli loga či popisu obsahu. Na výpisu z účtu se neobjeví nic, co by prozradilo, co jste koupili.', 'Ano. Naši partnerští prodejci posílají zboží v neutrálním balení bez loga či popisu obsahu.'],
@@ -48,181 +42,87 @@ const jsonLd = [
 ];
 ---
 <Base title={title} description={description} canonical={BASE + '/'} robots={robots(false)} ogType="website" ogImage={OG_HOME} graph={graph} jsonLd={jsonLd} pageType="home" searchAction={true}>
-<div class="erk-home">
-
-	<section class="erk-hero" aria-labelledby="erk-h1">
-		<div class="erk-wrap erk-hero__grid">
-			<div class="erk-hero__txt">
-				<span class="erk-stitek erk-stitek--nakl">★ Nezávislé srovnání cen z ověřených eshopů</span>
-				<h1 id="erk-h1">Erotické pomůcky <em>výhodně</em> a 100% diskrétně</h1>
-				<p class="erk-lead">Porovnáme za vás ceny tisíců hraček z prověřených českých eshopů. Vy si vyberete to pravé a koupíte tam, kde je to nejlevnější.</p>
-				<form class="erk-hledat erk-hledat--hero" role="search" method="get" action="/">
-					<label class="screen-reader-text" for="erk-q-hero">Hledat pomůcku</label>
-					<input type="search" id="erk-q-hero" name="s" placeholder="Hledejte: vibrátor, gel, prádlo…" />
-					<button type="submit"><Ik id="hledat" size={20} /><span>Najít nejlepší cenu</span></button>
+	<section class="hero">
+		<div class="w">
+			<h1>Erotické pomůcky <em>výhodně</em> a 100% diskrétně</h1>
+			<p class="hero__l">Porovnáváme ceny {celkem}+ produktů z ověřených českých e-shopů. Najděte, kde stejnou věc koupíte nejlevněji.</p>
+			<div class="hs">
+				<form class="hs__f" role="search" method="get" action="/" autocomplete="off">
+					<label class="vh" for="hs-hero">Hledat produkt, značku nebo kategorii</label>
+					<Ik id="hledat" />
+					<input type="search" id="hs-hero" name="s" placeholder="Např. Satisfyer, vibrátor, lubrikační gel…" data-suggest enterkeyhint="search" />
+					<button type="submit">Hledat</button>
 				</form>
-				<div class="erk-komu">
-					<span class="erk-komu__t">Kupujete pro koho?</span>
-					<ul>
-						{KOMU.map(([u, l, ik, c]) => <li><a href={u} style={`--ic:${c}`}><Ik id={ik} size={28} /><span>{l}</span></a></li>)}
-					</ul>
-				</div>
+				<div class="hs__s" role="listbox" hidden></div>
 			</div>
-			<div class="erk-hero__obr" aria-hidden="true">
-				<div class="erk-kolaz">
-					<span class="erk-kolaz__bl erk-kolaz__bl--a"><Ik id="vibr" size={120} /></span>
-					<span class="erk-kolaz__bl erk-kolaz__bl--b"><Ik id="darek" size={96} /></span>
-					<span class="erk-kolaz__bl erk-kolaz__bl--c"><Ik id="lubr" size={84} /></span>
-					<span class="erk-kolaz__bl erk-kolaz__bl--d"><Ik id="pradlo" size={72} /></span>
-					<span class="erk-kolaz__cena"><b>Cena vedle ceny</b><small>stejná hračka, víc eshopů</small></span>
-				</div>
-			</div>
-		</div>
-	</section>
-
-	<div class="erk-duvera">
-		<ul class="erk-wrap">
-			<li><Ik id="balik" size={40} /><div><b>Diskrétní doprava</b><small>Neutrální balení bez loga</small></div></li>
-			<li><Ik id="cena" size={40} /><div><b>Porovnání cen</b><small>Najdeme nejnižší cenu za vás</small></div></li>
-			<li><Ik id="stit" size={40} /><div><b>Ověřená kvalita</b><small>Jen prověření prodejci</small></div></li>
-		</ul>
-	</div>
-
-	<section class="erk-sek" id="kategorie">
-		<div class="erk-wrap">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek">Nakupujte podle kategorie</span>
-				<h2>Co vás dnes potěší?</h2>
-				<p>Vyberte si z nejoblíbenějších kategorií. U každé porovnáváme ceny z více eshopů.</p>
-			</header>
-			<ul class="erk-kat">
-				{KATEGORIE.map(([slug, label, ik, c1, c2, sl]) => (
-					<li style={`--ic:${c1};--ic2:${c2}`}>
-						<a href={`/${slug}/`}>
-							<span class="erk-kat__ik"><Ik id={ik} size={64} /></span>
-							<span class="erk-kat__nazev">{label}</span>
-							<span class="erk-kat__sl">{sl}</span>
-							<span class="erk-kat__pocet">{pocet(slug) ? `${cislo(pocet(slug))} ${produktu(pocet(slug))}` : 'Porovnat ceny'}</span>
-						</a>
-					</li>
-				))}
+			<ul class="hero__q"><li>Často hledané:</li>{popular.map(([u, t]) => <li><a href={u}>{t}</a></li>)}</ul>
+			<ul class="hero__s">
+				<li><b class="num">{cislo(v.home.products)}</b> produktů s cenou</li>
+				<li><b class="num">{cislo(v.home.offers)}</b> nabídek</li>
+				<li><b class="num">{shops.length}</b> obchodů</li>
+				<li>ceny aktualizujeme <b>každý den</b></li>
 			</ul>
 		</div>
 	</section>
 
-	<section class="erk-sek erk-sek--darek" id="darky">
-		<div class="erk-wrap erk-darek">
-			<div class="erk-darek__obr">
-				<img src={ASSETS + 'obrazky/darky.webp'} alt="" width="900" height="900" loading="lazy" decoding="async" />
-			</div>
-			<div class="erk-darek__txt">
-				<span class="erk-stitek erk-stitek--zl">Dárek pro kamarádku nebo partnera</span>
-				<h2>Nevíte, co vybrat?</h2>
-				<p>Podle příležitosti a rozpočtu jsme sepsali průvodce dárky, které potěší a nepřipadají trapné. A v kategoriích níže najdete ty nejoblíbenější s porovnanými cenami.</p>
-				<ul class="erk-darek__chips">
-					<li><a href="/parove-vibratory/">Párové vibrátory</a></li>
-					<li><a href="/eroticke-pradlo/">Erotické prádlo</a></li>
-					<li><a href="/masazni-oleje-a-svicky/">Masážní oleje a svíčky</a></li>
-					<li><a href="/lubrikacni-gely-a-oleje/">Lubrikační gely</a></li>
-				</ul>
-				<a class="erk-tl" href="/eroticke-darky/">Průvodce dárky <Ik id="sipka" size={20} /></a>
-			</div>
-		</div>
-	</section>
+	<div class="w">
+		<section class="sek" id="kategorie" aria-labelledby="h-kat">
+			<div class="sek__h"><h2 id="h-kat">Kategorie</h2></div>
+			<ul class="kt">
+				{tiles.map((t, i) => { const im = picture(t.img, 160); return <li><a href={`/${t.slug}/`}>{im ? <img src={im.src} srcset={im.srcset} alt="" width="84" height="84" loading={i < 6 ? 'eager' : 'lazy'} decoding="async" /> : <span class="kt__x" />}<b>{t.label}</b><small>{cislo(t.count)} produktů</small></a></li>; })}
+			</ul>
+		</section>
 
-	<section class="erk-sek erk-sek--tm" id="oblibene">
-		<div class="erk-wrap">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek erk-stitek--zl">Oblíbené u zákazníků</span>
-				<h2>Nejprodávanější pomůcky</h2>
-				<p>Tipy, které u nás letí nejvíc. Klikněte a porovnejte cenu napříč eshopy.</p>
-			</header>
-			<Mrizka items={v.best} cats={v.tree.byId} cols={5} />
-			<p class="erk-vice"><a class="erk-tl erk-tl--ob" href="/vibratory/">Procházet všechny produkty <Ik id="sipka" size={20} /></a></p>
-		</div>
-	</section>
+		{v.deals.length > 0 && (
+			<section class="sek" aria-labelledby="h-sl">
+				<div class="sek__h"><h2 id="h-sl">Největší slevy dnes</h2><a href="/vibratory/?orderby=disc" rel="nofollow">Další slevy</a></div>
+				<ul class="g g--6 sc">{v.deals.slice(0, 12).map((p) => <Karta p={p} />)}</ul>
+			</section>
+		)}
 
-	<section class="erk-sek" id="jak-to-funguje">
-		<div class="erk-wrap">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek">Jednoduše ve třech krocích</span>
-				<h2>Jak Eroka funguje</h2>
-				<p>Žádné složitosti. Vybíráte chytře a šetříte čas i peníze.</p>
-			</header>
-			<ol class="erk-kroky">
-				<li><span class="erk-kroky__c">1</span><h3>Vyberte pomůcku</h3><p>Procházejte kategorie nebo hledejte konkrétní hračku, která vás láká.</p></li>
-				<li><span class="erk-kroky__c">2</span><h3>Porovnáme ceny</h3><p>Ukážeme vám nabídky napříč ověřenými eshopy na jednom místě.</p></li>
-				<li><span class="erk-kroky__c">3</span><h3>Koupíte nejlevněji</h3><p>Přejdete přímo k prodejci s nejlepší cenou a nakoupíte diskrétně.</p></li>
+		{v.popular.length > 0 && (
+			<section class="sek" aria-labelledby="h-pop">
+				<div class="sek__h"><h2 id="h-pop">Nejoblíbenější produkty</h2></div>
+				<ul class="g g--6">{v.popular.slice(0, 12).map((p) => <Karta p={p} />)}</ul>
+			</section>
+		)}
+
+		{brands.length > 0 && (
+			<section class="sek" aria-labelledby="h-zn">
+				<div class="sek__h"><h2 id="h-zn">Oblíbené značky</h2></div>
+				<ul class="zn">{brands.map((b) => <li><a href={`/znacka/${b.slug}/`}>{b.name}<small>{cislo(b.n)}</small></a></li>)}</ul>
+			</section>
+		)}
+
+		<section class="sek" aria-labelledby="h-jak">
+			<div class="sek__h"><h2 id="h-jak">Jak srovnáváme ceny</h2></div>
+			<ol class="jak">
+				<li><h3>Sbíráme nabídky</h3><p>Každou noc načteme aktuální ceny a dostupnost z {shops.length} ověřených českých e-shopů.</p></li>
+				<li><h3>Párujeme stejné produkty</h3><p>Stejný výrobek od různých prodejců spojíme podle kódu EAN, takže vidíte všechny ceny vedle sebe.</p></li>
+				<li><h3>Vy vyberete nejlevnější</h3><p>Kliknutím přejdete přímo do obchodu. Cena je stejná jako u prodejce, nic nepřiplácíte.</p></li>
 			</ol>
-		</div>
-	</section>
+		</section>
 
-	<section class="erk-sek erk-sek--sl">
-		<div class="erk-wrap">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek">Proč nakupovat přes nás</span>
-				<h2>Chytřejší cesta k rozkoši</h2>
-				<p>Nejsme eshop. Jsme nezávislý průvodce, který vám pomůže vybrat dobře a ušetřit.</p>
-			</header>
-			<ul class="erk-proc">
-				<li style="--ic:#FFD66B"><Ik id="cena" size={56} /><h3>Ušetříte peníze</h3><p>Porovnáme ceny napříč eshopy, ať neplatíte zbytečně víc.</p></li>
-				<li style="--ic:#FFC9B5"><Ik id="balik" size={56} /><h3>Maximální diskrétnost</h3><p>Doručení v neutrálním balení, žádné stopy na výpisu.</p></li>
-				<li style="--ic:#D3EEDD"><Ik id="stit" size={56} /><h3>Ověření prodejci</h3><p>Spolupracujeme jen s prověřenými českými eshopy.</p></li>
-				<li style="--ic:#E9DDF7"><Ik id="sebe" size={56} /><h3>Nezávislé recenze</h3><p>Přehledné průvodce a tipy, ať vyberete bez trapasu.</p></li>
-			</ul>
-			<p class="erk-cisla"><b>{celkem}</b> porovnaných produktů &nbsp;·&nbsp; <b>0&nbsp;Kč</b> navíc oproti eshopu &nbsp;·&nbsp; <b>100&nbsp;%</b> diskrétní doručení</p>
-		</div>
-	</section>
+		{shops.length > 0 && (
+			<section class="sek" aria-labelledby="h-ob">
+				<div class="sek__h"><h2 id="h-ob">Obchody, které porovnáváme</h2></div>
+				<ul class="ob">{shops.map(([d, n]) => <li><img src={shopIcon(d)} alt="" width="24" height="24" loading="lazy" decoding="async" /><div><b>{shopName(d)}</b><small>{cislo(n)} produktů</small></div></li>)}</ul>
+			</section>
+		)}
 
-	<section class="erk-sek" id="magazin">
-		<div class="erk-wrap">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek">Magazín a průvodci</span>
-				<h2>Vyberte si jako profík</h2>
-				<p>Praktické rady bez mýtů a zbytečného studu. Než nakoupíte, přečtěte si.</p>
-			</header>
-			<ul class="erk-mag">
-				{v.main.map((p) => (
-					<li>
-						<a href={`/${p.slug}/`}>
-							<span class="erk-mag__ph">{p.image ? <img src={p.image_card || p.image} alt="" width="768" height="432" loading="lazy" decoding="async" /> : <Ik id="sebe" size={64} />}</span>
-							<span class="erk-mag__t">{decode(p.title)}</span>
-							<span class="erk-mag__d">Číst dál <Ik id="sipka" size={18} /></span>
-						</a>
-					</li>
-				))}
-			</ul>
-			<p class="erk-mag__dal"><b>Další průvodci:</b>{' '}
-				{v.more.map((p, i) => <>{i > 0 && ' · '}<a href={`/${p.slug}/`}>{decode(p.title)}</a></>)}
-				{' · '}<a href="/blog/">Celý magazín</a>
-			</p>
-		</div>
-	</section>
+		{v.mag.length > 0 && (
+			<section class="sek" aria-labelledby="h-mag">
+				<div class="sek__h"><h2 id="h-mag">Rádce a magazín</h2><a href="/blog/">Všechny články</a></div>
+				<ul class="pc pc--4">{v.mag.map((p) => <PostKarta p={p} h="h3" perex={false} />)}</ul>
+			</section>
+		)}
 
-	<section class="erk-sek erk-sek--cesta" id="od-seznameni-k-intimite">
-		<div class="erk-wrap erk-cesta">
-			<div class="erk-cesta__txt">
-				<span class="erk-stitek">Průvodce pro páry i nezadané</span>
-				<h2>Od seznámení k intimitě</h2>
-				<p>První rande, první dotek, bezpečí, dárky a rady, když vztah zevšední: celou cestu najdete v jednom průvodci s odkazy na ověřené články.</p>
-				<a class="erk-tl" href="/od-seznameni-k-intimite-pruvodce/">Otevřít průvodce <Ik id="sipka" size={20} /></a>
-			</div>
-			<ol class="erk-cesta__kroky" aria-label="Fáze vztahu">
-				<li><Ik id="hledat" size={28} /><span>Seznámení</span></li>
-				<li><Ik id="sebe" size={28} /><span>Blízkost</span></li>
-				<li><Ik id="stit" size={28} /><span>Bezpečí</span></li>
-				<li><Ik id="darek" size={28} /><span>Dárky</span></li>
-			</ol>
-		</div>
-	</section>
-
-	<section class="erk-sek erk-sek--seo">
-		<div class="erk-wrap erk-seo">
+		<section class="sek seo">
 			<h2>Erotické pomůcky a srovnání cen na jednom místě</h2>
 			<p>Eroka.cz je nezávislý český srovnávač, který vám pomůže vybrat <strong>erotické pomůcky</strong> chytře a hlavně výhodně. Místo abyste obcházeli jeden eshop za druhým, porovnáme za vás ceny tisíců produktů z prověřených prodejců a ukážeme vám, kde stejnou hračku pořídíte nejlevněji. Nakupujete tak se stejným pohodlím jako v běžném sexshopu, ale s jistotou, že neplatíte ani korunu navíc.</p>
-			<p>V nabídce najdete přes 9 700 produktů napříč všemi kategoriemi, od osvědčených klasik až po novinky. Ať hledáte první pomůcku, nebo rozšiřujete sbírku, vždy máte ceny i recenze přehledně na jednom místě. Naším cílem je, abyste se rozhodli rychle, bez trapasu a s dobrým pocitem z výhodného nákupu.</p>
+			<p>V nabídce najdete přes {celkem} produktů napříč všemi kategoriemi, od osvědčených klasik až po novinky. Ať hledáte první pomůcku, nebo rozšiřujete sbírku, vždy máte ceny i recenze přehledně na jednom místě. Naším cílem je, abyste se rozhodli rychle, bez trapasu a s dobrým pocitem z výhodného nákupu.</p>
 			<h3>Co u nás porovnáte</h3>
-			<p>Procházet můžete podle toho, co vás zajímá. Mezi nejoblíbenější kategorie patří <a href="https://eroka.cz/vibratory/">vibrátory</a>, <a href="https://eroka.cz/dilda/">dilda</a> a <a href="https://eroka.cz/umele-vaginy-a-masturbatory/">masturbátory a umělé vaginy</a>. Pro páry i jednotlivce máme <a href="https://eroka.cz/eroticke-pradlo/">erotické prádlo</a>, <a href="https://eroka.cz/vibracni-koliky-a-dalsi/">anální pomůcky</a> a <a href="https://eroka.cz/erekcni-krouzky-na-penis-a-varlata/">erekční kroužky</a>. Nechybí ani <a href="https://eroka.cz/kondomy/">kondomy</a> a <a href="https://eroka.cz/kosmetika-a-pece-o-telo/">lubrikační gely a kosmetika</a> pro bezpečné a příjemné chvíle.</p>
+			<p>Procházet můžete podle toho, co vás zajímá. Mezi nejoblíbenější kategorie patří <a href="/vibratory/">vibrátory</a>, <a href="/dilda/">dilda</a> a <a href="/umele-vaginy-a-masturbatory/">masturbátory a umělé vaginy</a>. Pro páry i jednotlivce máme <a href="/eroticke-pradlo/">erotické prádlo</a>, <a href="/vibracni-koliky-a-dalsi/">anální pomůcky</a> a <a href="/erekcni-krouzky-na-penis-a-varlata/">erekční kroužky</a>. Nechybí ani <a href="/kondomy/">kondomy</a> a <a href="/kosmetika-a-pece-o-telo/">lubrikační gely a kosmetika</a> pro bezpečné a příjemné chvíle.</p>
 			<p>U každého produktu vidíte dostupné nabídky z různých eshopů, takže si snadno vyberete tu nejvýhodnější. Ceny se průběžně aktualizují, abyste měli vždy aktuální přehled.</p>
 			<h3>Proč srovnávat ceny erotických pomůcek</h3>
 			<p>Rozdíly v cenách stejné pomůcky u různých prodejců mohou být i několik set korun. U dražších značek, jako jsou prémiové vibrátory nebo interaktivní pomůcky, se vyplatí pár sekund porovnání ještě víc. Srovnávač vám tuhle práci udělá za vás a ukáže nejnižší cenu hned. Navíc spolupracujeme jen s ověřenými českými eshopy (například Růžový slon a Sexíček shop), takže nakupujete bezpečně a s důvěryhodnou zákaznickou podporou.</p>
@@ -230,27 +130,11 @@ const jsonLd = [
 			<p>Veškeré zboží od našich partnerů přichází v neutrálním balení bez loga a popisu obsahu. Na výpisu z účtu ani na zásilce nepozná nikdo, co jste si objednali. Diskrétní doručení je u erotických pomůcek samozřejmostí a my klademe důraz na to, aby byl celý nákup pohodlný a soukromý.</p>
 			<h3>Tipy, jak vybrat tu pravou pomůcku</h3>
 			<p>Pokud si nejste jistí výběrem, mrkněte do našeho magazínu. Najdete v něm praktické průvodce bez mýtů a zbytečného studu, od výběru prvního dilda přes anální pomůcky pro začátečníky až po srovnání nejlepších masturbátorů. Dobře vybraná pomůcka vydrží roky a udělá radost, proto se vyplatí věnovat pár minut tomu, abyste koupili chytře a výhodně.</p>
-		</div>
-	</section>
+		</section>
 
-	<section class="erk-sek erk-sek--sl">
-		<div class="erk-wrap erk-wrap--uzky">
-			<header class="erk-sek__hl">
-				<span class="erk-stitek">Časté dotazy</span>
-				<h2>Než se rozhodnete</h2>
-			</header>
-			<div class="erk-faq">
-				{FAQ.map(([q, a], i) => <details open={i === 0}><summary>{q}</summary><p>{a}</p></details>)}
-			</div>
-		</div>
-	</section>
-
-	<section class="erk-final">
-		<div class="erk-wrap">
-			<h2>Objevte svět nekonečné rozkoše</h2>
-			<p>Tisíce hraček, porovnané ceny a maximální diskrétnost. Začněte u kategorie, která vás láká nejvíc.</p>
-			<a href="#kategorie" class="erk-tl erk-tl--zl">Procházet kategorie</a>
-		</div>
-	</section>
-</div>
+		<section class="sek faq" aria-labelledby="h-faq" style="max-width:860px">
+			<h2 id="h-faq">Časté dotazy</h2>
+			{FAQ.map(([q, a]) => <details><summary>{q}</summary><p>{a}</p></details>)}
+		</section>
+	</div>
 </Base>

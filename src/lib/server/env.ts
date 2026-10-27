@@ -4,6 +4,8 @@ export interface AppEnv {
   DB: D1Database;
   MEDIA?: R2Bucket;
   ASSETS?: Fetcher;
+  /** eroka-img thumbnail Worker (service binding), see workers/img */
+  IMG?: Fetcher;
   RL_GO?: RateLimit;
   RL_SEARCH?: RateLimit;
   ENVIRONMENT?: string;

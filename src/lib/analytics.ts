@@ -1,5 +1,5 @@
 // GA4 with Consent Mode v2 (default denied, granted from localStorage). Same event names as the WordPress site:
-// affiliate_click (offers via /go/ or direct shop links), partner_click (Sbalit.cz module). Banner styles live in astro.css.
+// affiliate_click (offers via /go/ or direct shop links), partner_click (Sbalit.cz module). Banner styles live in app.css.
 const KEY = 'eroka_consent';
 export function ga4Head(id: string, pageType: string): string {
   if (!/^G-[A-Z0-9]{6,}$/i.test(id)) return '';

@@ -1,21 +1,22 @@
 ---
+import Ik from './Ik.astro';
 import type { Offer } from '../lib/db';
 import { cena } from '../lib/format';
+import { shopIcon, shopName } from '../lib/shops';
 interface Props { o: Offer; nej: boolean }
 const { o, nej } = Astro.props;
-const logo = `/wp-content/uploads/ce-logos/icon_${o.domain.replace(/\./g, '-')}.png`;
+const stav = o.stock === 1 ? ['ok', 'Skladem'] : o.stock === -1 ? ['no', 'Není skladem'] : ['', 'Dostupnost ověřte v obchodě'];
+const doprava = o.delivery_price === null || o.delivery_price === undefined ? '' : o.delivery_price === 0 ? 'Doprava zdarma' : `Doprava od ${cena(o.delivery_price)}`;
 ---
-<li class={nej ? 'je-nej' : undefined}>
-	<div class="erk-nab__shop">
-		<img src={logo} alt="" width="16" height="16" loading="lazy" decoding="async" />
-		<span>{o.domain}{nej && <em class="erk-nab__nej">Nejlevněji</em>}
-			{o.stock === 1 && <small class="erk-nab__stav erk-nab__stav--ano">Skladem</small>}
-			{o.stock === -1 && <small class="erk-nab__stav">Není skladem</small>}
-		</span>
+<li class={o.stock === -1 ? 'je-ne' : undefined}>
+	<div class="ot__s">
+		<img src={shopIcon(o.domain)} alt="" width="28" height="28" loading="lazy" decoding="async" />
+		<div><b>{shopName(o.domain)}{nej && <span class="ot__nej">Nejlevněji</span>}</b><small>{o.title}</small></div>
 	</div>
-	<div class="erk-nab__cena">
-		{o.price_old > o.price && <del>{cena(o.price_old)}</del>}
-		{cena(o.price)}
+	<div class="ot__dv">
+		<span class={stav[0]}>{o.stock === 1 && <Ik id="ok" size={16} />}{stav[1]}</span>
+		{doprava && <span><Ik id="doprava" size={16} />{doprava}</span>}
 	</div>
-	<a class="erk-nab__tl" href={`/go/${o.go_slug}/`} target="_blank" rel="nofollow sponsored" data-partner={o.domain} data-price={Math.round(o.price)}>Do obchodu</a>
+	<div class="ot__c num">{o.price_old > o.price && <del>{cena(o.price_old)}</del>}{cena(o.price)}</div>
+	<div class="ot__b"><a class={`btn btn--b${nej ? '' : ' btn--o'}`} href={`/go/${o.go_slug}/?ctx=tabulka`} target="_blank" rel="nofollow sponsored" data-partner={o.domain} data-price={Math.round(o.price)}>Do obchodu</a></div>
 </li>

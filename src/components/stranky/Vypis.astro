@@ -1,58 +1,74 @@
 ---
-// Listing shell shared by category, brand and search pages: breadcrumb, H1, intro text, chips, sort, grid,
-// pagination, sidebar. Blocks below the grid (magazine box, SEO text) come through the default slot.
+// Listing shell (category, brand): breadcrumb, H1 + count, intro, subcategory tiles, filters, sort tabs, active
+// filter chips, grid, pagination. Blocks below the grid (magazine box, SEO text) come through the default slot.
 import Drobky from '../Drobky.astro';
 import Mrizka from '../Mrizka.astro';
 import Strankovani from '../Strankovani.astro';
-import Sidebar from '../Sidebar.astro';
-import Razeni from '../Razeni.astro';
-import type { Card, Cat, Sort } from '../../lib/db';
-import { cislo } from '../../lib/format';
-import { PER_PAGE } from '../../lib/site';
+import Filtry from '../Filtry.astro';
+import Ik from '../Ik.astro';
+import type { BrandLite, Card, Cat, Facets } from '../../lib/db';
+import { SORTS, toQuery, withFilter, type FilterState } from '../../lib/filters';
+import { BUCKETS, PARAM_LABEL, PARAM_ORDER, valueSlug } from '../../lib/params';
+import { cislo, decode, produktu } from '../../lib/format';
+import { picture } from '../../lib/img';
+import { shopName } from '../../lib/shops';
 
 interface Props {
-	crumbs?: Array<{ name: string; url?: string }> | undefined;
+	crumbs: Array<{ name: string; url?: string }>;
 	h1: string;
 	introHtml?: string | undefined;
-	usp?: boolean | undefined;
-	chips?: { title: string; links: Cat[] } | undefined;
-	sidebar?: { title: string; links: Cat[]; current?: number | undefined } | undefined;
-	items: Card[];
-	cats: Map<number, Cat>;
-	total: number;
-	page: number;
-	pages: number;
-	base: string;
-	qs?: string | undefined;
-	q?: { sort: Sort; min?: number | undefined; max?: number | undefined } | undefined;
-	empty?: string | undefined;
+	tiles?: Array<{ slug: string; name: string; count: number; img?: string | undefined }> | undefined;
+	links?: { title: string; items: Array<{ slug: string; name: string; count: number }>; current?: string } | undefined;
+	f: FilterState; fc: Facets | null; brands: { byId: Map<number, BrandLite>; bySlug: Map<string, BrandLite> }; cats?: Map<number, Cat> | undefined;
+	items: Card[]; total: number; page: number; pages: number; base: string; qs: string; empty?: string | undefined;
 }
-const { crumbs, h1, introHtml, usp, chips, sidebar, items, cats, total, page, pages, base, qs = '', q, empty = 'Tady zatím nic není.' } = Astro.props;
-const from = (page - 1) * PER_PAGE + 1;
-const to = Math.min(total, page * PER_PAGE);
+const { crumbs, h1, introHtml, tiles = [], links, f, fc, brands, cats, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.' } = Astro.props;
+// active filters as removable chips
+const chips: Array<[string, string]> = [];
+const url = (s: FilterState) => base + toQuery(s);
+if (f.min !== undefined || f.max !== undefined) chips.push([`Cena ${f.min !== undefined ? 'od ' + cislo(f.min) : ''} ${f.max !== undefined ? 'do ' + cislo(f.max) : ''} Kč`, url(withFilter(f, { min: undefined, max: undefined }))]);
+if (f.skladem) chips.push(['Jen skladem', url(withFilter(f, { skladem: false }))]);
+if (f.sleva) chips.push(['Ve slevě', url(withFilter(f, { sleva: false }))]);
+if (f.kat && cats) { const c = [...cats.values()].find((x) => x.slug === f.kat); chips.push([c ? decode(c.name) : f.kat, url(withFilter(f, { kat: '' }))]); }
+for (const s of f.znacka) chips.push([decode(brands.bySlug.get(s)?.name ?? s), url(withFilter(f, { znacka: f.znacka.filter((x) => x !== s) }))]);
+for (const s of f.obchod) chips.push([shopName(s), url(withFilter(f, { obchod: f.obchod.filter((x) => x !== s) }))]);
+for (const k of PARAM_ORDER) for (const v of f.p[k] ?? []) {
+	const label = BUCKETS[k]?.find(([id]) => id === v)?.[1] ?? (fc?.p[k] ?? []).map(([x]) => x).find((x) => valueSlug(x) === v) ?? v;
+	chips.push([`${PARAM_LABEL[k]}: ${label}`, url(withFilter(f, { p: { ...f.p, [k]: (f.p[k] ?? []).filter((x) => x !== v) } }))]);
+}
+const plain = withFilter(f, { min: undefined, max: undefined, znacka: [], obchod: [], skladem: false, sleva: false, kat: '', p: {} });
 ---
-<div class="erk-obal">
-	{crumbs && <Drobky items={crumbs} />}
-	<div class={`erk-vypis${sidebar ? ' erk-vypis--sb' : ''}`}>
+<div class="w">
+	<Drobky items={crumbs} />
+	<div class="lh"><h1>{h1}</h1><span class="lh__n">{cislo(total)} {produktu(total)}</span></div>
+	{introHtml && <div class="intro" data-zav set:html={introHtml} />}
+	{tiles.length > 0 && (
+		<ul class="pk" aria-label="Podkategorie">
+			{tiles.map((t) => { const im = picture(t.img, 160); return <li><a href={`/${t.slug}/`}>{im ? <img src={im.src} srcset={im.srcset} alt="" width="40" height="40" loading="lazy" decoding="async" /> : <span class="pk__x" />}<span>{t.name} <small>{cislo(t.count)}</small></span></a></li>; })}
+		</ul>
+	)}
+	<div class="lv">
+		<Filtry action={base} f={f} fc={fc} brands={brands} links={links} cats={cats} />
 		<div>
-			<h1>{h1}</h1>
-			{introHtml && <div class="erk-popis" set:html={introHtml} />}
-			{usp && <div class="erk-usp">✔ Porovnáváme ceny z ověřených českých e-shopů na jednom místě · vyberte si <b>nejlevnější nabídku</b> a ušetřete u každého nákupu.</div>}
-			{chips && chips.links.length > 0 && (
-				<nav class="erk-chipy erk-chipy--sb" aria-label={chips.title}><ul>{chips.links.map((c) => <li><a href={`/${c.slug}/`}>{c.name}</a></li>)}</ul></nav>
+			<div class="lt">
+				<button type="button" class="btn btn--g fbtn" data-filtry><Ik id="filtr" />Filtry{chips.length > 0 && ` (${chips.length})`}</button>
+				<nav class="rz" aria-label="Řazení">
+					{SORTS.map(([k, label]) => <a href={url(withFilter(f, { sort: k }))} rel="nofollow" aria-current={f.sort === k ? 'true' : undefined}>{label}</a>)}
+				</nav>
+			</div>
+			{chips.length > 0 && (
+				<ul class="ch" aria-label="Aktivní filtry">
+					{chips.map(([t, u]) => <li><a href={u} rel="nofollow">{t}<Ik id="zavrit" /></a></li>)}
+					<li><a class="ch__x" href={url(plain)} rel="nofollow">Zrušit filtry</a></li>
+				</ul>
 			)}
 			{total > 0 ? (
 				<>
-					<div class="erk-lista-v">
-						<p class="erk-pocet" role="status">Zobrazeno {cislo(from)}.–{cislo(to)}. z {cislo(total)} výsledků</p>
-						{q && <Razeni action={base} sort={q.sort} min={q.min} max={q.max} />}
-					</div>
-					<Mrizka items={items} cats={cats} />
+					<Mrizka items={items} />
 					<Strankovani base={base} page={page} pages={pages} query={qs} />
 				</>
-			) : <p class="erk-prazdno">{empty}</p>}
-			<slot />
+			) : <p class="prazdno">{chips.length ? 'Těmto filtrům nic neodpovídá. Zkuste některý zrušit.' : empty}</p>}
 		</div>
-		{sidebar && q && <Sidebar title={sidebar.title} links={sidebar.links} current={sidebar.current} action={base} min={q.min} max={q.max} sort={q.sort} />}
 	</div>
+	<slot />
 </div>

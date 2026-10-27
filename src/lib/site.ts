@@ -3,11 +3,10 @@
 export const BASE = 'https://eroka.cz';
 export const SITE_NAME = 'Eroka';
 export const GA4_ID = 'G-MMYYZLD63Y';
-export const ASSETS = '/wp-content/themes/eroka-child/assets/';
-export const LOGO_URL = BASE + '/wp-content/uploads/2026/02/Eroka_logo-e1770493799374.png';
-/** Rank Math default OG image (used where the page has no own image). */
-export const OG_DEFAULT = BASE + '/wp-content/uploads/2026/02/pexels-foundertips-5219021-1024x683.jpg';
-export const OG_HOME = BASE + ASSETS + 'obrazky/og-eroka.jpg';
+export const LOGO_URL = BASE + '/a/logo-512.png';
+/** Share image for pages without their own photo (1200 × 630). */
+export const OG_DEFAULT = BASE + '/a/og.png';
+export const OG_HOME = OG_DEFAULT;
 export const PER_PAGE = 24;
 export const POSTS_PER_PAGE = 10;
 
@@ -23,7 +22,7 @@ export function orgGraph(adultOnly = false, searchAction = false): unknown[] {
       url: BASE,
       email: 'info@eroka.cz',
       address: ADDRESS,
-      logo: { '@type': 'ImageObject', '@id': BASE + '/#logo', url: LOGO_URL, contentUrl: LOGO_URL, caption: SITE_NAME, inLanguage: 'cs', width: '574', height: '176' },
+      logo: { '@type': 'ImageObject', '@id': BASE + '/#logo', url: LOGO_URL, contentUrl: LOGO_URL, caption: SITE_NAME, inLanguage: 'cs', width: '512', height: '512' },
       priceRange: '$',
       openingHours: ['Mo,Tu,We,Th,Fr,Sa,Su 09:00-17:00'],
       description: 'Hledání potěšení by měla být radost, ne starost. Eroka.cz pro vás denně srovnává tisíce hraček z ověřených českých e-shopů. Hlídáme pro vás nejlepší ceny, slevy a novinky na jednom místě. Nakupujte chytře, diskrétně a s úsměvem.',

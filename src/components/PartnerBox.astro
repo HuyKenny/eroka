@@ -9,15 +9,15 @@ const m = (map as Record<string, { vlna: number; cile: Array<{ url: string; titu
 const cards = m && m.vlna <= WAVE ? m.cile : [];
 ---
 {cards.length > 0 && (
-	<aside class="erk-partner" aria-label="Ze Sbalit.cz" data-partner="sbalit">
-		<p class="erk-partner__k"><span>Partnerský web</span></p>
-		<p class="erk-partner__h">Ze Sbalit.cz: srovnání seznamek a rady o vztazích</p>
-		<ul class="erk-partner__l">
+	<aside class="pa" aria-label="Ze Sbalit.cz" data-partner="sbalit">
+		<p class="pa__k">Partnerský web</p>
+		<p class="pa__h">Ze Sbalit.cz: srovnání seznamek a rady o vztazích</p>
+		<ul>
 			{cards.map((c) => (
-				<li><a class="erk-partner__a" href={c.url} target="_blank" rel={REL} data-partner-link="sbalit">
-					<span class="erk-partner__t">{c.titulek}</span>
-					<span class="erk-partner__d">{c.popis}</span>
-					<span class="erk-partner__go">Číst na Sbalit.cz →</span>
+				<li><a href={c.url} target="_blank" rel={REL} data-partner-link="sbalit">
+					<span class="pa__t">{c.titulek}</span>
+					<span class="pa__d">{c.popis}</span>
+					<span class="pa__go">Číst na Sbalit.cz →</span>
 				</a></li>
 			))}
 		</ul>

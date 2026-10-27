@@ -1,0 +1,20 @@
+{
+  "$schema": "../../node_modules/wrangler/config-schema.json",
+  // Product photo thumbnails for shops wsrv.nl refuses (src/index.ts). Stateless, no bindings, nothing stored.
+  // The web Worker calls it through the IMG service binding (all environments); production also gets the route
+  // eroka.cz/img/* so cached thumbnails skip the Astro Worker.
+  "name": "eroka-img",
+  "main": "./src/index.ts",
+  "compatibility_date": "2026-10-01",
+  "workers_dev": false,
+  "preview_urls": false,
+  "limits": { "cpu_ms": 10000 },
+  "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
+  "observability": { "enabled": true, "head_sampling_rate": 0.05 },
+  "env": {
+    "production": {
+      "name": "eroka-img",
+      "routes": [{ "pattern": "eroka.cz/img/*", "zone_name": "eroka.cz" }]
+    }
+  }
+}

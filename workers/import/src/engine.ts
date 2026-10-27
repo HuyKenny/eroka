@@ -6,6 +6,8 @@ import { FEEDS, feedKey, type FeedDef } from './feeds';
 import { itemHash, parseItem, type Item } from './parse';
 import { openFeed, FeedFetchError } from './http';
 import { rebuildSitemaps } from '../../../src/lib/sitemap';
+import { mergeParams, type Params } from './params';
+import { rebuildFacets } from './facets';
 
 export interface Env {
   DB: D1Database;
@@ -34,6 +36,42 @@ function shortHash(s: string): string {
   return (h >>> 0).toString(16).padStart(8, '0').slice(0, 6);
 }
 
+/** Feeds whose parameters win when shops disagree (the richest, most consistent data first). */
+const PARAM_PRIORITY = ['Feed__2', 'Feed__15', 'Feed__9', 'Feed__8', 'Feed__1', 'Feed__7', 'Feed__12', 'Feed__13', 'Feed__16'];
+const imgKey = (u: string) => u.replace(/\/product\/(original|detail)\//, '/product/x/').replace(/^https?:\/\//, '');
+
+/** Gallery (up to 4 images besides the main one) and canonical params of products, merged from their active offers. */
+async function recomputeDetails(db: D1Database, part: number[]) {
+  const ph = part.map(() => '?').join(',');
+  const [prods, offs] = await db.batch([
+    db.prepare(`SELECT id, image FROM products WHERE id IN (${ph})`).bind(...part),
+    db.prepare(`SELECT product_id, feed, img, extra FROM offers WHERE product_id IN (${ph}) AND active = 1 ORDER BY price`).bind(...part),
+  ]);
+  const by = new Map<number, Array<{ feed: string; img: string; extra: string }>>();
+  for (const o of offs!.results as Array<{ product_id: number; feed: string; img: string; extra: string }>) (by.get(o.product_id) ?? by.set(o.product_id, []).get(o.product_id)!).push(o);
+  const stmts: D1PreparedStatement[] = [db.prepare(`DELETE FROM product_params WHERE product_id IN (${ph})`).bind(...part)];
+  const rows: Array<[number, string, string]> = [];
+  for (const pr of prods!.results as Array<{ id: number; image: string }>) {
+    const list = (by.get(pr.id) ?? []).slice().sort((a, b) => (PARAM_PRIORITY.indexOf(a.feed) + 1 || 99) - (PARAM_PRIORITY.indexOf(b.feed) + 1 || 99));
+    const extras = list.map((o) => { try { return o.extra ? JSON.parse(o.extra) as { p?: Params; i?: string[] } : {}; } catch { return {}; } });
+    const params = mergeParams(extras.map((e) => e.p ?? {}));
+    for (const [k, vals] of Object.entries(params)) for (const v of vals ?? []) rows.push([pr.id, k, v]);
+    const seen = new Set([imgKey(pr.image)]);
+    const gallery: string[] = [];
+    for (const u of [...list.map((o) => o.img), ...extras.flatMap((e) => e.i ?? [])]) {
+      if (gallery.length >= 4 || !/^https:\/\/[^\s/]+\.[^\s/]+\//i.test(u ?? '')) continue;
+      const k = imgKey(u);
+      if (!seen.has(k)) { seen.add(k); gallery.push(u); }
+    }
+    stmts.push(db.prepare('UPDATE products SET images = ? WHERE id = ?').bind(gallery.length ? JSON.stringify(gallery) : '', pr.id));
+  }
+  for (let i = 0; i < rows.length; i += 30) {
+    const r = rows.slice(i, i + 30);
+    stmts.push(db.prepare(`INSERT OR IGNORE INTO product_params (product_id, key, value) VALUES ${r.map(() => '(?, ?, ?)').join(',')}`).bind(...r.flat()));
+  }
+  for (let i = 0; i < stmts.length; i += 50) await db.batch(stmts.slice(i, i + 50));
+}
+
 /** Recompute min/max/offer_count/shop_count/best offer (cheapest not-out-of-stock, else cheapest) for products. */
 export async function recomputeProducts(db: D1Database, ids: number[]) {
   const uniq = [...new Set(ids)];
@@ -46,8 +84,11 @@ export async function recomputeProducts(db: D1Database, ids: number[]) {
         min_price = COALESCE((SELECT MIN(o.price) FROM offers o WHERE o.product_id = products.id AND o.active = 1), 0),
         max_price = COALESCE((SELECT MAX(o.price) FROM offers o WHERE o.product_id = products.id AND o.active = 1), 0),
         best_offer_id = COALESCE((${best.replace('%c', 'o.id')}), 0),
-        best_domain = COALESCE((${best.replace('%c', 'o.domain')}), '')
+        best_domain = COALESCE((${best.replace('%c', 'o.domain')}), ''),
+        in_stock = EXISTS (SELECT 1 FROM offers o WHERE o.product_id = products.id AND o.active = 1 AND o.stock <> -1)
       WHERE id IN (${ph})`).bind(...part).run();
+    await db.prepare(`UPDATE cat_products SET min_price = (SELECT p.min_price FROM products p WHERE p.id = cat_products.product_id) WHERE product_id IN (${ph})`).bind(...part).run();
+    await recomputeDetails(db, part);
   });
 }
 
@@ -139,17 +180,17 @@ export async function runFeed(env: Env, f: FeedDef, opts: { force?: boolean } = 
         res.rekeyed++;
       } else if (pid) {
         const go = `${slugify(it.title)}-${shortHash(`${key}|${it.uid}|${pid}`)}`;
-        writes.push(db.prepare(`INSERT INTO offers (product_id, feed, unique_id, title, domain, price, price_old, currency, target_url, orig_url, stock, ean, img, go_slug, updated_at, active, content_hash)
-            VALUES (?, ?, ?, ?, ?, ?, ?, 'CZK', ?, ?, ?, ?, ?, ?, ?, 1, ?) ON CONFLICT DO NOTHING`)
-          .bind(pid, key, it.uid, it.title, f.domain, it.price, it.priceOld, it.url, it.orig, it.stock, it.ean, it.img, go, stamp, hash));
+        writes.push(db.prepare(`INSERT INTO offers (product_id, feed, unique_id, title, domain, price, price_old, currency, target_url, orig_url, stock, ean, img, go_slug, updated_at, active, content_hash, delivery_price, extra)
+            VALUES (?, ?, ?, ?, ?, ?, ?, 'CZK', ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?) ON CONFLICT DO NOTHING`)
+          .bind(pid, key, it.uid, it.title, f.domain, it.price, it.priceOld, it.url, it.orig, it.stock, it.ean, it.img, go, stamp, hash, it.delivery, it.extra));
         res.created++; res.matched++; affected.push(pid);
       }
     }
     for (const r of rows ?? []) {
       seen.add(r.id); res.matched++;
       if (r.content_hash === hash && r.active === 1) continue;
-      writes.push(db.prepare('UPDATE offers SET title = ?, price = ?, price_old = ?, target_url = ?, orig_url = ?, stock = ?, ean = CASE WHEN ? <> \'\' THEN ? ELSE ean END, img = ?, updated_at = ?, active = 1, content_hash = ? WHERE id = ?')
-        .bind(it.title, it.price, it.priceOld, it.url, it.orig, it.stock, it.ean, it.ean, it.img, stamp, hash, r.id));
+      writes.push(db.prepare('UPDATE offers SET title = ?, price = ?, price_old = ?, target_url = ?, orig_url = ?, stock = ?, ean = CASE WHEN ? <> \'\' THEN ? ELSE ean END, img = ?, updated_at = ?, active = 1, content_hash = ?, delivery_price = ?, extra = ? WHERE id = ?')
+        .bind(it.title, it.price, it.priceOld, it.url, it.orig, it.stock, it.ean, it.ean, it.img, stamp, hash, it.delivery, it.extra, r.id));
       res.changed++; affected.push(r.product_id);
     }
     if (writes.length >= 50) await flush();
@@ -210,12 +251,13 @@ export async function finalizeDay(env: Env): Promise<Record<string, unknown>> {
       WHERE p.min_price > 0 AND p.min_price <> COALESCE((SELECT h.min_price FROM price_history h WHERE h.product_id = p.id ORDER BY h.day DESC LIMIT 1), -1)
       ON CONFLICT(product_id, day) DO UPDATE SET min_price = excluded.min_price`).bind(day).run();
   const sm = await rebuildSitemaps(db);
+  const facets = await rebuildFacets(db, day);
   const stamp = new Date().toISOString();
   await db.batch([
     db.prepare("INSERT INTO site_cache (key, value, updated_at) VALUES ('data_version', ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at").bind(stamp, stamp),
     db.prepare("INSERT INTO site_cache (key, value, updated_at) VALUES ('import:finalized', ?, ?) ON CONFLICT(key) DO UPDATE SET value = excluded.value, updated_at = excluded.updated_at").bind(day, stamp),
   ]);
-  const out = { day, stale_feeds: stale, stale_offers: staleOffers, price_history_rows: hist.meta.changes ?? 0, sitemaps: sm };
+  const out = { day, stale_feeds: stale, stale_offers: staleOffers, price_history_rows: hist.meta.changes ?? 0, sitemaps: sm, facets };
   log('day.finalized', out);
   return out;
 }

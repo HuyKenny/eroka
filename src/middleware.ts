@@ -14,8 +14,18 @@ import { dataVersion } from './lib/server/versions';
 import { securityHeaders } from './lib/security';
 
 /** Query params that change the rendered content (utm_*, fbclid … do not split the cache). */
-const CONTENT_PARAMS = new Set(['s', 'post_type', 'orderby', 'min_price', 'max_price', 'filter_store', 'q']);
-const NO_CACHE = [/^\/go\//, /^\/api\//, /^\/wp-content\//];
+const CONTENT_PARAMS = new Set(['s', 'orderby', 'min_price', 'max_price', 'znacka', 'obchod', 'skladem', 'sleva', 'kat',
+  'p_pro', 'p_barva', 'p_material', 'p_vibrace', 'p_napajeni', 'p_voda', 'p_delka', 'p_prumer']);
+const NO_CACHE = [/^\/go\//, /^\/api\//, /^\/wp-content\//, /^\/img\//, /^\/a\//];
+
+// the Rank Math redirect table (a few dozen rows) lives in isolate memory — a cached page never waits for D1
+let redirMemo: { at: number; map: Map<string, { to_path: string; status: number }> } | null = null;
+async function redirects(db: D1Database) {
+  if (redirMemo && Date.now() - redirMemo.at < 600_000) return redirMemo.map;
+  const rows = (await db.prepare('SELECT from_path, to_path, status FROM redirects').all<{ from_path: string; to_path: string; status: number }>()).results;
+  redirMemo = { at: Date.now(), map: new Map(rows.map((r) => [r.from_path, r])) };
+  return redirMemo.map;
+}
 const CACHE_TTL = 600;
 
 const LEGACY: Array<[RegExp, (m: RegExpExecArray) => string]> = [
@@ -64,6 +74,14 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
   if (ctx.isPrerendered) return next();
   const env = getEnv();
 
+  // product thumbnails for shops wsrv.nl refuses → eroka-img Worker (production also routes eroka.cz/img/* to it directly)
+  if (url.pathname.startsWith('/img/')) {
+    if (env.IMG) { try { return await env.IMG.fetch(ctx.request); } catch { /* local dev without the img Worker */ } }
+    const m = /^\/img\/\d+\/([A-Za-z0-9_-]+)\.webp$/.exec(url.pathname);
+    try { if (m) return Response.redirect(atob(m[1]!.replace(/-/g, '+').replace(/_/g, '/')), 302); } catch { /* bad path */ }
+    return new Response('Not found', { status: 404 });
+  }
+
   const host = url.hostname.toLowerCase();
   if (env.ENVIRONMENT === 'production' && host === 'www.eroka.cz') return redirect('https://eroka.cz' + url.pathname + url.search, 301);
 
@@ -91,7 +109,7 @@ export const onRequest = defineMiddleware(async (ctx, next) => {
     }
     if (!NO_CACHE.some((r) => r.test(url.pathname)) && url.pathname !== '/') {
       try {
-        const r = await env.DB.prepare('SELECT to_path, status FROM redirects WHERE from_path = ?').bind(decodeURIComponent(url.pathname).toLowerCase()).first<{ to_path: string; status: number }>();
+        const r = (await redirects(env.DB)).get(decodeURIComponent(url.pathname).toLowerCase());
         if (r) return finish(r.status === 410 ? new Response('Gone', { status: 410, headers: { 'cache-control': 'public, max-age=3600' } }) : redirect(r.to_path + url.search, r.status), url);
       } catch { /* a DB hiccup must not break pages */ }
     }

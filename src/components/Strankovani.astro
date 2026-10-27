@@ -12,10 +12,10 @@ const out: Array<number | 0> = [];
 list.forEach((n, i) => { if (i && n - list[i - 1]! > 1) out.push(0); out.push(n); });
 ---
 {pages > 1 && (
-	<nav class="erk-strany" aria-label="Stránkování">
+	<nav class="str" aria-label="Stránkování">
 		<ul>
 			{page > 1 && <li><a href={url(page - 1)} rel="prev" aria-label="Předchozí stránka">←</a></li>}
-			{out.map((n) => n === 0 ? <li><span class="tecky">…</span></li> : n === page ? <li><span aria-current="page">{n}</span></li> : <li><a href={url(n)} aria-label={`Stránka ${n}`}>{n}</a></li>)}
+			{out.map((n) => n === 0 ? <li><span>…</span></li> : n === page ? <li><span aria-current="page">{n}</span></li> : <li><a href={url(n)} aria-label={`Stránka ${n}`}>{n}</a></li>)}
 			{page < pages && <li><a href={url(page + 1)} rel="next" aria-label="Další stránka">→</a></li>}
 		</ul>
 	</nav>

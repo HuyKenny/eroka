@@ -1,36 +1,38 @@
 ---
-// Product card (listing, brand, search, homepage, related). One offer → straight to the shop via /go/,
-// more offers → "Porovnat N nabídek" on the product page (same rule as the WordPress v2 theme).
+// Product card. Several offers → "Porovnat ceny" (product page); one offer → straight to the shop via /go/ (ctx=karta).
 import Ik from './Ik.astro';
 import type { Card } from '../lib/db';
-import { cena, nabidek, decode, texturize } from '../lib/format';
-import { imgUrl, validImage } from '../lib/img';
+import { cena, decode, texturize } from '../lib/format';
+import { picture } from '../lib/img';
+import { shopName } from '../lib/shops';
 
-interface Props { p: Card; cat?: { slug: string; name: string } | undefined; idx?: number }
-const { p, cat, idx = 99 } = Astro.props;
+interface Props { p: Card; idx?: number; h?: 'h2' | 'h3' }
+const { p, idx = 99, h = 'h3' } = Astro.props;
+const H = h;
 const name = texturize(decode(p.name));
-const img = validImage(p.image);
+const img = picture(p.image, 240);
 const href = `/${p.slug}/`;
+const shops = p.shop_count || p.offer_count;
 ---
 <li>
-	<article class="erk-karta">
-		<div class="erk-karta__obr">
-			{img ? (
-				<img src={imgUrl(img)} alt={name} width="300" height="300" loading={idx < 4 ? 'eager' : 'lazy'} fetchpriority={idx < 2 ? 'high' : undefined} decoding="async" />
-			) : <Ik id="vibr" size={80} />}
+	<article class="k">
+		<div class="k__img">
+			{img ? <img src={img.src} srcset={img.srcset} alt={name} width="240" height="240" loading={idx < 4 ? 'eager' : 'lazy'} fetchpriority={idx < 2 ? 'high' : undefined} decoding="async" /> : <Ik id="foto" />}
+			{p.disc_pct >= 10 && <span class="k__s">−{p.disc_pct} %</span>}
 		</div>
-		{cat && <div class="erk-karta__kat"><a href={`/${cat.slug}/`} style="position:relative;z-index:2">{decode(cat.name)}</a></div>}
-		<h3><a href={href}>{name}</a></h3>
-		{p.best_domain && <p class="erk-karta__u">Nejlepší nabídka u: <b>{p.best_domain}</b></p>}
-		<div class="erk-karta__spod">
-			{p.min_price > 0 && <span class="erk-karta__cena">{p.offer_count > 1 && <small>od</small>}{cena(p.min_price)}</span>}
-			{p.offer_count === 1 && p.go_slug ? (
-				<a class="erk-karta__tl" href={`/go/${p.go_slug}/`} target="_blank" rel="nofollow sponsored" data-partner={p.best_domain} data-price={Math.round(p.min_price)}>Koupit</a>
-			) : p.offer_count > 1 ? (
-				<a class="erk-karta__tl erk-karta__tl--ob" href={href}>Porovnat {p.offer_count} {nabidek(p.offer_count)}</a>
-			) : (
-				<a class="erk-karta__tl erk-karta__tl--ob" href={href}>Zobrazit</a>
-			)}
-		</div>
+		<H class="k__n"><a href={href}>{name}</a></H>
+		{p.min_price > 0 ? (
+			<>
+				<p class="k__p num">{p.offer_count > 1 && <small>od</small>}{cena(p.min_price)}</p>
+				<p class="k__m"><span class={p.in_stock ? 'dot' : 'dot dot--no'}></span>{shops > 1 ? `v ${shops} obchodech` : shopName(p.best_domain)}</p>
+			</>
+		) : <p class="k__m">Teď není v nabídce</p>}
+		{p.offer_count === 1 && p.go_slug ? (
+			<a class="btn btn--o k__b" href={`/go/${p.go_slug}/?ctx=karta`} target="_blank" rel="nofollow sponsored" data-partner={p.best_domain} data-price={Math.round(p.min_price)}>Do obchodu</a>
+		) : p.offer_count > 1 ? (
+			<a class="btn btn--o k__b" href={href} tabindex="-1">Porovnat ceny</a>
+		) : (
+			<a class="btn btn--g k__b" href={href} tabindex="-1">Zobrazit</a>
+		)}
 	</article>
 </li>

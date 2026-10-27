@@ -1,10 +1,11 @@
 // View models for each page type: data from D1 + SEO meta (title, description, canonical, prev/next, robots, JSON-LD)
 // matching the WordPress/Rank Math output. Templates only render what these return.
 import {
-  ancestry, catTree, cardsByIds, comments, listPosts, listProducts, loadBrand, loadCategory, loadPost, loadProduct,
-  postCat, postsBySlugs, relatedPosts, relatedProducts, searchProducts,
-  type Card, type Cat, type Offer, type Post, type PostCard, type Sort,
+  ancestry, brandList, catImages, catTree, cardsByIds, comments, facets, listPosts, listProducts, loadBrand, loadCategory, loadPost, loadProduct,
+  postCat, postsBySlugs, relatedPosts, relatedProducts, searchProducts, siteCache,
+  type Card, type Cat, type Offer, type Post, type PostCard,
 } from './db';
+import { isFiltered, parseFilters, toListQuery, toQuery } from './filters';
 import { BASE, OG_DEFAULT, PER_PAGE, POSTS_PER_PAGE, isoPrague } from './site';
 import { categoryTitle, descFrom, postTitle, productTitle, robots, searchTitle, termTitle } from './seo';
 import { decode, stripTags } from './format';
@@ -39,28 +40,13 @@ function collection(url: string, title: string) {
   return { '@type': 'CollectionPage', '@id': url + '#webpage', url, name: title, isPartOf: { '@id': BASE + '/#website' }, inLanguage: 'cs' };
 }
 
-// ---------- listing query (?orderby, ?min_price, ?max_price) ----------
-export function listQuery(sp: URLSearchParams, page: number) {
-  const o = sp.get('orderby') ?? '';
-  const sort: Sort = o === 'price' || o === 'price-desc' || o === 'popularity' ? o : 'date';
-  const num = (k: string) => { const v = sp.get(k); if (v === null || v.trim() === '') return undefined; const n = Number(v); return Number.isFinite(n) && n >= 0 ? Math.floor(n) : undefined; };
-  return { page, sort, min: num('min_price'), max: num('max_price') };
-}
-const filtered = (q: ReturnType<typeof listQuery>) => q.sort !== 'date' || q.min !== undefined || q.max !== undefined;
-function queryString(q: ReturnType<typeof listQuery>): string {
-  const sp = new URLSearchParams();
-  if (q.sort !== 'date') sp.set('orderby', q.sort);
-  if (q.min !== undefined) sp.set('min_price', String(q.min));
-  if (q.max !== undefined) sp.set('max_price', String(q.max));
-  const s = sp.toString();
-  return s ? '?' + s : '';
-}
-
 // ---------- category ----------
 export async function categoryView(db: D1Database, catId: number, page: number, sp: URLSearchParams) {
-  const [cat, tree] = await Promise.all([loadCategory(db, catId), catTree(db)]);
+  const [cat, tree, fc, brands, imgs] = await Promise.all([loadCategory(db, catId), catTree(db), facets(db, `f:${catId}`), brandList(db), catImages(db)]);
   if (!cat) return null;
-  const q = listQuery(sp, page);
+  const f = parseFilters(sp);
+  const filtered = isFiltered(f);
+  const q = toListQuery(f, page, brands, fc);
   const { items, total } = await listProducts(db, { cat: cat.id }, q, cat.count_total);
   const pages = Math.max(1, Math.ceil(total / PER_PAGE));
   if (page > pages) return null;
@@ -80,25 +66,30 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
   const magSlugs = (links.magbox as Record<string, string[]>)[cat.slug] ?? links.magbox_default;
   const meta: Meta = {
     title, description: descFrom(cat.seo_desc, cat.description_html, { term: decode(cat.name) }),
-    ...(noindex ? {} : { canonical: url }), robots: robots(noindex, cat.seo_robots),
-    ...(page > 1 ? { prev: abs(pagePath(base, page - 1)) } : {}),
-    ...(page < pages ? { next: abs(pagePath(base, page + 1)) } : {}),
+    // filtered / re-sorted listings: noindex, follow and no canonical (the indexable listing is the plain URL)
+    ...(noindex || filtered ? {} : { canonical: url }), robots: filtered ? ['noindex', 'follow'] : robots(noindex, cat.seo_robots),
+    ...(page > 1 && !filtered ? { prev: abs(pagePath(base, page - 1)) } : {}),
+    ...(page < pages && !filtered ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)],
     jsonLd: [breadcrumbLd(crumbs), itemListLd(abs(base), decode(cat.name), items)].filter(Boolean),
   };
   return {
-    meta, cat, crumbs, items, total, page, pages, base, q, qs: queryString(q), kids, kidsTitle, tree,
+    meta, cat, crumbs, items, total, page, pages, base, f, qs: toQuery(f), kids, kidsTitle, tree, fc, brands, imgs,
     magbox: magSlugs.map((s) => ({ slug: s, title: (links.titulky as Record<string, string>)[s] ?? s })),
-    isFiltered: filtered(q),
+    isFiltered: filtered,
   };
 }
 
 // ---------- brand ----------
 export async function brandView(db: D1Database, slug: string, page: number, sp: URLSearchParams) {
-  const b = await loadBrand(db, slug);
+  const [b, tree, brands] = await Promise.all([loadBrand(db, slug), catTree(db), brandList(db)]);
   if (!b) return null;
-  const q = listQuery(sp, page);
-  const [{ items, total }, tree] = await Promise.all([listProducts(db, { brand: b.id }, q, b.count), catTree(db)]);
+  const fc = await facets(db, `fb:${b.id}`);
+  const f = parseFilters(sp);
+  f.znacka = [];
+  const filtered = isFiltered(f);
+  const q = toListQuery(f, page, brands, fc, tree);
+  const { items, total } = await listProducts(db, { brand: b.id }, q, b.count);
   const pages = Math.max(1, Math.ceil(total / PER_PAGE));
   if (page > pages && page > 1) return null;
   const base = `/znacka/${b.slug}/`;
@@ -106,29 +97,41 @@ export async function brandView(db: D1Database, slug: string, page: number, sp: 
   const title = termTitle(b.name);
   const crumbs: Crumb[] = [{ name: 'Domů', url: '/' }, { name: decode(b.name), url: base }];
   const meta: Meta = {
-    title, description: stripTags(b.description_html), ...(b.noindex ? {} : { canonical: url }), robots: robots(b.noindex === 1),
-    ...(page > 1 ? { prev: abs(pagePath(base, page - 1)) } : {}),
-    ...(page < pages ? { next: abs(pagePath(base, page + 1)) } : {}),
+    title, description: stripTags(b.description_html), ...(b.noindex || filtered ? {} : { canonical: url }), robots: filtered ? ['noindex', 'follow'] : robots(b.noindex === 1),
+    ...(page > 1 && !filtered ? { prev: abs(pagePath(base, page - 1)) } : {}),
+    ...(page < pages && !filtered ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)], adultOnly: true,
     jsonLd: [breadcrumbLd(crumbs), itemListLd(abs(base), decode(b.name), items)].filter(Boolean),
   };
-  return { meta, brand: b, crumbs, items, total, page, pages, base, q, qs: queryString(q), tree, isFiltered: filtered(q) };
+  return { meta, brand: b, crumbs, items, total, page, pages, base, f, qs: toQuery(f), tree, fc, brands, isFiltered: filtered };
 }
 
 // ---------- search ----------
 export async function searchView(db: D1Database, query: string, page: number) {
-  const tree = await catTree(db);
+  const [tree, brands] = await Promise.all([catTree(db), brandList(db)]);
   const { items, total } = await searchProducts(db, query, page);
   const pages = Math.max(1, Math.ceil(total / PER_PAGE));
   const meta: Meta = { title: searchTitle(query, page, pages), description: '', robots: ['follow', 'noindex'], graph: [], jsonLd: [] };
-  return { meta, query, items, total, page, pages, tree };
+  const { cats, brs } = matchNames(query, tree, brands);
+  return { meta, query, items, total, page, pages, tree, cats, brs };
+}
+
+/** Categories and brands whose name contains every typed word (diacritics-insensitive) — search page + suggestions. */
+export function matchNames(query: string, tree: Awaited<ReturnType<typeof catTree>>, brands: Awaited<ReturnType<typeof brandList>>) {
+  const fold = (t: string) => decode(t).normalize('NFKD').replace(/[̀-ͯ]/g, '').toLowerCase();
+  const words = fold(query).split(/[^a-z0-9]+/).filter((w) => w.length > 1);
+  if (!words.length) return { cats: [] as Cat[], brs: [] as Array<{ slug: string; name: string; count: number }> };
+  const hit = (name: string) => { const n = fold(name); return words.every((w) => n.includes(w)); };
+  const cats = [...tree.byId.values()].filter((c) => c.count_total > 0 && !c.noindex && hit(c.name)).sort((a, b) => b.count_total - a.count_total).slice(0, 6);
+  const brs = [...brands.byId.values()].filter((b) => b.slug !== 'ostatni' && hit(b.name)).sort((a, b) => b.count - a.count).slice(0, 6);
+  return { cats, brs };
 }
 
 // ---------- product ----------
 export async function productView(db: D1Database, id: number) {
   const [data, tree] = await Promise.all([loadProduct(db, id), catTree(db)]);
   if (!data) return null;
-  const { product: p, offers, catIds, history, brand } = data;
+  const { product: p, offers, catIds, history, brand, params } = data;
   const name = decode(p.name);
   const primary = tree.byId.get(p.primary_cat) ?? tree.byId.get(catIds[0] ?? 0);
   const chain = primary ? ancestry(tree, primary.id) : [];
@@ -144,7 +147,9 @@ export async function productView(db: D1Database, id: number) {
   const crumbs: Crumb[] = [{ name: 'Domů', url: '/' }, ...chain.map((c) => ({ name: decode(c.name), url: `/${c.slug}/` })), { name, url: `/${p.slug}/` }];
   const skip = new Set(['ostatni', 'nezarazene', 'venusiny-kulicky-a-cinky']);
   const relCats = catIds.map((cid) => tree.byId.get(cid)).filter((c): c is Cat => !!c && !skip.has(c.slug)).slice(0, 6);
-  const related = await relatedProducts(db, primary?.id ?? 0, p.id, p.created_at);
+  const related = await relatedProducts(db, primary?.id ?? 0, p.id, p.min_price || 0);
+  let gallery: string[] = [];
+  try { gallery = p.images ? (JSON.parse(p.images) as string[]).map(validImage).filter(Boolean) : []; } catch { /* no gallery */ }
   const graph: unknown[] = [
     ...(img ? [{ '@type': 'ImageObject', '@id': img, url: img, inLanguage: 'cs' }] : []),
     { '@type': 'ItemPage', '@id': url + '#webpage', url, name: title, datePublished: isoPrague(p.created_at), dateModified: isoPrague(p.updated_at), isPartOf: { '@id': BASE + '/#website' }, ...(img ? { primaryImageOfPage: { '@id': img } } : {}), inLanguage: 'cs' },
@@ -155,11 +160,11 @@ export async function productView(db: D1Database, id: number) {
       mainEntityOfPage: { '@id': url + '#webpage' },
       ...(p.ean ? { gtin: p.ean } : {}),
       ...(img ? { image: [{ '@type': 'ImageObject', url: img }] } : {}),
+      // price comparison: one AggregateOffer over all shops (lowPrice/highPrice/offerCount)
       ...(best ? {
         offers: {
-          '@type': 'Offer', price: String(Math.round(best.price)), priceCurrency: 'CZK', priceValidUntil: `${new Date().getFullYear() + 1}-12-31`,
-          availability: best.stock === -1 ? 'http://schema.org/OutOfStock' : 'http://schema.org/InStock', itemCondition: 'NewCondition', url,
-          seller: { '@type': 'Organization', '@id': BASE + '/', name: 'Eroka', url: BASE, logo: BASE + '/wp-content/uploads/2026/02/Eroka_logo-e1770493799374.png' },
+          '@type': 'AggregateOffer', priceCurrency: 'CZK', lowPrice: String(Math.round(stats.min)), highPrice: String(Math.round(stats.max)), offerCount: String(stats.n),
+          availability: inStock.length ? 'https://schema.org/InStock' : 'https://schema.org/OutOfStock', itemCondition: 'https://schema.org/NewCondition', url,
         },
       } : {}),
     },
@@ -172,7 +177,7 @@ export async function productView(db: D1Database, id: number) {
       ...(best ? [{ property: 'product:price:amount', content: String(Math.round(best.price)) }, { property: 'product:price:currency', content: 'CZK' }, { property: 'product:availability', content: best.stock === -1 ? 'out of stock' : 'instock' }] : []),
     ],
   };
-  return { meta, p, name, offers, best, stats, history, brand, primary, crumbs, relCats, related, tree, img };
+  return { meta, p, name, offers, best, stats, history, brand, primary, crumbs, relCats, related, tree, img, gallery, params };
 }
 
 /** Split the product description at the empty Content Egg headings ("Kde koupit … nejlevněji", "Vývoj ceny …"):
@@ -255,27 +260,16 @@ export async function blogView(db: D1Database, page: number, catId?: number) {
   return { meta, items, total, page, pages, base, cat };
 }
 
+export interface HomeBlocks { deals: number[]; popular: number[]; brands: Array<[number, number]>; shops: Array<[string, number]>; products: number; offers: number }
 export async function homeView(db: D1Database) {
-  const tree = await catTree(db);
-  const MAG_MAIN = ['eroticke-darky', 'jak-ozivit-vztah', 'klitoris-jak-najit-a-stimulovat', 'bod-g-jak-najit-a-stimulovat', 'nejlepsi-sexualni-polohy', 'jak-na-eroticke-hry'];
-  const MAG_MORE = ['co-je-dildo-prakticky-pruvodce-vyberem-bez-trapasu', 'jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu', 'nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu', 'erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit'];
-  const [main, more, best, total] = await Promise.all([
-    postsBySlugs(db, MAG_MAIN),
-    postsBySlugs(db, MAG_MORE),
-    bestsellers(db, tree),
-    db.prepare("SELECT COUNT(*) AS n FROM products WHERE status = 'publish'").first<{ n: number }>(),
-  ]);
-  return { tree, main, more, best, total: Number(total?.n ?? 0) };
-}
-
-/** Homepage "Nejprodávanější pomůcky": WooCommerce [products orderby=popularity] over five categories, 10 items. */
-async function bestsellers(db: D1Database, tree: Awaited<ReturnType<typeof catTree>>): Promise<Card[]> {
-  const slugs = ['vibratory', 'parove-vibratory', 'damske-eroticke-pradlo', 'lubrikacni-gely-a-oleje', 'masazni-oleje-a-svicky'];
-  const ids = slugs.map((s) => tree.bySlug.get(s)?.id).filter((x): x is number => !!x);
-  if (!ids.length) return [];
-  const rows = (await db.prepare(`SELECT DISTINCT x.product_id AS id, p.total_sales FROM cat_products x JOIN products p ON p.id = x.product_id
-     WHERE x.cat_id IN (${ids.map(() => '?').join(',')}) AND p.status = 'publish' AND p.offer_count > 0 ORDER BY p.total_sales DESC, p.id DESC LIMIT 10`).bind(...ids).all<{ id: number }>()).results;
-  return cardsByIds(db, rows.map((r) => r.id));
+  const MAG = ['eroticke-darky', 'jak-ozivit-vztah', 'nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu', 'klitoris-jak-najit-a-stimulovat'];
+  const [tree, brands, imgs, raw, mag] = await Promise.all([catTree(db), brandList(db), catImages(db), siteCache(db, 'home'), postsBySlugs(db, MAG)]);
+  let home: HomeBlocks = { deals: [], popular: [], brands: [], shops: [], products: 0, offers: 0 };
+  try { if (raw) home = JSON.parse(raw) as HomeBlocks; } catch { /* nightly block missing */ }
+  const cards = await cardsByIds(db, [...home.deals, ...home.popular]);
+  const by = new Map(cards.map((c) => [c.id, c]));
+  const pick = (ids: number[]) => ids.map((i) => by.get(i)).filter((x): x is Card => !!x);
+  return { tree, brands, imgs, home, deals: pick(home.deals), popular: pick(home.popular), mag };
 }
 
 export type { Card, Cat, Post, PostCard };
