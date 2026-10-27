@@ -185,6 +185,10 @@ def main():
     # ---------- brands ----------
     brands = {b["id"]: b for b in nd(exp / "brands.ndjson")}
 
+    # raw product excerpts (Rank Math printed wp_strip_all_tags(raw excerpt); the REST export is texturized)
+    rx = exp / "product_excerpt_raw.ndjson"
+    raw_excerpt = {int(r["id"]): r["excerpt"] for r in nd(rx)} if rx.exists() else {}
+
     # ---------- link index (legacy /go/ slugs) ----------
     go = {}
     for r in nd(exp / "cegg_link_index.ndjson.gz"):
@@ -268,7 +272,8 @@ def main():
         prod_rows.append([
             pid, p["slug"], html.unescape(p["name"]), "publish", p.get("short_description") or "", p.get("description") or "",
             img, str(p.get("global_unique_id") or ""), primary, brand_id, created, p["date_modified"], int(p.get("total_sales") or 0),
-            1 if pid in thin else 0, prm.get("rank_math_title", ""), prm.get("rank_math_description", ""),
+            1 if pid in thin else 0, prm.get("rank_math_title", ""),
+            prm.get("rank_math_description", "") or re.sub(r"\s+", " ", html.unescape(re.sub(r"<[^>]+>", "", raw_excerpt.get(pid, "")))).strip(),
             min(prices) if prices else 0.0, max(prices) if prices else 0.0, len(offers), len({o["domain"] for o in offers}),
             best["id"] if best else 0, best["domain"] if best else "",
         ])

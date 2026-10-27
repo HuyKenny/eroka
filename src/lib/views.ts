@@ -7,7 +7,7 @@ import {
 } from './db';
 import { BASE, OG_DEFAULT, PER_PAGE, POSTS_PER_PAGE, isoPrague } from './site';
 import { categoryTitle, descFrom, postTitle, productTitle, robots, searchTitle, termTitle } from './seo';
-import { decode, stripTags, untexturize } from './format';
+import { decode, stripTags } from './format';
 import { validImage } from './img';
 import links from '../data/prolinkovani.json';
 
@@ -134,8 +134,8 @@ export async function productView(db: D1Database, id: number) {
   const chain = primary ? ancestry(tree, primary.id) : [];
   const url = abs(`/${p.slug}/`);
   const title = productTitle(p.name, p.seo_title);
-  // Rank Math printed the raw short description; the REST export has it texturized (– „“ …)
-  const description = p.seo_desc ? descFrom(p.seo_desc, p.short_html, { title: name }) : untexturize(stripTags(p.short_html));
+  // seo_desc = Rank Math description or the raw (untexturized) short description from the migration
+  const description = p.seo_desc ? descFrom(p.seo_desc, p.short_html, { title: name }) : stripTags(p.short_html);
   const inStock = offers.filter((o) => o.stock !== -1);
   const best: Offer | undefined = (inStock.length ? inStock : offers)[0];
   const prices = offers.map((o) => o.price);
