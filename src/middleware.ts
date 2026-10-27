@@ -47,7 +47,6 @@ const LEGACY: Array<[RegExp, (m: RegExpExecArray) => string]> = [
   [/^\/([^/]+)\/in(?:%20| |\+)stock\/?$/i, (m) => '/' + m[1] + '/'],
   // WooCommerce shop pagination (~19k hits a month from old crawls, often with the theme's /null)
   [/^\/produkt\/page\/\d+\/?$/, () => '/'],
-  [/^\/tag\/([^/]+)\/?$/, (m) => '/' + m[1] + '/'],
   // WordPress feeds of single objects/archives
   [/^\/(.+)\/feed\/?$/, (m) => '/' + m[1] + '/'],
   // front page slug and the WooCommerce shop base
