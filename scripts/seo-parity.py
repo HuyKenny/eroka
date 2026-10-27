@@ -82,7 +82,7 @@ for f in files:
     name = re.sub(r'\d*\.xml$', '', f.rsplit('/', 1)[-1])
     by.setdefault(name, []).extend(urlparse(u).path for u in re.findall(r'<loc>([^<]+)</loc>', fetch(f, live=True)[2]))
     time.sleep(0.3)
-random.seed(26)
+random.seed(arg('--seed', 26))
 pick = lambda name, n: (by.get(name, []) if n >= len(by.get(name, [])) else random.sample(by[name], n))
 cats = by.get('product_cat-sitemap', [])
 sample = (pick('post-sitemap', 999) + pick('page-sitemap', 99) + pick('category-sitemap', 99) + cats
