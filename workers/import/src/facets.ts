@@ -83,7 +83,9 @@ export async function rebuildFacets(db: D1Database, day: string): Promise<Record
   const [deals, popular, topBrands, topShops, totals, catImg] = await Promise.all([
     all<{ id: number; c: number }>(`SELECT id, primary_cat AS c FROM products WHERE ${card} AND disc_pct >= 10 ORDER BY disc_pct DESC, pop DESC LIMIT 300`),
     all<{ id: number; c: number }>(`SELECT id, primary_cat AS c FROM products WHERE ${card} ORDER BY pop DESC, shop_count DESC LIMIT 300`),
-    all<{ id: number; n: number }>(`SELECT b.id, b.count AS n FROM brands b WHERE b.noindex = 0 AND b.slug <> 'ostatni' AND b.count > 0 ORDER BY (SELECT COALESCE(SUM(p.pop), 0) FROM products p WHERE p.brand_id = b.id) DESC LIMIT 24`),
+    // one grouped pass (a correlated SUM per brand hit the D1 CPU limit with 1 000 brands × 23k products)
+    all<{ id: number; n: number }>(`SELECT b.id, b.count AS n FROM brands b JOIN (SELECT brand_id, SUM(pop) AS s FROM products GROUP BY brand_id) t ON t.brand_id = b.id
+      WHERE b.noindex = 0 AND b.slug <> 'ostatni' AND b.count > 0 ORDER BY t.s DESC LIMIT 24`),
     all<{ k: string; n: number }>(`SELECT domain AS k, COUNT(DISTINCT product_id) AS n FROM offers WHERE active = 1 GROUP BY domain ORDER BY n DESC`),
     all<{ products: number; offers: number }>(`SELECT (SELECT COUNT(*) FROM products WHERE status = 'publish' AND offer_count > 0) AS products, (SELECT COUNT(*) FROM offers WHERE active = 1) AS offers`),
     // top 6 photos per category through idx_cp_pop (a window over all of cat_products timed out at 23k products)
