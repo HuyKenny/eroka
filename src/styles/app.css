@@ -197,6 +197,9 @@ p { margin: 0 0 1em; }
 .fo label:hover span { color: var(--c); }
 .fo input { width: 17px; height: 17px; margin: 0; accent-color: var(--c); flex: none; }
 .fo small { margin-left: auto; color: var(--ink3); font-size: .8rem; }
+.fo__l { display: flex; align-items: center; gap: 9px; padding: 4px 0; color: inherit; }
+.fo__l i { width: 17px; height: 17px; flex: none; border: 1.5px solid var(--ink3); border-radius: 3px; }
+.fo__l:hover span { color: var(--c); }
 .fo__vic > summary { list-style: none; color: var(--c); font-weight: 600; cursor: pointer; padding: 4px 0; font-size: .88rem; }
 .fo__vic > summary::-webkit-details-marker { display: none; }
 .fo__vic[open] > summary { display: none; }

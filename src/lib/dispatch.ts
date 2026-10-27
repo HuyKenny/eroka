@@ -2,8 +2,12 @@
 //   /<slug>/                → product | product category | post | page | blog category (slugs table, product wins)
 //   /<slug>/page/<n>/       → paged product category / blog category / the blog page
 //   /page/<n>/?s=…          → paged search
-//   unknown /<slug>/        → 301 only to an unambiguous continuation of a cut-off slug (db.guessSlug), else 404
+//   unknown /<slug>/        → 301 to an unambiguous continuation of a cut-off slug (db.guessSlug), else to the most
+//                             relevant category/brand by its words (guess.ts), else 404; scanner junk stays 404
 import { guessSlug, resolveSlug } from './db';
+import { guessListing } from './guess';
+
+const JUNK = /\.[a-z0-9]{2,5}$|^\/(\.|wp-|cgi-bin|admin|administrator|phpmyadmin|xmlrpc|vendor|api\/|_)/i;
 
 export type Route =
   | { kind: 'product' | 'category' | 'post' | 'page' | 'postcat'; id: number; page: number }
@@ -23,7 +27,13 @@ export async function dispatch(db: D1Database, pathname: string, sp: URLSearchPa
     if (page <= 1) return { kind: 'redirect', to: '/' + seg.map(encodeURIComponent).join('/') + (seg.length ? '/' : '') };
   }
   if (seg.length === 0) return sp.has('s') ? { kind: 'search', page } : page > 1 ? { kind: 'redirect', to: '/' } : { kind: 'notfound' };
-  if (seg.length !== 1) return { kind: 'notfound' };
+  if (seg.length !== 1) {
+    if (page > 1 || JUNK.test(path)) return { kind: 'notfound' };
+    const g = await guessed(db, seg.join('-'));
+    // nothing better: the existing first segment (/kondomy/<gone>/ → /kondomy/)
+    if (g.kind === 'notfound' && await resolveSlug(db, seg[0]!.toLowerCase())) return { kind: 'redirect', to: `/${encodeURIComponent(seg[0]!.toLowerCase())}/` };
+    return g;
+  }
   const slug = seg[0]!.toLowerCase();
   if (slug !== seg[0]) return { kind: 'redirect', to: `/${encodeURIComponent(slug)}/` };
   const r = await resolveSlug(db, slug);
@@ -35,6 +45,12 @@ export async function dispatch(db: D1Database, pathname: string, sp: URLSearchPa
   if (page === 1) {
     const g = await guessSlug(db, slug);
     if (g) return { kind: 'redirect', to: `/${encodeURIComponent(g)}/` };
+    if (!JUNK.test(path)) return guessed(db, slug);
   }
   return { kind: 'notfound' };
+}
+
+async function guessed(db: D1Database, words: string): Promise<Route> {
+  const to = await guessListing(db, words);
+  return to ? { kind: 'redirect', to } : { kind: 'notfound' };
 }

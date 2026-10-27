@@ -3,6 +3,9 @@
 // to the target category and its ancestors as cat_products rows with direct = 2; rules run nightly (facets.ts) in this
 // order, so a later rule (the audience hubs at the end) sees the members added by earlier ones. Manual rows (direct 0/1)
 // are never touched. `within` limits a rule to products already in those category subtrees ('*' = whole catalogue).
+// Facet landings (src/data/fasety.ts) get their rules generated from that table and run last.
+
+import { FASETY } from '../../../src/data/fasety';
 
 export interface Rule {
   cat: string;                       // target category slug
@@ -66,7 +69,6 @@ export const RULES: Rule[] = [
   { cat: 'analni-lubrikacni-gely-a-oleje', any: [{ within: LUB, name: /anál|anal/i }] },
   { cat: 'oralni-lubrikacni-gely-a-oleje-s-prichuti', any: [{ within: LUB, name: /\borál|\boral\b|příchu|prichu|jahod|flavou?r|ovocn|čokolád|cokolad|vanilk|třešň|tresn|malin/i }] },
   { cat: 'hrejive-lubrikacni-gely-a-oleje-na-vodni-bazi', any: [{ within: LUB, name: /hřej|hrej|warm|tepl/i }] },
-  { cat: 'kondomy-durex', any: [{ within: K, brand: ['durex'] }] },
   { cat: 'ultra-tenke-kondomy', any: [{ within: K, name: /tenk|thin|slim|invisible|feel ?ultra|real ?feel/i }] },
   { cat: 'velke-kondomy', any: [{ within: K, name: /\bxl\b|\bxxl\b|\blarge\b|\bking\b|magnum|velké kondom|velke kondom|nadměr|extra velk|grande/i }], not: /maxi-pack|custom fit|balení|baleni/i },
   { cat: 'ochucene-kondomy', any: [{ within: K, name: /příchu|prichu|ochuc|flavou?r|jahod|banán|banan|čokolád|cokolad|máta|mata|třešň|tresn/i }] },
@@ -86,4 +88,13 @@ export const RULES: Rule[] = [
     { within: ['umele-vaginy-a-masturbatory', 'erekcni-krouzky-na-penis-a-varlata', 'navleky-na-penis-prst', 'vakuove-pumpy-pro-muze-na-penis', 'umele-panny', 'masaz-prostaty', 'zvetseni-penisu-pomucky-a-pripravky', 'sexualni-stroje'] },
     { within: [...ANAL, ...V], param: { key: 'pro', values: ['pro muže'] } },
   ] },
+  // facet landings: param value OR brand OR product name, within the base category
+  ...FASETY.map((f): Rule => ({
+    cat: f.slug,
+    any: [
+      ...(f.key && f.key !== 'brand' ? [{ within: [f.base], param: { key: f.key, values: [f.value!] } }] : []),
+      ...(f.key === 'brand' ? [{ within: [f.base], brand: [f.value!] }] : []),
+      ...(f.re ? [{ within: [f.base], name: f.re }] : []),
+    ],
+  })),
 ];

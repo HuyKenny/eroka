@@ -10,6 +10,8 @@ import { BASE, OG_DEFAULT, PER_PAGE, POSTS_PER_PAGE, isoPrague } from './site';
 import { brandTitle, categoryTitle, descFrom, postTitle, productTitle, robots, searchTitle, termTitle } from './seo';
 import { cislo, decode } from './format';
 import { validImage } from './img';
+import { valueSlug } from './params';
+import { FASETY } from '../data/fasety';
 import links from '../data/prolinkovani.json';
 import menu from '../data/menu.json';
 
@@ -47,6 +49,17 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
   if (!cat) return null;
   const f = parseFilters(sp);
   const filtered = isFiltered(f);
+  // facet landings of this category (src/data/fasety.ts) that are indexable: filter value → landing slug
+  const landings: Record<string, string> = {};
+  for (const l of FASETY) {
+    const c = l.base === cat.slug && l.key ? tree.bySlug.get(l.slug) : undefined;
+    if (c && c.count_total >= 5 && !c.noindex) landings[`${l.key}=${l.key === 'brand' ? l.value : valueSlug(l.value!)}`] = l.slug;
+  }
+  // the plain filter of exactly one landing value → 301 to the landing (one indexable URL per combination)
+  if (filtered && page === 1) {
+    const one = only(f);
+    if (one && landings[one]) return { redirect: `/${landings[one]}/` } as const;
+  }
   const q = toListQuery(f, page, brands, fc);
   const { items, total } = await listProducts(db, { cat: cat.id }, q, cat.count_total);
   const pages = Math.max(1, Math.ceil(total / PER_PAGE));
@@ -85,10 +98,19 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
     jsonLd: [breadcrumbLd(crumbs), itemListLd(abs(base), decode(cat.name), items)].filter(Boolean),
   };
   return {
-    meta, cat, crumbs, items, total, page, pages, base, f, qs: toQuery(f), kids, kidsTitle, tree, fc, brands, imgs,
+    meta, cat, crumbs, items, total, page, pages, base, f, qs: toQuery(f), kids, kidsTitle, tree, fc, brands, imgs, landings,
     magbox: magSlugs.map((s) => ({ slug: s, title: (links.titulky as Record<string, string>)[s] ?? s })),
     isFiltered: filtered,
   };
+}
+
+/** `key=value` when the filter state is a single brand or a single parameter value and nothing else, else null. */
+function only(f: ReturnType<typeof parseFilters>): string | null {
+  if (f.sort !== 'pop' || f.min !== undefined || f.max !== undefined || f.obchod.length || f.skladem || f.sleva || f.kat) return null;
+  const ps = Object.entries(f.p);
+  if (f.znacka.length === 1 && !ps.length) return `brand=${f.znacka[0]}`;
+  if (!f.znacka.length && ps.length === 1 && ps[0]![1]!.length === 1) return `${ps[0]![0]}=${ps[0]![1]![0]}`;
+  return null;
 }
 
 // ---------- brand ----------

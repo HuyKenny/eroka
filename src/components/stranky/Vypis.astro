@@ -22,9 +22,10 @@ interface Props {
 	tilesTitle?: string | undefined;
 	links?: { title: string; items: Array<{ slug: string; name: string; count: number }>; current?: string } | undefined;
 	f: FilterState; fc: Facets | null; brands: { byId: Map<number, BrandLite>; bySlug: Map<string, BrandLite> }; cats?: Map<number, Cat> | undefined;
+	landings?: Record<string, string> | undefined;
 	items: Card[]; total: number; page: number; pages: number; base: string; qs: string; empty?: string | undefined;
 }
-const { crumbs, h1, introHtml, tiles = [], tilesTitle = 'Podkategorie', links, f, fc, brands, cats, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.' } = Astro.props;
+const { crumbs, h1, introHtml, tiles = [], tilesTitle = 'Podkategorie', links, f, fc, brands, cats, landings, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.' } = Astro.props;
 // active filters as removable chips
 const chips: Array<[string, string]> = [];
 const url = (s: FilterState) => base + toQuery(s);
@@ -57,7 +58,7 @@ const plain = withFilter(f, { min: undefined, max: undefined, znacka: [], obchod
 		</nav>
 	)}
 	<div class="lv">
-		<Filtry action={base} f={f} fc={fc} brands={brands} links={links} cats={cats} />
+		<Filtry action={base} f={f} fc={fc} brands={brands} links={links} cats={cats} landings={landings} />
 		<div>
 			<div class="lt">
 				<button type="button" class="btn btn--g fbtn" data-filtry><Ik id="filtr" />Filtry{chips.length > 0 && ` (${chips.length})`}</button>

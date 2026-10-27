@@ -44,7 +44,10 @@ const LEGACY: Array<[RegExp, (m: RegExpExecArray) => string]> = [
   // old brand base with a diacritic (Rank Math had hundreds of these pointing at /vibratory/)
   [/^\/(?:zna%c4%8dka|znau010dka)\/(.+)$/i, (m) => '/znacka/' + m[1]],
   // feeds once put the availability text into image URLs: /<product>/in stock/
-  [/^\/([^/]+)\/in(?:%20| )stock\/?$/i, (m) => '/' + m[1] + '/'],
+  [/^\/([^/]+)\/in(?:%20| |\+)stock\/?$/i, (m) => '/' + m[1] + '/'],
+  // WooCommerce shop pagination (~19k hits a month from old crawls, often with the theme's /null)
+  [/^\/produkt\/page\/\d+\/?$/, () => '/'],
+  [/^\/tag\/([^/]+)\/?$/, (m) => '/' + m[1] + '/'],
   // WordPress feeds of single objects/archives
   [/^\/(.+)\/feed\/?$/, (m) => '/' + m[1] + '/'],
   // front page slug and the WooCommerce shop base
@@ -55,6 +58,10 @@ const LEGACY: Array<[RegExp, (m: RegExpExecArray) => string]> = [
 async function canonicalPath(path: string, db: D1Database): Promise<{ to: string; status: number } | null> {
   let p = path.replace(/\/\/+/g, '/');
   if (/[A-Z]/.test(p) && !KEEP_CASE.test(p)) p = p.toLowerCase();
+  // the old theme appended "null" to links: /<anything>/null
+  if (/\/null\/?$/i.test(p)) p = p.replace(/\/null\/?$/i, '/');
+  // WordPress REST/oEmbed endpoints are gone for good
+  if (/^\/wp-json(\/|$)/.test(p)) return { to: '', status: 410 };
   for (const [re, to] of LEGACY) {
     const m = re.exec(p);
     if (m) { p = to(m); break; }

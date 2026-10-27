@@ -12,12 +12,16 @@ interface Props {
 	action: string; f: FilterState; fc: Facets | null; brands: { byId: Map<number, BrandLite> };
 	links?: { title: string; items: Array<{ slug: string; name: string; count: number }>; current?: string } | undefined;
 	cats?: Map<number, Cat> | undefined;
+	/** `key=value` → facet landing slug (views.ts): such a value is a crawlable link to its landing, not a checkbox */
+	landings?: Record<string, string> | undefined;
 }
-const { action, f, fc, brands, links, cats } = Astro.props;
+const { action, f, fc, brands, links, cats, landings = {} } = Astro.props;
 const n = fc?.n ?? 0;
-type Opt = { v: string; label: string; c: number; on: boolean };
-const brandOpts: Opt[] = (fc?.b ?? []).map(([id, c]) => brands.byId.get(id) ? { v: brands.byId.get(id)!.slug, label: decode(brands.byId.get(id)!.name), c, on: f.znacka.includes(brands.byId.get(id)!.slug) } : null)
-	.filter((x): x is Opt => !!x && x.v !== 'ostatni');
+type Opt = { v: string; label: string; c: number; on: boolean; to?: string | undefined };
+const brandOpts: Opt[] = (fc?.b ?? []).flatMap(([id, c]): Opt[] => {
+	const b = brands.byId.get(id);
+	return b && b.slug !== 'ostatni' ? [{ v: b.slug, label: decode(b.name), c, on: f.znacka.includes(b.slug), to: landings[`brand=${b.slug}`] }] : [];
+});
 const shopOpts: Opt[] = (fc?.s ?? []).map(([d, c]) => ({ v: d, label: shopName(d), c, on: f.obchod.includes(d) }));
 const catOpts: Opt[] = cats ? (fc?.c ?? []).map(([id, c]) => cats.get(id) ? { v: cats.get(id)!.slug, label: decode(cats.get(id)!.name), c, on: f.kat === cats.get(id)!.slug } : null).filter((x): x is Opt => !!x) : [];
 const params = PARAM_ORDER.map((k) => {
@@ -27,7 +31,7 @@ const params = PARAM_ORDER.map((k) => {
 	const b = BUCKETS[k];
 	const opts: Opt[] = b
 		? b.map(([id, label]) => ({ v: id, label, c: vals.find(([v]) => v === id)?.[1] ?? 0, on: (f.p[k] ?? []).includes(id) })).filter((o) => o.c > 0)
-		: vals.map(([v, c]) => ({ v: valueSlug(v), label: v, c, on: (f.p[k] ?? []).includes(valueSlug(v)) }));
+		: vals.map(([v, c]) => ({ v: valueSlug(v), label: v, c, on: (f.p[k] ?? []).includes(valueSlug(v)), to: landings[`${k}=${valueSlug(v)}`] }));
 	return { k, label: PARAM_LABEL[k], opts };
 }).filter((x): x is { k: (typeof PARAM_ORDER)[number]; label: string; opts: Opt[] } => !!x && x.opts.length > 1);
 const SHOW = 7;
@@ -68,11 +72,11 @@ const SHOW = 7;
 		<details class="fg" open>
 			<summary>Značka<Ik id="dolu" /></summary>
 			<ul class="fo">
-				{brandOpts.filter((o, i) => i < SHOW || o.on).map((o) => <li><label><input type="checkbox" name="znacka" value={o.v} checked={o.on} /><span>{o.label}</span><small>{cislo(o.c)}</small></label></li>)}
+				{brandOpts.filter((o, i) => i < SHOW || o.on || o.to).map((o) => <li>{o.to && !o.on ? <a class="fo__l" href={`/${o.to}/`}><i aria-hidden="true"></i><span>{o.label}</span><small>{cislo(o.c)}</small></a> : <label><input type="checkbox" name="znacka" value={o.v} checked={o.on} /><span>{o.label}</span><small>{cislo(o.c)}</small></label>}</li>)}
 			</ul>
-			{brandOpts.length > SHOW && (
-				<details class="fo__vic"><summary>Další značky ({brandOpts.length - SHOW})</summary>
-					<ul class="fo">{brandOpts.filter((o, i) => i >= SHOW && !o.on).map((o) => <li><label><input type="checkbox" name="znacka" value={o.v} /><span>{o.label}</span><small>{cislo(o.c)}</small></label></li>)}</ul>
+			{brandOpts.filter((o, i) => i >= SHOW && !o.on && !o.to).length > 0 && (
+				<details class="fo__vic"><summary>Další značky ({brandOpts.filter((o, i) => i >= SHOW && !o.on && !o.to).length})</summary>
+					<ul class="fo">{brandOpts.filter((o, i) => i >= SHOW && !o.on && !o.to).map((o) => <li><label><input type="checkbox" name="znacka" value={o.v} /><span>{o.label}</span><small>{cislo(o.c)}</small></label></li>)}</ul>
 				</details>
 			)}
 		</details>
@@ -80,7 +84,7 @@ const SHOW = 7;
 	{params.map((g, gi) => (
 		<details class="fg" open={gi < 2 || g.opts.some((o) => o.on)}>
 			<summary>{g.label}<Ik id="dolu" /></summary>
-			<ul class="fo">{g.opts.map((o) => <li><label><input type="checkbox" name={`p_${g.k}`} value={o.v} checked={o.on} /><span>{o.label}</span><small>{cislo(o.c)}</small></label></li>)}</ul>
+			<ul class="fo">{g.opts.map((o) => <li>{o.to && !o.on ? <a class="fo__l" href={`/${o.to}/`}><i aria-hidden="true"></i><span>{o.label}</span><small>{cislo(o.c)}</small></a> : <label><input type="checkbox" name={`p_${g.k}`} value={o.v} checked={o.on} /><span>{o.label}</span><small>{cislo(o.c)}</small></label>}</li>)}</ul>
 		</details>
 	))}
 	{shopOpts.length > 1 && (

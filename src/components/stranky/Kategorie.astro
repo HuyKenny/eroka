@@ -5,7 +5,7 @@ import Ik from '../Ik.astro';
 import type { categoryView } from '../../lib/views';
 import { decode, texturize } from '../../lib/format';
 
-interface Props { v: NonNullable<Awaited<ReturnType<typeof categoryView>>> }
+interface Props { v: Exclude<NonNullable<Awaited<ReturnType<typeof categoryView>>>, { redirect: string }> }
 const { v } = Astro.props;
 const m = v.meta;
 const first = v.page === 1 && !v.isFiltered;
@@ -13,7 +13,7 @@ const tiles = v.kids.map((c) => ({ slug: c.slug, name: decode(c.name), count: c.
 ---
 <Base title={m.title} description={m.description} canonical={m.canonical} prev={m.prev} next={m.next} robots={m.robots} graph={m.graph} jsonLd={m.jsonLd} pageType="category">
 	<Vypis crumbs={v.crumbs} h1={texturize(decode(v.cat.name))} introHtml={first ? v.cat.description_html : undefined} tiles={tiles} tilesTitle={v.kidsTitle}
-		f={v.f} fc={v.fc} brands={v.brands} items={v.items} total={v.total} page={v.page} pages={v.pages} base={v.base} qs={v.qs}
+		f={v.f} fc={v.fc} brands={v.brands} landings={v.landings} items={v.items} total={v.total} page={v.page} pages={v.pages} base={v.base} qs={v.qs}
 		empty="V této kategorii teď nejsou žádné produkty.">
 		<section class="sek box">
 			<h2>Rádce z magazínu Eroka.cz</h2>
