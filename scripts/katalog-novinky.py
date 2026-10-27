@@ -68,8 +68,7 @@ def d1(sql=None, file=None):
     r = subprocess.run(cmd, cwd=APP, env=WENV, capture_output=True, text=True)
     if r.returncode:
         raise SystemExit(f"D1 error: {r.stderr[-600:]}{r.stdout[-600:]}")
-    out = json.loads(r.stdout)
-    return out[0]["results"] if sql else out
+    return json.loads(r.stdout)[0]["results"] if sql else r.stdout
 
 
 # ---------- text helpers ----------
@@ -466,6 +465,7 @@ def main():
     next_bid = max(b["id"] for b in brands) + 1
     new_brands = {}
     sql, sample = [], []
+    n_keys = 0
     q = lambda s: "'" + str(s).replace("'", "''") + "'"
 
     def ancestors(cid):
@@ -513,11 +513,17 @@ def main():
             sql.append(f"INSERT OR IGNORE INTO brand_products (brand_id, created_at, product_id) VALUES ({bid}, {q(now)}, {pid});")
         bname = next((b["name"] for b in list(new_brands.values()) if b["id"] == bid), brand_name.get(bid, ""))
         sql.append(f"INSERT INTO product_fts (rowid, name, brand) VALUES ({pid}, {q(rep['name'])}, {q(bname)});")
+        # keys in the same batch as the product: a run cut off midway never leaves a product the next run cannot recognise
+        own = {}
         for g in cl:
             for it in g["items"]:
-                key_rows[f"uid:Feed__{g['feed']}:{it['uid']}"] = pid
+                own[f"uid:Feed__{g['feed']}:{it['uid']}"] = pid
                 if it["ean"]:
-                    key_rows.setdefault(f"ean:{it['ean']}", pid)
+                    own.setdefault(f"ean:{it['ean']}", pid)
+        for k, v in own.items():
+            key_rows.pop(k, None)
+            sql.append(f"INSERT OR IGNORE INTO product_keys (key, product_id) VALUES ({q(k)}, {v});")
+        n_keys += len(own)
         sample.append(dict(id=pid, slug=s, name=rep["name"], cat=cat["slug"], path=rep["path"], brand=bname, ean=ean, img=it0["img"], shops=sorted({DOMAIN[g["feed"]] for g in cl}), variants=sum(len(g["items"]) for g in cl)))
     for b in new_brands.values():
         sql.insert(0, f"INSERT INTO brands (id, slug, name, count) VALUES ({b['id']}, {q(b['slug'])}, {q(b['name'])}, 0);")
@@ -567,17 +573,20 @@ def main():
     tmpd = Path(tempfile.mkdtemp(prefix="eroka-katalog-sql-", dir=ROOT / "tmp"))
     chunk, part = [], 0
     for st in sql + [None]:
-        if st is not None:
-            chunk.append(st)
-        if (st is None and chunk) or len(chunk) >= 4000:
+        # flush before a new product (or brand/key/update) once the batch is big, never inside one product's rows
+        boundary = st is None or not st.startswith(("INSERT INTO slugs", "INSERT OR IGNORE INTO cat_products", "INSERT OR IGNORE INTO brand_products",
+                                                    "INSERT INTO product_fts", "INSERT OR IGNORE INTO product_keys (key, product_id) VALUES ('uid", "INSERT OR IGNORE INTO product_keys (key, product_id) VALUES ('ean"))
+        if (boundary and len(chunk) >= 4000) or len(chunk) >= 8000 or (st is None and chunk):
             f = tmpd / f"part-{part:03d}.sql"
             f.write_text("\n".join(chunk))
             d1(file=str(f))
             print(f"  applied {f.name} ({len(chunk)} statements)", file=sys.stderr)
             f.unlink()
             chunk, part = [], part + 1
+        if st is not None:
+            chunk.append(st)
     tmpd.rmdir()
-    print(f"applied: {len(created)} products, {len(key_rows)} keys")
+    print(f"applied: {len(created)} products, {len(key_rows) + n_keys} keys")
 
 
 if __name__ == "__main__":

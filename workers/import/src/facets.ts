@@ -86,9 +86,11 @@ export async function rebuildFacets(db: D1Database, day: string): Promise<Record
     all<{ id: number; n: number }>(`SELECT b.id, b.count AS n FROM brands b WHERE b.noindex = 0 AND b.slug <> 'ostatni' AND b.count > 0 ORDER BY (SELECT COALESCE(SUM(p.pop), 0) FROM products p WHERE p.brand_id = b.id) DESC LIMIT 24`),
     all<{ k: string; n: number }>(`SELECT domain AS k, COUNT(DISTINCT product_id) AS n FROM offers WHERE active = 1 GROUP BY domain ORDER BY n DESC`),
     all<{ products: number; offers: number }>(`SELECT (SELECT COUNT(*) FROM products WHERE status = 'publish' AND offer_count > 0) AS products, (SELECT COUNT(*) FROM offers WHERE active = 1) AS offers`),
-    all<{ id: number; img: string; parent: number; rn: number }>(`SELECT t.cat_id AS id, t.image AS img, c.parent, t.rn FROM (SELECT x.cat_id, p.image, ROW_NUMBER() OVER (PARTITION BY x.cat_id ORDER BY x.pop DESC, p.shop_count DESC) AS rn
-      FROM cat_products x JOIN products p ON p.id = x.product_id WHERE p.status = 'publish' AND p.image <> '' AND p.offer_count > 0 AND p.noindex = 0) t
-      JOIN categories c ON c.id = t.cat_id WHERE t.rn <= 6 ORDER BY t.cat_id, t.rn`),
+    // top 6 photos per category through idx_cp_pop (a window over all of cat_products timed out at 23k products)
+    all<{ id: number; img: string; parent: number; pop: number }>(`SELECT x.cat_id AS id, p.image AS img, c.parent, x.pop FROM categories c
+      JOIN cat_products x ON x.cat_id = c.id AND x.product_id IN (SELECT x2.product_id FROM cat_products x2 JOIN products p2 ON p2.id = x2.product_id
+        WHERE x2.cat_id = c.id AND p2.status = 'publish' AND p2.image <> '' AND p2.offer_count > 0 AND p2.noindex = 0 ORDER BY x2.pop DESC LIMIT 6)
+      JOIN products p ON p.id = x.product_id ORDER BY x.cat_id, x.pop DESC`),
   ]);
   const home = {
     deals: pick(deals, 12), popular: pick(popular, 12),
