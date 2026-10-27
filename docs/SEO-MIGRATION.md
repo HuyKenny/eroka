@@ -21,3 +21,13 @@
   `/značka/x/`→`/znacka/x/`, `…/in stock/`, `*/feed/`, `/domov/`), tabulka `redirects` (24 smysluplných pravidel z Rank
   Math + 7 `_wp_old_slug`; 672 botích pravidel typu `/.env`→`/vibratory/` zahozeno → 404), odhad slugu jako WordPress.
 - Ověření: `scripts/seo-parity.py` (tvrdá pole status/redirect/canonical/robots/title/description/H1).
+
+## Výsledek parity (27. 10. 2026, staging)
+- Vzorek 1 437 URL (všechny kategorie, články, stránky, rubriky, 200 značek, 800 produktů, stránkování, legacy URL),
+  seed 27: **1 431 / 1 437 shodných (99,6 %)** v tvrdých polích. První vzorek (1 189 URL, seed 26) po opravách stejně.
+- Zbylé rozdíly jsou záměrné: 4 rubriky blogu mají H1 (WP žádné neměl), `/brandstore/<x>/` → 301 na `/znacka/<x>/`
+  (WP servíroval duplicitu), 1 produkt má na WP prázdné H1.
+- Opravy, které parita našla: canonical se u noindex nevypisuje; zobrazené názvy jdou přes `texturize()` (pomlčky,
+  „uvozovky“, palce ″, apostrofy, ×), Rank Math popisy produktů z neformátovaného excerptu (`product_excerpt_raw.ndjson`),
+  popisy článků jako snapshot živého webu (`live-post-descriptions.json`), robots `noimageindex` u recenzí,
+  značka se stejným slugem jako produkt → 301 na produkt.
