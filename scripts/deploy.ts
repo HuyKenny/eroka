@@ -53,10 +53,11 @@ if (!argv.includes('--no-import')) wr(['deploy', '-c', 'workers/import/wrangler.
 
 let webSecrets: Record<string, string> | null = null;
 if (argv.includes('--secrets')) {
-  const w = { ACCESS_AUD: er[`ACCESS_AUD${sfx}`], IP_HASH_SALT: er[`IP_HASH_SALT${sfx}`] };
-  const missing = Object.entries(w).filter(([, v]) => !v).map(([k]) => k);
+  // ACCESS_AUD is optional in production: without it /admin stays closed (the public site does not use Access)
+  const w: Record<string, string | undefined> = { IP_HASH_SALT: er[`IP_HASH_SALT${sfx}`], ACCESS_AUD: er[`ACCESS_AUD${sfx}`] };
+  const missing = Object.entries(w).filter(([k, v]) => !v && !(k === 'ACCESS_AUD' && envName === 'production')).map(([k]) => k);
   if (missing.length) throw new Error(`missing secret values ${missing.join(', ')}`);
-  webSecrets = w as Record<string, string>;
+  webSecrets = Object.fromEntries(Object.entries(w).filter(([, v]) => v)) as Record<string, string>;
 }
 if (!argv.includes('--skip-build')) run(join(NODE, 'npx'), ['astro', 'build'], { env: { CLOUDFLARE_ENV: envName, BUILD_ID: sha, SITE_URL: siteBase } });
 run(join(NODE, 'npx'), ['tsx', 'scripts/verify-no-secrets.ts']);

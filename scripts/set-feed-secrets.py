@@ -19,9 +19,9 @@ ROOT = Path("/home/kenny/ai")
 APP = ROOT / "apps/eroka"
 
 
-def creds():
+def creds(name=".eroka-credentials.env"):
     e = {}
-    for line in open(ROOT / "credentials/.eroka-credentials.env"):
+    for line in open(ROOT / "credentials" / name):
         line = line.strip()
         if "=" in line and not line.startswith("#"):
             k, v = line.split("=", 1)
@@ -38,7 +38,7 @@ def main():
     feeds = json.load(open(ROOT / "credentials/.eroka-feeds.json"))["feeds"]
     c = creds()
     secrets = {f"FEED_URL_{k.split('__')[1]}": v["feed_url"] for k, v in feeds.items() if v.get("feed_url")}
-    secrets["IMPORT_SHARED_SECRET"] = c.get(f"IMPORT_SHARED_SECRET_{env.upper()}") or c.get("IMPORT_SHARED_SECRET_STAGING", "")
+    secrets["IMPORT_SHARED_SECRET"] = c.get(f"IMPORT_SHARED_SECRET_{env.upper()}", "")
     if len(secrets["IMPORT_SHARED_SECRET"]) < 24:
         sys.exit("IMPORT_SHARED_SECRET missing in credentials")
     if env == "local":
@@ -52,8 +52,10 @@ def main():
         tmp = t.name
     os.chmod(tmp, 0o600)
     try:
+        cf = creds(".cloudflare-credentials.env")
+        auth = {"CLOUDFLARE_EMAIL": cf["CF_EMAIL"], "CLOUDFLARE_API_KEY": cf["CF_GLOBAL_API_KEY"], "CLOUDFLARE_ACCOUNT_ID": c["CF_ACCOUNT_ID"]}
         r = subprocess.run(["npx", "wrangler", "secret", "bulk", tmp, "-c", "workers/import/wrangler.jsonc", "--env", env],
-                           cwd=APP, capture_output=True, text=True)
+                           cwd=APP, capture_output=True, text=True, env={**os.environ, **auth})
         print(f"{len(secrets)} secrets → eroka-import-{env}: {'ok' if r.returncode == 0 else 'CHYBA'}")
         if r.returncode:
             print(r.stderr[-400:])
