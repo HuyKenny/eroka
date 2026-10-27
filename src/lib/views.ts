@@ -262,7 +262,11 @@ export async function postView(db: D1Database, id: number) {
     };
     return { meta, post, cat: null, related: [] as PostCard[], comments: [], shopCats: [] as Cat[] };
   }
-  const [cat, related, coms, tree] = await Promise.all([postCat(db, post.cat_id), relatedPosts(db, post), comments(db, post.id), catTree(db)]);
+  // related: hand-picked topical neighbours (prolinkovani.json "souvisejici", 27. 10. 2026), then newest of the same blog category
+  const picked = (links as { souvisejici?: Record<string, string[]> }).souvisejici?.[post.slug] ?? [];
+  const [cat, chosen, latest, coms, tree] = await Promise.all([postCat(db, post.cat_id), picked.length ? postsBySlugs(db, picked) : Promise.resolve([] as PostCard[]),
+    relatedPosts(db, post, 6), comments(db, post.id), catTree(db)]);
+  const related = [...chosen, ...latest.filter((r) => !chosen.some((c) => c.id === r.id))].slice(0, 4);
   const author = { '@type': 'Person', '@id': BASE + '/#autor-ester', name: 'Ester' };
   const graph: unknown[] = [
     ...(img ? [{ '@type': 'ImageObject', '@id': img, url: img, ...(post.image_w ? { width: String(post.image_w), height: String(post.image_h) } : {}), ...(post.image_alt ? { caption: post.image_alt } : {}), inLanguage: 'cs' }] : []),

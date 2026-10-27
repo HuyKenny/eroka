@@ -51,4 +51,4 @@ export function picture(url: string | null | undefined, css: 160 | 240 | 320 | 4
 }
 
 /** Own uploads (article photos) as site-relative paths, so every host (staging, workers.dev) serves its own copy. */
-export const ownUpload = (u: string | null | undefined) => String(u ?? '').replace(/^https?:\/\/(www\.)?eroka\.cz(?=\/wp-content\/)/, '');
+export const ownUpload = (u: string | null | undefined) => String(u ?? '').replace(/^https?:\/\/(www\.)?eroka\.cz(?=\/(wp-content|a)\/)/, '');

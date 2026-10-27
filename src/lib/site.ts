@@ -8,7 +8,7 @@ export const LOGO_URL = BASE + '/a/logo-512.png';
 export const OG_DEFAULT = BASE + '/a/og.png';
 export const OG_HOME = OG_DEFAULT;
 export const PER_PAGE = 24;
-export const POSTS_PER_PAGE = 10;
+export const POSTS_PER_PAGE = 12;
 
 const ADDRESS = { '@type': 'PostalAddress', streetAddress: 'Bartáková 36', addressLocality: 'Krč', addressRegion: 'Praha', postalCode: '140000' };
 

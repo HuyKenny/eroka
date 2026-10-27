@@ -1,189 +1,1229 @@
 {
- "_zdroj": "weby/eroka/mu-plugin/eroka-redesign.php (erk_magbox_map, erk_article_title) + eroka-seo-hygiene.php (eroka_article_cat_targets)",
+ "_zdroj": "scripts/blog-aplikuj.py (27. 10. 2026) from the rewritten articles' cats/related",
  "magbox_default": [
   "klitoris-jak-najit-a-stimulovat",
   "nejlepsi-sexualni-polohy",
   "jak-na-eroticke-hry"
  ],
  "magbox": {
-  "vibratory": [
-   "klitoris-jak-najit-a-stimulovat",
-   "nejlepsi-sexualni-polohy",
-   "jak-uspokojit-zenu-rukou-prsteni",
-   "jak-na-eroticke-hry"
-  ],
-  "levne-vibratory": [
-   "klitoris-jak-najit-a-stimulovat",
-   "nejlepsi-sexualni-polohy",
-   "jak-uspokojit-zenu-rukou-prsteni"
-  ],
-  "vibracni-vajicka": [
-   "jak-na-eroticke-hry",
-   "bod-g-jak-najit-a-stimulovat",
-   "klitoris-jak-najit-a-stimulovat"
-  ],
-  "dilda": [
-   "nejlepsi-sexualni-polohy",
-   "jak-uspokojit-zenu-rukou-prsteni",
-   "bod-g-jak-najit-a-stimulovat"
-  ],
-  "umele-vaginy-a-masturbatory": [
-   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce",
-   "jak-na-prvni-sex",
-   "nejlepsi-sexualni-polohy"
-  ],
-  "nafukovaci-panny": [
-   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce",
-   "nejlepsi-sexualni-polohy",
-   "jak-na-prvni-sex"
-  ],
-  "umele-panny": [
-   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce",
-   "nejlepsi-sexualni-polohy",
-   "jak-na-prvni-sex"
-  ],
-  "realisticke-silikonove-panny": [
-   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce",
-   "nejlepsi-sexualni-polohy",
-   "jak-na-prvni-sex"
-  ],
-  "kondomy": [
-   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
-   "jak-na-prvni-sex",
-   "nejlepsi-sexualni-polohy"
-  ],
-  "znecitlivujici-kondomy": [
-   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
-   "jak-na-prvni-sex",
-   "nejlepsi-sexualni-polohy"
-  ],
-  "eroticke-pradlo": [
-   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti",
-   "femdom-zenska-dominance-jak-zacit",
-   "facesitting-jak-na-to"
-  ],
-  "damske-eroticke-pradlo": [
-   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti",
-   "femdom-zenska-dominance-jak-zacit",
-   "facesitting-jak-na-to"
-  ],
-  "kosmetika-a-pece-o-telo": [
-   "eroticka-masaz-navod",
-   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
-   "jak-uspokojit-zenu-rukou-prsteni"
-  ],
-  "lubrikacni-gely-a-oleje": [
-   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
-   "eroticka-masaz-navod",
-   "fisting-bezpecny-navod"
-  ],
-  "masazni-oleje-a-svicky": [
-   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
-   "eroticka-masaz-navod",
-   "jak-uspokojit-zenu-rukou-prsteni"
-  ],
-  "masazni-oleje": [
-   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
-   "eroticka-masaz-navod",
-   "jak-uspokojit-zenu-rukou-prsteni"
-  ],
-  "masazni-svicky": [
-   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
-   "eroticka-masaz-navod",
-   "jak-uspokojit-zenu-rukou-prsteni"
-  ],
-  "vibracni-koliky-a-dalsi": [
-   "fisting-bezpecny-navod",
-   "masaz-prostaty-navod",
-   "poppers-co-to-je-ucinky-rizika"
+  "analni-dilda": [
+   "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu"
   ],
   "analni-koliky": [
-   "fisting-bezpecny-navod",
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu",
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "poppers-co-to-je-ucinky-rizika",
+   "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic"
+  ],
+  "analni-koliky-pro-muze": [
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu",
    "masaz-prostaty-navod",
-   "poppers-co-to-je-ucinky-rizika"
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual"
+  ],
+  "analni-lubrikacni-gely-a-oleje": [
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni",
+   "fisting-bezpecny-navod",
+   "masaz-prostaty-navod"
+  ],
+  "automaticke-masturbatory": [
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu"
+  ],
+  "bdsm-pradlo": [
+   "femdom-zenska-dominance-jak-zacit"
+  ],
+  "bdsm-sady": [
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "bondage-svazovani-pro-zacatecniky"
+  ],
+  "bezlatexove-kondomy": [
+   "jak-vybrat-kondomy"
+  ],
+  "bondage": [
+   "bondage-svazovani-pro-zacatecniky"
+  ],
+  "cistice-erotickych-pomucek": [
+   "vibrator-v-tehotenstvi-je-to-bezpecne-pro-vas-i-miminko-myty-a-fakta"
+  ],
+  "damske-body": [
+   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti"
+  ],
+  "damske-eroticke-pradlo": [
+   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti"
+  ],
+  "damske-kalhotky-a-tanga": [
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene"
+  ],
+  "damske-korzety": [
+   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti",
+   "poprve-na-swingers-party-byli-jsme-tam-zjistete-jak-to-funguje-kdo-tam-chodi-a-jaka-plati-pravidla"
+  ],
+  "damske-puncochy": [
+   "foot-fetis-co-potrebujete-vedet"
+  ],
+  "dilatatory": [
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni",
+   "fisting-bezpecny-navod"
+  ],
+  "dilda": [
+   "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu",
+   "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu"
+  ],
+  "dilda-do-postroju": [
+   "pegging-pro-zacatecniky-jak-si-vymenit-role-a-proc-to-muzi-tajne-miluji"
+  ],
+  "dilda-s-prisavkou": [
+   "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu"
+  ],
+  "do-koupele": [
+   "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit"
+  ],
+  "doplnky-k-analnimu-sexu": [
+   "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic"
+  ],
+  "doplnky-na-masaz": [
+   "eroticka-masaz-navod"
+  ],
+  "dutky-biciky-a-placacky": [
+   "femdom-zenska-dominance-jak-zacit"
   ],
   "erekcni-krouzky-na-penis-a-varlata": [
-   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
-   "jak-na-prvni-sex",
-   "nejlepsi-sexualni-polohy"
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit",
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky",
+   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
   ],
-  "venusiny-kulicky": [
-   "bod-g-jak-najit-a-stimulovat",
-   "jak-uspokojit-zenu-rukou-prsteni",
-   "klitoris-jak-najit-a-stimulovat"
+  "eroticka-literatura": [
+   "recenze-lustery-kdyz-je-porno-skutecnejsi-nez-realita-proc-jsem-se-zamilovala-do-eticke-erotiky",
+   "top-20-erotickych-filmu-vsech-dob-od-klasiky-po-moderni-klenoty"
   ],
   "eroticka-pouta": [
    "femdom-zenska-dominance-jak-zacit",
    "bondage-svazovani-pro-zacatecniky",
-   "facesitting-jak-na-to"
+   "facesitting-jak-na-to",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
   ],
-  "bondage": [
-   "bondage-svazovani-pro-zacatecniky",
-   "femdom-zenska-dominance-jak-zacit",
-   "facesitting-jak-na-to"
+  "eroticke-hry-pro-dospele": [
+   "jak-na-eroticke-hry"
   ],
-  "dutky-biciky-a-placacky": [
-   "bondage-svazovani-pro-zacatecniky",
-   "femdom-zenska-dominance-jak-zacit"
+  "eroticke-hry-pro-pary": [
+   "jak-ozivit-vztah",
+   "jak-na-eroticke-hry",
+   "darek-pro-partnera-ktereho-teprve-poznavate",
+   "eroticke-darky"
   ],
-  "damske-puncochy": [
+  "eroticke-masky-a-skrabosky": [
+   "facesitting-jak-na-to",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
+  ],
+  "eroticke-pomucky-pro-muze": [
+   "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu",
+   "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi",
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit"
+  ],
+  "eroticke-pomucky-pro-pary": [
+   "eroticke-darky",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "nejlepsi-sexualni-polohy",
+   "recenze-lustery-kdyz-je-porno-skutecnejsi-nez-realita-proc-jsem-se-zamilovala-do-eticke-erotiky"
+  ],
+  "eroticke-pomucky-pro-zeny": [
+   "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu",
+   "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi",
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu"
+  ],
+  "eroticke-pradlo": [
+   "darek-pro-partnera-ktereho-teprve-poznavate",
+   "top-20-erotickych-filmu-vsech-dob-od-klasiky-po-moderni-klenoty",
+   "facesitting-jak-na-to",
+   "sex-v-aute-tipy"
+  ],
+  "feromony-a-afrodiziaka": [
+   "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida"
+  ],
+  "fetis-kink": [
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
+  ],
+  "fistingove-lubrikacni-gely-a-oleje": [
+   "fisting-bezpecny-navod"
+  ],
+  "hrejive-masazni-oleje": [
+   "eroticka-masaz-navod"
+  ],
+  "klasicke-vibratory": [
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie"
+  ],
+  "klystyr-a-analni-sprchy": [
+   "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic",
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni",
+   "fisting-bezpecny-navod"
+  ],
+  "kondomy": [
+   "jak-na-prvni-sex",
+   "jak-vybrat-kondomy",
+   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu",
+   "od-seznameni-k-intimite-pruvodce"
+  ],
+  "kondomy-my-size": [
+   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum"
+  ],
+  "kosmetika-na-oddaleni-ejakulace": [
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
+  ],
+  "kosmetika-pro-zeny": [
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene"
+  ],
+  "kozena-eroticka-pouta": [
+   "bondage-svazovani-pro-zacatecniky"
+  ],
+  "levne-vibratory": [
+   "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku"
+  ],
+  "lubrikacni-gely-a-oleje": [
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
+   "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "lubrikacni-gely-a-oleje-na-vodni-bazi": [
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual",
+   "jak-uspokojit-zenu-rukou-prsteni",
+   "jak-na-prvni-sex",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce"
+  ],
+  "luxusni-tlakove-pomucky": [
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani"
+  ],
+  "masaz-prostaty": [
+   "masaz-prostaty-navod",
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky",
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu",
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize"
+  ],
+  "masazni-oleje": [
+   "eroticka-masaz-navod",
+   "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit",
    "foot-fetis-co-potrebujete-vedet",
-   "femdom-zenska-dominance-jak-zacit"
+   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky"
+  ],
+  "masazni-oleje-a-svicky": [
+   "darek-pro-partnera-ktereho-teprve-poznavate",
+   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
+   "jak-ozivit-vztah",
+   "ticha-domacnost-neni-trest-ale-emocionalni-nasili-jak-s-timto-nicivym-zvykem-jednou-provzdy-skoncovat"
+  ],
+  "masazni-svicky": [
+   "eroticka-masaz-navod",
+   "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit",
+   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky"
+  ],
+  "masazni-vibratory": [
+   "recenze-zalo-kyro-neslusne-luxusni-vibrator-ktery-vas-donuti-zahodit-starou-hulku",
+   "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu",
+   "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce",
+   "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku"
+  ],
+  "nafukovaci-panny": [
+   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce"
+  ],
+  "navleky-na-penis-prst": [
+   "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod",
+   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum"
+  ],
+  "obojky-a-voditka": [
+   "femdom-zenska-dominance-jak-zacit",
+   "poprve-na-swingers-party-byli-jsme-tam-zjistete-jak-to-funguje-kdo-tam-chodi-a-jaka-plati-pravidla"
+  ],
+  "ochucene-kondomy": [
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky"
+  ],
+  "oralni-lubrikacni-gely-a-oleje-s-prichuti": [
+   "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic",
+   "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize",
+   "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida"
+  ],
+  "parfemy": [
+   "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida"
+  ],
+  "parove-vibratory": [
+   "eroticke-darky",
+   "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah",
+   "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi",
+   "nejlepsi-sexualni-polohy"
+  ],
+  "pece-o-umele-vaginy-masturbatory": [
+   "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy"
+  ],
+  "podvazky-a-podvazkove-pasy": [
+   "foot-fetis-co-potrebujete-vedet",
+   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti"
+  ],
+  "poppers": [
+   "poppers-co-to-je-ucinky-rizika"
+  ],
+  "pripinaci-penisy-strap-on": [
+   "pegging-pro-zacatecniky-jak-si-vymenit-role-a-proc-to-muzi-tajne-miluji"
+  ],
+  "realisticka-dilda": [
+   "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu"
+  ],
+  "realisticke-silikonove-panny": [
+   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce"
+  ],
+  "silikonove-krouzky-na-penis": [
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit"
+  ],
+  "silikonove-lubrikacni-gely-a-oleje": [
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce"
+  ],
+  "silikonove-vibratory": [
+   "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni",
+   "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru",
+   "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci"
+  ],
+  "skladovani-pomucek": [
+   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce"
+  ],
+  "sklenena-dilda": [
+   "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu",
+   "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce"
+  ],
+  "spanelske-musky": [
+   "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida"
+  ],
+  "telova-kosmetika": [
+   "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit"
+  ],
+  "tlakove-pomucky": [
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani",
+   "klitoris-jak-najit-a-stimulovat",
+   "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky"
+  ],
+  "tlakove-pomucky-2v1": [
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani"
+  ],
+  "ultra-tenke-kondomy": [
+   "jak-vybrat-kondomy",
+   "jak-na-prvni-sex"
+  ],
+  "umele-panny": [
+   "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce"
+  ],
+  "umele-vaginy-a-masturbatory": [
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu",
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual",
+   "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy",
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky"
+  ],
+  "umele-vaginy-a-masturbatory-fleshlight": [
+   "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy",
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu"
+  ],
+  "umele-vaginy-a-masturbatory-tenga": [
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu"
+  ],
+  "vaginalni-lubrikacni-gely-a-oleje-na-vodni-bazi": [
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene",
+   "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize"
+  ],
+  "vakuove-pumpy-pro-muze-na-penis": [
+   "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod",
+   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum"
+  ],
+  "velke-kondomy": [
+   "jak-vybrat-kondomy"
+  ],
+  "venusiny-kulicky": [
+   "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom",
+   "bod-g-jak-najit-a-stimulovat",
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene"
+  ],
+  "vibracni-analni-koliky": [
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu"
+  ],
+  "vibracni-erekcni-krouzky-na-penis-a-varlata": [
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual",
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit",
+   "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah",
+   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu"
+  ],
+  "vibracni-koliky-a-dalsi": [
+   "poppers-co-to-je-ucinky-rizika"
+  ],
+  "vibracni-vajicka": [
+   "klitoris-jak-najit-a-stimulovat",
+   "sex-v-aute-tipy",
+   "nejlepsi-sexualni-polohy"
+  ],
+  "vibracni-vajicka-s-bezdratovym-dalkovym-ovladanim": [
+   "jak-na-eroticke-hry",
+   "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom"
+  ],
+  "vibracni-venusiny-kulicky": [
+   "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom"
+  ],
+  "vibratory": [
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie",
+   "nejlepsi-vibratory-2026-top-10-ktere-stoji-za-kazdou-korunu",
+   "recenze-zalo-kyro-neslusne-luxusni-vibrator-ktery-vas-donuti-zahodit-starou-hulku"
+  ],
+  "vibratory-lelo": [
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize",
+   "recenze-lelo-enigma-sonicka-revoluce-pro-bod-g-nebo-jen-krasny-designovy-kousek"
+  ],
+  "vibratory-na-bod-g": [
+   "bod-g-jak-najit-a-stimulovat",
+   "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce",
+   "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni",
+   "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru"
+  ],
+  "vibratory-na-dalkove-ovladani": [
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize",
+   "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci",
+   "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni"
+  ],
+  "vibratory-na-klitoris": [
+   "facesitting-jak-na-to",
+   "klitoris-jak-najit-a-stimulovat",
+   "vibrator-v-tehotenstvi-je-to-bezpecne-pro-vas-i-miminko-myty-a-fakta",
+   "jak-uspokojit-zenu-rukou-prsteni"
+  ],
+  "vibratory-pro-zeny": [
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky",
+   "jak-uspokojit-zenu-rukou-prsteni",
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu"
+  ],
+  "vibratory-s-vybezkem-na-klitoris": [
+   "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci",
+   "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru",
+   "bod-g-jak-najit-a-stimulovat",
+   "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce"
+  ],
+  "znecitlivujici-kondomy": [
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
+  ],
+  "zvetseni-penisu-pomucky-a-pripravky": [
+   "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod"
   ]
  },
  "titulky": {
-  "klitoris-jak-najit-a-stimulovat": "Klitoris: jak ho najít a stimulovat",
-  "bod-g-jak-najit-a-stimulovat": "Bod G: zaručený návod, jak ho najít",
-  "jak-uspokojit-zenu-rukou-prsteni": "Jak uspokojit ženu rukou (prstění)",
+  "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum": "Jaká je průměrná velikost penisu",
+  "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi": "Mám raději masturbaci než sex s partnerem",
+  "vibrator-v-tehotenstvi-je-to-bezpecne-pro-vas-i-miminko-myty-a-fakta": "Vibrátor v těhotenství",
+  "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida": "Afrodiziaka, která opravdu fungují",
+  "od-seznameni-k-intimite-pruvodce": "Od seznámení k intimitě",
+  "pegging-pro-zacatecniky-jak-si-vymenit-role-a-proc-to-muzi-tajne-miluji": "Pegging pro začátečníky",
+  "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic": "Rimming (anilingus)",
+  "recenze-lustery-kdyz-je-porno-skutecnejsi-nez-realita-proc-jsem-se-zamilovala-do-eticke-erotiky": "Recenze Lustery",
+  "eroticke-darky": "Erotické dárky",
+  "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual": "15 technik masturbace",
+  "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy": "Bonnie Blue: 7 faktů o hvězdě, jejíž Fleshlight láme",
+  "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie": "Jak vybrat vibrátor",
+  "darek-pro-partnera-ktereho-teprve-poznavate": "Dárek pro partnera, kterého teprve poznáváte",
+  "jak-vybrat-kondomy": "Jak vybrat kondomy",
+  "ticha-domacnost-neni-trest-ale-emocionalni-nasili-jak-s-timto-nicivym-zvykem-jednou-provzdy-skoncovat": "Tichá domácnost",
+  "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji": "Anální sex bez bolesti",
+  "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit": "Hlad po doteku",
   "nejlepsi-sexualni-polohy": "Nejlepší sexuální polohy",
+  "jak-ozivit-vztah": "Jak oživit vztah",
+  "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene": "Intimní komfort bez tabu",
+  "masaz-prostaty-navod": "Masáž prostaty",
+  "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu": "Masturbace s kondomem",
+  "jak-na-prvni-sex": "Jak na první sex",
+  "poppers-co-to-je-ucinky-rizika": "Poppers: co to je, jak působí a jaká jsou",
+  "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni": "Anodyspareunie",
+  "foot-fetis-co-potrebujete-vedet": "Foot fetiš: co potřebujete vědět, když milujete",
+  "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku": "Nejlepší vibrátor do 1000 Kč",
   "jak-na-eroticke-hry": "Erotické hry pro dospělé",
-  "eroticka-masaz-navod": "Erotická masáž krok za krokem",
-  "jak-na-prvni-sex": "Jak na první sex bez stresu",
-  "femdom-zenska-dominance-jak-zacit": "Femdom: ženská dominance pro začátečníky",
-  "facesitting-jak-na-to": "Facesitting: jak na to bezpečně",
-  "fisting-bezpecny-navod": "Fisting: bezpečný návod krok za krokem",
-  "masaz-prostaty-navod": "Masáž prostaty: návod k orgasmu",
-  "poppers-co-to-je-ucinky-rizika": "Poppers: účinky a rizika",
-  "bondage-svazovani-pro-zacatecniky": "Bondage a svazování pro začátečníky",
-  "foot-fetis-co-potrebujete-vedet": "Foot fetiš: co potřebujete vědět",
-  "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci": "Jak déle vydržet v posteli: 9 technik",
-  "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti": "Jak vybrat erotické prádlo",
+  "facesitting-jak-na-to": "Facesitting: jak na to bezpečně a s požitkem pro",
+  "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit": "Erekční kroužek",
+  "jak-uspokojit-zenu-rukou-prsteni": "Jak uspokojit ženu rukou",
+  "eroticka-masaz-navod": "Erotická masáž",
+  "bod-g-jak-najit-a-stimulovat": "Bod G: jak ho najít a stimulovat krok za",
+  "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni": "Recenze Lovense Hyphy",
+  "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom": "Venušiny kuličky",
+  "klitoris-jak-najit-a-stimulovat": "Klitoris: jak ho najít a stimulovat, abyste byli lepší",
+  "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu": "Je masturbace zdravá",
+  "femdom-zenska-dominance-jak-zacit": "Femdom: ženská dominance a jak s ní bezpečně",
+  "sex-v-aute-tipy": "Sex v autě: tipy, jak na to pohodlně a bez",
   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky": "Tantrický sex a tantra masáž",
-  "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce": "Nafukovací panny a love dolls: průvodce"
+  "recenze-lelo-enigma-sonicka-revoluce-pro-bod-g-nebo-jen-krasny-designovy-kousek": "Recenze Lelo Enigma",
+  "recenze-zalo-kyro-neslusne-luxusni-vibrator-ktery-vas-donuti-zahodit-starou-hulku": "Recenze Zalo Kyro",
+  "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci": "Jak déle vydržet v posteli",
+  "bondage-svazovani-pro-zacatecniky": "Bondage a svazování pro začátečníky",
+  "fisting-bezpecny-navod": "Fisting: bezpečný návod krok za krokem bez bolesti a",
+  "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce": "Jak vybrat lubrikační gel",
+  "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky": "Nejlepší vibrátor pro začátečnice 2026",
+  "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce": "Nafukovací panny a love dolls",
+  "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu": "Jak vybrat anální kolík (nejen) pro muže",
+  "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky": "Orální sex pro něj",
+  "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu": "Co je to dildo",
+  "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu": "Recenze skleněného dilda Gildo č. 15 a průvodce vaginálním",
+  "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani": "Satisfyer vs Womanizer",
+  "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci": "Recenze Lovense Quake (Dolce)",
+  "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah": "Erotické hračky pro páry 2026",
+  "poprve-na-swingers-party-byli-jsme-tam-zjistete-jak-to-funguje-kdo-tam-chodi-a-jaka-plati-pravidla": "Swingers party poprvé",
+  "nejlepsi-vibratory-2026-top-10-ktere-stoji-za-kazdou-korunu": "Nejlepší vibrátory 2026",
+  "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti": "Jak vybrat erotické prádlo podle postavy, materiálu a",
+  "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize": "Recenze přírodních lubrikantů Bijoux Indiscrets Sex au",
+  "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru": "Recenze Nomi Tang Flex Bi",
+  "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu": "BDSM pro začátečníky",
+  "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu": "Nejlepší masturbátor pro muže 2026",
+  "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize": "Lovense vs Lelo",
+  "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce": "Jak mluvit s partnerem o sexu bez trapasu",
+  "top-20-erotickych-filmu-vsech-dob-od-klasiky-po-moderni-klenoty": "Erotické filmy",
+  "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce": "Squirting u žen",
+  "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod": "Jak zvětšit penis",
+  "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu": "Co je masturbace"
  },
  "clanek_kategorie": {
-  "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual": [
-   "umele-vaginy-a-masturbatory",
-   "saci-masturbatory",
+  "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum": [
+   "erekcni-krouzky-na-penis-a-varlata",
+   "navleky-na-penis-prst",
+   "vakuove-pumpy-pro-muze-na-penis",
+   "kondomy-my-size"
+  ],
+  "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi": [
+   "eroticke-pomucky-pro-zeny",
+   "eroticke-pomucky-pro-muze",
+   "parove-vibratory",
    "lubrikacni-gely-a-oleje"
+  ],
+  "vibrator-v-tehotenstvi-je-to-bezpecne-pro-vas-i-miminko-myty-a-fakta": [
+   "vibratory-na-klitoris",
+   "tlakove-pomucky",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "cistice-erotickych-pomucek"
+  ],
+  "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida": [
+   "feromony-a-afrodiziaka",
+   "spanelske-musky",
+   "parfemy",
+   "oralni-lubrikacni-gely-a-oleje-s-prichuti"
+  ],
+  "od-seznameni-k-intimite-pruvodce": [
+   "kondomy",
+   "lubrikacni-gely-a-oleje",
+   "masazni-oleje-a-svicky",
+   "eroticke-hry-pro-pary"
+  ],
+  "pegging-pro-zacatecniky-jak-si-vymenit-role-a-proc-to-muzi-tajne-miluji": [
+   "pripinaci-penisy-strap-on",
+   "dilda-do-postroju",
+   "analni-lubrikacni-gely-a-oleje",
+   "masaz-prostaty"
+  ],
+  "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic": [
+   "klystyr-a-analni-sprchy",
+   "oralni-lubrikacni-gely-a-oleje-s-prichuti",
+   "analni-koliky",
+   "doplnky-k-analnimu-sexu"
+  ],
+  "recenze-lustery-kdyz-je-porno-skutecnejsi-nez-realita-proc-jsem-se-zamilovala-do-eticke-erotiky": [
+   "eroticke-pomucky-pro-pary",
+   "eroticka-literatura",
+   "eroticke-hry-pro-pary",
+   "masazni-oleje-a-svicky"
+  ],
+  "eroticke-darky": [
+   "eroticke-pomucky-pro-pary",
+   "parove-vibratory",
+   "eroticke-hry-pro-pary",
+   "masazni-oleje-a-svicky"
+  ],
+  "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual": [
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "umele-vaginy-a-masturbatory",
+   "vibracni-erekcni-krouzky-na-penis-a-varlata",
+   "analni-koliky-pro-muze"
+  ],
+  "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy": [
+   "umele-vaginy-a-masturbatory-fleshlight",
+   "umele-vaginy-a-masturbatory",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "pece-o-umele-vaginy-masturbatory"
+  ],
+  "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie": [
+   "vibratory",
+   "klasicke-vibratory",
+   "tlakove-pomucky",
+   "vibratory-s-vybezkem-na-klitoris"
+  ],
+  "darek-pro-partnera-ktereho-teprve-poznavate": [
+   "masazni-oleje-a-svicky",
+   "eroticke-pradlo",
+   "eroticke-hry-pro-pary"
+  ],
+  "jak-vybrat-kondomy": [
+   "kondomy",
+   "ultra-tenke-kondomy",
+   "velke-kondomy",
+   "bezlatexove-kondomy"
+  ],
+  "ticha-domacnost-neni-trest-ale-emocionalni-nasili-jak-s-timto-nicivym-zvykem-jednou-provzdy-skoncovat": [
+   "eroticke-pomucky-pro-pary",
+   "masazni-oleje-a-svicky",
+   "eroticke-hry-pro-pary"
+  ],
+  "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji": [
+   "analni-lubrikacni-gely-a-oleje",
+   "analni-koliky",
+   "klystyr-a-analni-sprchy",
+   "kondomy"
+  ],
+  "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit": [
+   "masazni-oleje",
+   "masazni-svicky",
+   "do-koupele",
+   "telova-kosmetika"
+  ],
+  "nejlepsi-sexualni-polohy": [
+   "eroticke-pomucky-pro-pary",
+   "vibratory-na-klitoris",
+   "parove-vibratory",
+   "vibracni-vajicka"
+  ],
+  "jak-ozivit-vztah": [
+   "eroticke-hry-pro-pary",
+   "masazni-oleje-a-svicky",
+   "eroticke-pomucky-pro-pary",
+   "parove-vibratory"
+  ],
+  "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene": [
+   "damske-kalhotky-a-tanga",
+   "kosmetika-pro-zeny",
+   "vaginalni-lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "venusiny-kulicky"
+  ],
+  "masaz-prostaty-navod": [
+   "masaz-prostaty",
+   "analni-lubrikacni-gely-a-oleje",
+   "analni-koliky-pro-muze",
+   "klystyr-a-analni-sprchy"
   ],
   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu": [
    "kondomy",
    "umele-vaginy-a-masturbatory",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "vibracni-erekcni-krouzky-na-penis-a-varlata"
+  ],
+  "jak-na-prvni-sex": [
+   "kondomy",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "ultra-tenke-kondomy",
    "lubrikacni-gely-a-oleje"
   ],
-  "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani": [
-   "vibratory",
+  "poppers-co-to-je-ucinky-rizika": [
+   "vibracni-koliky-a-dalsi",
+   "analni-lubrikacni-gely-a-oleje",
+   "analni-koliky",
+   "poppers"
+  ],
+  "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni": [
+   "analni-lubrikacni-gely-a-oleje",
+   "silikonove-lubrikacni-gely-a-oleje",
+   "dilatatory",
+   "klystyr-a-analni-sprchy"
+  ],
+  "foot-fetis-co-potrebujete-vedet": [
+   "damske-puncochy",
+   "masazni-oleje",
+   "lubrikacni-gely-a-oleje",
+   "podvazky-a-podvazkove-pasy"
+  ],
+  "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku": [
+   "levne-vibratory",
+   "tlakove-pomucky",
+   "vibratory-s-vybezkem-na-klitoris",
+   "masazni-vibratory"
+  ],
+  "jak-na-eroticke-hry": [
+   "eroticke-hry-pro-dospele",
+   "eroticke-hry-pro-pary",
+   "vibracni-vajicka-s-bezdratovym-dalkovym-ovladanim",
+   "eroticka-pouta"
+  ],
+  "facesitting-jak-na-to": [
+   "vibratory-na-klitoris",
+   "eroticka-pouta",
+   "eroticke-masky-a-skrabosky",
+   "eroticke-pradlo"
+  ],
+  "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit": [
+   "erekcni-krouzky-na-penis-a-varlata",
+   "silikonove-krouzky-na-penis",
+   "vibracni-erekcni-krouzky-na-penis-a-varlata",
+   "eroticke-pomucky-pro-muze"
+  ],
+  "jak-uspokojit-zenu-rukou-prsteni": [
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "vibratory-na-klitoris",
+   "vibratory-na-bod-g",
+   "vibratory-pro-zeny"
+  ],
+  "eroticka-masaz-navod": [
+   "masazni-oleje",
+   "masazni-svicky",
+   "hrejive-masazni-oleje",
+   "doplnky-na-masaz"
+  ],
+  "bod-g-jak-najit-a-stimulovat": [
+   "vibratory-na-bod-g",
+   "vibratory-s-vybezkem-na-klitoris",
+   "lubrikacni-gely-a-oleje",
+   "venusiny-kulicky"
+  ],
+  "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni": [
+   "silikonove-vibratory",
+   "vibratory-na-bod-g",
+   "vibratory-na-klitoris",
+   "vibratory-na-dalkove-ovladani"
+  ],
+  "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom": [
+   "venusiny-kulicky",
+   "vibracni-venusiny-kulicky",
+   "vibracni-vajicka-s-bezdratovym-dalkovym-ovladanim",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "klitoris-jak-najit-a-stimulovat": [
+   "vibratory-na-klitoris",
+   "tlakove-pomucky",
+   "vibracni-vajicka",
+   "lubrikacni-gely-a-oleje"
+  ],
+  "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu": [
+   "lubrikacni-gely-a-oleje",
+   "eroticke-pomucky-pro-zeny",
+   "eroticke-pomucky-pro-muze",
+   "vibratory-pro-zeny"
+  ],
+  "femdom-zenska-dominance-jak-zacit": [
+   "eroticka-pouta",
+   "dutky-biciky-a-placacky",
+   "obojky-a-voditka",
+   "bdsm-pradlo"
+  ],
+  "sex-v-aute-tipy": [
+   "kondomy",
+   "lubrikacni-gely-a-oleje",
+   "vibracni-vajicka",
+   "eroticke-pradlo"
+  ],
+  "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky": [
+   "masazni-oleje-a-svicky",
+   "masazni-oleje",
+   "masazni-svicky",
+   "lubrikacni-gely-a-oleje"
+  ],
+  "recenze-lelo-enigma-sonicka-revoluce-pro-bod-g-nebo-jen-krasny-designovy-kousek": [
+   "vibratory-lelo",
+   "tlakove-pomucky",
+   "vibratory-na-bod-g",
+   "vibratory-s-vybezkem-na-klitoris"
+  ],
+  "recenze-zalo-kyro-neslusne-luxusni-vibrator-ktery-vas-donuti-zahodit-starou-hulku": [
    "masazni-vibratory",
-   "levne-vibratory"
+   "vibratory",
+   "vibratory-na-bod-g",
+   "eroticke-pomucky-pro-pary"
   ],
-  "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu": [
-   "umele-vaginy-a-masturbatory",
-   "saci-masturbatory"
+  "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci": [
+   "znecitlivujici-kondomy",
+   "kosmetika-na-oddaleni-ejakulace",
+   "erekcni-krouzky-na-penis-a-varlata",
+   "umele-vaginy-a-masturbatory"
   ],
-  "nejlepsi-masturbator-pro-muze-velke-srovnani-a-pruvodce-vyberem": [
+  "bondage-svazovani-pro-zacatecniky": [
+   "bondage",
+   "eroticka-pouta",
+   "kozena-eroticka-pouta",
+   "bdsm-sady"
+  ],
+  "fisting-bezpecny-navod": [
+   "fistingove-lubrikacni-gely-a-oleje",
+   "analni-lubrikacni-gely-a-oleje",
+   "dilatatory",
+   "klystyr-a-analni-sprchy"
+  ],
+  "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce": [
+   "lubrikacni-gely-a-oleje",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "silikonove-lubrikacni-gely-a-oleje",
+   "analni-lubrikacni-gely-a-oleje"
+  ],
+  "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky": [
+   "vibratory-pro-zeny",
+   "tlakove-pomucky",
+   "vibratory-na-klitoris",
+   "vibratory-s-vybezkem-na-klitoris"
+  ],
+  "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce": [
+   "umele-panny",
+   "nafukovaci-panny",
+   "realisticke-silikonove-panny",
+   "skladovani-pomucek"
+  ],
+  "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu": [
+   "analni-koliky",
+   "analni-koliky-pro-muze",
+   "masaz-prostaty",
+   "vibracni-analni-koliky"
+  ],
+  "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky": [
+   "erekcni-krouzky-na-penis-a-varlata",
    "umele-vaginy-a-masturbatory",
-   "saci-masturbatory"
+   "masaz-prostaty",
+   "ochucene-kondomy"
+  ],
+  "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu": [
+   "dilda",
+   "realisticka-dilda",
+   "dilda-s-prisavkou",
+   "analni-dilda"
+  ],
+  "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu": [
+   "sklenena-dilda",
+   "dilda",
+   "masazni-vibratory",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani": [
+   "tlakove-pomucky",
+   "luxusni-tlakove-pomucky",
+   "tlakove-pomucky-2v1",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci": [
+   "vibratory-s-vybezkem-na-klitoris",
+   "vibratory-na-dalkove-ovladani",
+   "vibratory-na-bod-g",
+   "silikonove-vibratory"
+  ],
+  "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah": [
+   "eroticke-pomucky-pro-pary",
+   "parove-vibratory",
+   "vibracni-erekcni-krouzky-na-penis-a-varlata",
+   "tlakove-pomucky"
+  ],
+  "poprve-na-swingers-party-byli-jsme-tam-zjistete-jak-to-funguje-kdo-tam-chodi-a-jaka-plati-pravidla": [
+   "kondomy",
+   "lubrikacni-gely-a-oleje",
+   "damske-korzety",
+   "obojky-a-voditka"
   ],
   "nejlepsi-vibratory-2026-top-10-ktere-stoji-za-kazdou-korunu": [
    "vibratory",
-   "levne-vibratory",
+   "tlakove-pomucky",
+   "vibratory-na-bod-g",
    "parove-vibratory"
   ],
+  "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti": [
+   "damske-eroticke-pradlo",
+   "damske-body",
+   "damske-korzety",
+   "podvazky-a-podvazkove-pasy"
+  ],
+  "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize": [
+   "lubrikacni-gely-a-oleje",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi",
+   "oralni-lubrikacni-gely-a-oleje-s-prichuti",
+   "vaginalni-lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru": [
+   "vibratory-s-vybezkem-na-klitoris",
+   "vibratory-na-bod-g",
+   "silikonove-vibratory",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu": [
+   "fetis-kink",
+   "bdsm-sady",
+   "eroticka-pouta",
+   "eroticke-masky-a-skrabosky"
+  ],
+  "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu": [
+   "umele-vaginy-a-masturbatory",
+   "umele-vaginy-a-masturbatory-fleshlight",
+   "umele-vaginy-a-masturbatory-tenga",
+   "automaticke-masturbatory"
+  ],
+  "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize": [
+   "vibratory-lelo",
+   "vibratory-na-dalkove-ovladani",
+   "vibratory-s-vybezkem-na-klitoris",
+   "masaz-prostaty"
+  ],
+  "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce": [
+   "eroticke-pomucky-pro-pary",
+   "lubrikacni-gely-a-oleje",
+   "masazni-oleje-a-svicky",
+   "parove-vibratory"
+  ],
+  "top-20-erotickych-filmu-vsech-dob-od-klasiky-po-moderni-klenoty": [
+   "eroticke-pomucky-pro-pary",
+   "masazni-oleje-a-svicky",
+   "eroticke-pradlo",
+   "eroticka-literatura"
+  ],
+  "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce": [
+   "vibratory-na-bod-g",
+   "vibratory-s-vybezkem-na-klitoris",
+   "masazni-vibratory",
+   "sklenena-dilda"
+  ],
+  "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod": [
+   "vakuove-pumpy-pro-muze-na-penis",
+   "navleky-na-penis-prst",
+   "erekcni-krouzky-na-penis-a-varlata",
+   "zvetseni-penisu-pomucky-a-pripravky"
+  ],
+  "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu": [
+   "eroticke-pomucky-pro-zeny",
+   "eroticke-pomucky-pro-muze",
+   "lubrikacni-gely-a-oleje",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ]
+ },
+ "souvisejici": {
+  "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum": [
+   "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod",
+   "jak-vybrat-kondomy",
+   "klitoris-jak-najit-a-stimulovat"
+  ],
+  "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi": [
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "vibrator-v-tehotenstvi-je-to-bezpecne-pro-vas-i-miminko-myty-a-fakta": [
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
+   "nejlepsi-sexualni-polohy",
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene"
+  ],
+  "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida": [
+   "jak-ozivit-vztah",
+   "eroticka-masaz-navod",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
+  ],
+  "od-seznameni-k-intimite-pruvodce": [
+   "jak-na-prvni-sex",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "jak-ozivit-vztah"
+  ],
+  "pegging-pro-zacatecniky-jak-si-vymenit-role-a-proc-to-muzi-tajne-miluji": [
+   "masaz-prostaty-navod",
+   "femdom-zenska-dominance-jak-zacit",
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji"
+  ],
   "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic": [
-   "analni-dilda",
-   "analni-koliky",
-   "lubrikacni-gely-a-oleje"
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "nejlepsi-sexualni-polohy"
+  ],
+  "recenze-lustery-kdyz-je-porno-skutecnejsi-nez-realita-proc-jsem-se-zamilovala-do-eticke-erotiky": [
+   "top-20-erotickych-filmu-vsech-dob-od-klasiky-po-moderni-klenoty",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "rimming-anilingus-pruvodce-lizanim-zadecku-pro-pary-ktere-chteji-vic"
+  ],
+  "eroticke-darky": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "darek-pro-partnera-ktereho-teprve-poznavate",
+   "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah"
+  ],
+  "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual": [
+   "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu",
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu",
+   "masaz-prostaty-navod"
+  ],
+  "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy": [
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu",
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual"
+  ],
+  "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie": [
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky",
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani",
+   "nejlepsi-vibratory-2026-top-10-ktere-stoji-za-kazdou-korunu"
+  ],
+  "darek-pro-partnera-ktereho-teprve-poznavate": [
+   "eroticke-darky",
+   "od-seznameni-k-intimite-pruvodce",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "jak-vybrat-kondomy": [
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
+  ],
+  "ticha-domacnost-neni-trest-ale-emocionalni-nasili-jak-s-timto-nicivym-zvykem-jednou-provzdy-skoncovat": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit",
+   "jak-ozivit-vztah"
+  ],
+  "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji": [
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu",
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni",
+   "masaz-prostaty-navod"
+  ],
+  "hlad-po-doteku-ticha-epidemie-ktera-nici-nase-dusevni-zdravi-jak-ji-poznat-a-nasytit": [
+   "eroticka-masaz-navod",
+   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
+   "jak-ozivit-vztah"
+  ],
+  "nejlepsi-sexualni-polohy": [
+   "bod-g-jak-najit-a-stimulovat",
+   "sex-v-aute-tipy",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
+  ],
+  "jak-ozivit-vztah": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "eroticka-masaz-navod",
+   "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah"
+  ],
+  "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene": [
+   "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom",
+   "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce"
+  ],
+  "masaz-prostaty-navod": [
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu",
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize"
+  ],
+  "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu": [
+   "jak-vybrat-kondomy",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu"
+  ],
+  "jak-na-prvni-sex": [
+   "jak-vybrat-kondomy",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce"
+  ],
+  "poppers-co-to-je-ucinky-rizika": [
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "fisting-bezpecny-navod",
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni"
+  ],
+  "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni": [
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "foot-fetis-co-potrebujete-vedet": [
+   "femdom-zenska-dominance-jak-zacit",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku": [
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky",
+   "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru"
+  ],
+  "jak-na-eroticke-hry": [
+   "jak-ozivit-vztah",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah"
+  ],
+  "facesitting-jak-na-to": [
+   "femdom-zenska-dominance-jak-zacit",
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
+  ],
+  "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit": [
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
+   "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod"
+  ],
+  "jak-uspokojit-zenu-rukou-prsteni": [
+   "klitoris-jak-najit-a-stimulovat",
+   "bod-g-jak-najit-a-stimulovat",
+   "nejlepsi-sexualni-polohy"
+  ],
+  "eroticka-masaz-navod": [
+   "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky",
+   "masaz-prostaty-navod",
+   "bod-g-jak-najit-a-stimulovat"
+  ],
+  "bod-g-jak-najit-a-stimulovat": [
+   "klitoris-jak-najit-a-stimulovat",
+   "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce",
+   "masaz-prostaty-navod"
+  ],
+  "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni": [
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize",
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie"
+  ],
+  "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom": [
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky"
+  ],
+  "klitoris-jak-najit-a-stimulovat": [
+   "bod-g-jak-najit-a-stimulovat",
+   "jak-uspokojit-zenu-rukou-prsteni",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky"
+  ],
+  "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky",
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual"
+  ],
+  "femdom-zenska-dominance-jak-zacit": [
+   "bondage-svazovani-pro-zacatecniky",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "pegging-pro-zacatecniky-jak-si-vymenit-role-a-proc-to-muzi-tajne-miluji"
+  ],
+  "sex-v-aute-tipy": [
+   "nejlepsi-sexualni-polohy",
+   "jak-ozivit-vztah",
+   "jak-na-eroticke-hry"
+  ],
+  "tantricky-sex-a-tantra-masaz-pruvodce-pro-zacatecniky": [
+   "eroticka-masaz-navod",
+   "klitoris-jak-najit-a-stimulovat",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci"
+  ],
+  "recenze-lelo-enigma-sonicka-revoluce-pro-bod-g-nebo-jen-krasny-designovy-kousek": [
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani",
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize",
+   "bod-g-jak-najit-a-stimulovat"
+  ],
+  "recenze-zalo-kyro-neslusne-luxusni-vibrator-ktery-vas-donuti-zahodit-starou-hulku": [
+   "nejlepsi-vibratory-2026-top-10-ktere-stoji-za-kazdou-korunu",
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie"
+  ],
+  "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci": [
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit",
+   "nejlepsi-sexualni-polohy",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "bondage-svazovani-pro-zacatecniky": [
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "femdom-zenska-dominance-jak-zacit",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "fisting-bezpecny-navod": [
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce": [
+   "jak-vybrat-kondomy",
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize"
+  ],
+  "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky": [
+   "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru",
+   "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku",
+   "klitoris-jak-najit-a-stimulovat"
+  ],
+  "nafukovaci-panny-a-love-dolls-jak-vybrat-pruvodce": [
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu"
+  ],
+  "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu": [
+   "analni-sex-bez-bolesti-kompletni-manual-pro-zacatecniky-i-pro-ty-co-se-boji",
+   "masaz-prostaty-navod",
+   "anodyspareunie-kdyz-analni-sex-boli-a-proc-to-rozhodne-neni-normalni"
+  ],
+  "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky": [
+   "masaz-prostaty-navod",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "nejlepsi-sexualni-polohy"
+  ],
+  "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu": [
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu"
+  ],
+  "recenze-sklenene-dildo-gildo-c-15-a-umeni-vaginalniho-mapovani-proc-byste-mela-dat-sanci-tvrdemu-sklu": [
+   "co-je-to-dildo-kompletni-pruvodce-vyberem-tvary-a-materialy-bez-trapasu",
+   "bod-g-jak-najit-a-stimulovat",
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene"
+  ],
+  "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani": [
+   "klitoris-jak-najit-a-stimulovat",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce"
+  ],
+  "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci": [
+   "recenze-lovense-hyphy-konecne-oboustranny-vibrator-ktery-neni-jen-divny-ale-funkcni",
+   "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize",
+   "bod-g-jak-najit-a-stimulovat"
+  ],
+  "top-10-erotickych-hracek-pro-pary-zahodte-nudu-a-ozivte-svuj-vztah": [
+   "jak-ozivit-vztah",
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani",
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit"
+  ],
+  "poprve-na-swingers-party-byli-jsme-tam-zjistete-jak-to-funguje-kdo-tam-chodi-a-jaka-plati-pravidla": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "jak-ozivit-vztah",
+   "jak-vybrat-kondomy"
+  ],
+  "nejlepsi-vibratory-2026-top-10-ktere-stoji-za-kazdou-korunu": [
+   "satisfyer-vs-womanizer-ktery-podtlakovy-stimulator-je-lepsi-velke-srovnani",
+   "recenze-lelo-enigma-sonicka-revoluce-pro-bod-g-nebo-jen-krasny-designovy-kousek",
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie"
+  ],
+  "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti": [
+   "eroticke-darky",
+   "jak-ozivit-vztah"
+  ],
+  "recenze-prirodni-lubrikanty-bijoux-indiscrets-sex-au-naturel-stoji-luxusni-ekologie-za-vasi-pozornost-a-penize": [
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene",
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky"
+  ],
+  "recenze-nomi-tang-flex-bi-levny-a-ohebny-zazrak-ktery-resi-nejvetsi-problem-vibratoru": [
+   "jak-vybrat-vibrator-typy-material-hlucnost-vydrz-baterie",
+   "nejlepsi-vibrator-do-1000-kc-protoze-fantasticky-orgasmus-nemusi-zruinovat-penezenku",
+   "bod-g-jak-najit-a-stimulovat"
+  ],
+  "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu": [
+   "bondage-svazovani-pro-zacatecniky",
+   "femdom-zenska-dominance-jak-zacit",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
+  ],
+  "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu": [
+   "7-sokujicich-faktu-o-bonnie-blue-fenomen-jehoz-novy-fleshlight-boura-prodejni-rekordy",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce",
+   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu"
+  ],
+  "lovense-vs-lelo-dve-premiove-znacky-pod-lupou-ktera-stoji-za-vase-penize": [
+   "recenze-lelo-enigma-sonicka-revoluce-pro-bod-g-nebo-jen-krasny-designovy-kousek",
+   "recenze-lovense-quake-dolce-orgasticke-zemetreseni-ktere-zmeni-vas-pohled-na-linou-masturbaci",
+   "jak-vybrat-lubrikacni-gel-vodni-silikonovy-nebo-olejovy-velky-pruvodce"
+  ],
+  "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce": [
+   "jak-ozivit-vztah",
+   "eroticka-masaz-navod",
+   "jak-na-eroticke-hry"
+  ],
+  "top-20-erotickych-filmu-vsech-dob-od-klasiky-po-moderni-klenoty": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "jak-ozivit-vztah",
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
+  ],
+  "squirting-u-zen-jak-na-mokry-orgasmus-krok-za-krokem-kompletni-pruvodce": [
+   "bod-g-jak-najit-a-stimulovat",
+   "jak-uspokojit-zenu-rukou-prsteni",
+   "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom"
+  ],
+  "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod": [
+   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum",
+   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit",
+   "nejlepsi-sexualni-polohy"
+  ],
+  "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu": [
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual",
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce"
   ]
  }
 }
