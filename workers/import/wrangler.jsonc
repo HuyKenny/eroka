@@ -40,7 +40,7 @@
       "workers_dev": true,
       "preview_urls": false,
       // every 10 min between 01:00 and 05:50 UTC: 16 feeds one by one, then the day is finalised
-      "triggers": { "crons": ["*/10 1-5 * * *"] },
+      "triggers": { "crons": ["*/10 1-5 * * 1"] },
       "limits": { "cpu_ms": 300000 },
       "d1_databases": [{ "binding": "DB", "database_name": "eroka-production", "database_id": "f62bfa2e-1e2c-4a3f-b100-f88220c25592", "migrations_dir": "../../migrations" }],
       "r2_buckets": [{ "binding": "FEED_MIRROR", "bucket_name": "eroka-feeds" }],
