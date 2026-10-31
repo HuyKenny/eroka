@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """eroka.cz — apply the rewritten magazine (27. 10. 2026): one editorial voice, new photos, internal links.
 
-    scripts/blog-aplikuj.py <dir> [--env staging|production] [--apply]
+    scripts/blog-aplikuj.py <dir> [--env staging|production] [--apply] [--nove <dir2>] [--jen-odkazy]
 
 <dir>/out/<id>.json   rewritten articles (STYL.md format: title, seo_*, excerpt, content_html, image_alt, cats, related)
 <dir>/merge.json      {dropped id: kept id} — duplicates merged into one article; the dropped URL 301s to the kept one
@@ -11,6 +11,7 @@ Writes posts (content, titles, photo, modified_at), redirects for merged duplica
 and src/data/prolinkovani.json: clanek_kategorie (article → categories, the "Kde vybrat a koupit" box),
 magbox (category → up to 4 articles, "Rádce z magazínu" on category pages), souvisejici (article → related articles),
 titulky (short article titles for the boxes). Dry run prints the plan; --apply writes.
+--nove <dir2>: new articles (<slug>.json, scripts/blog-nove.py) join the link map; --jen-odkazy: only rewrite the map.
 """
 import json
 import os
@@ -31,6 +32,8 @@ args = sys.argv[1:]
 D = Path(args[0])
 ENV = args[args.index("--env") + 1] if "--env" in args else "production"
 APPLY = "--apply" in args
+NOVE = Path(args[args.index("--nove") + 1]) if "--nove" in args else None
+JEN_ODKAZY = "--jen-odkazy" in args
 
 
 def creds(name):
@@ -90,9 +93,16 @@ def main():
         sql.append(f"UPDATE posts SET status = 'draft' WHERE id = {drop};")
         sql.append(f"INSERT OR REPLACE INTO redirects (from_path, to_path, status) VALUES ({q('/' + posts[drop]['slug'] + '/')}, {q('/' + posts[keep]['slug'] + '/')}, 301);")
 
-    # internal-link map
+    # internal-link map (new articles are keyed by negative pseudo ids so they sit next to the rewritten ones)
     links = json.loads(LINKS.read_text())
     slug_of = {i: posts[i]["slug"] for i in arts}
+    if NOVE:
+        for k, f in enumerate(sorted(NOVE.glob("*.json")), start=1):
+            a = json.loads(f.read_text())
+            a["cats"] = [c.strip("/") for c in a.get("cats", [])]
+            a["related"] = [r.strip("/") for r in a.get("related", [])]
+            arts[-k] = a
+            slug_of[-k] = a["slug"]
     live = set(slug_of.values())
     links["clanek_kategorie"] = {slug_of[i]: a["cats"][:4] for i, a in arts.items() if a.get("cats")}
     links["souvisejici"] = {slug_of[i]: [s for s in a.get("related", []) if s in live and s != slug_of[i]][:3] for i, a in arts.items()}
@@ -109,8 +119,9 @@ def main():
         return
     if ENV == "production" and os.environ.get("ERK_PRODUCTION_APPROVED") != "yes":
         raise SystemExit("production needs ERK_PRODUCTION_APPROVED=yes")
-    for k in range(0, len(sql), 40):
-        d1_file("\n".join(sql[k:k + 40]))
+    if not JEN_ODKAZY:
+        for k in range(0, len(sql), 40):
+            d1_file("\n".join(sql[k:k + 40]))
     LINKS.write_text(json.dumps(links, ensure_ascii=False, indent=1))
     print("applied; prolinkovani.json updated — commit + deploy the web (BUILD_ID) to show it")
 
