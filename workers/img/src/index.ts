@@ -1,6 +1,6 @@
 // eroka-img: product photo thumbnails for the whole site. The photo is fetched from the partner's feed URL, resized in
-// WASM and returned as WebP. Nothing is stored (Kenny, 27. 10. 2026: save space) — only the edge cache and the
-// browser keep the result (immutable, 1 year; the source URL is part of the path, so a new photo = a new URL).
+// WASM and returned as WebP. Each thumbnail is computed once and kept in R2 (binding THUMBS, bucket lifecycle 180 days — Kenny 3. 11. 2026:
+// the WASM resize is what costs CPU money, R2 is free up to 10 GB); the edge cache and the browser keep the result too (immutable, 1 year; the source URL is part of the path, so a new photo = a new URL).
 //   GET /img/<width>/<sig>/<base64url(source URL)>.webp
 //   width ∈ WIDTHS, sig = HMAC(IMG_SECRET, "<width>/<base64url>") from src/lib/sign.ts, source host ∈ image-hosts.ts
 // Guards: signature, host allowlist (also after a redirect), byte cap while streaming, pixel cap read from the image
@@ -27,7 +27,8 @@ class ImageDataShim {
 
 const MAX_BYTES = 8_000_000;
 const MAX_PIXELS = 25_000_000;
-interface Env { IMG_SECRET?: string; IMG_LEGACY?: string; RL_IMG?: { limit(o: { key: string }): Promise<{ success: boolean }> } }
+interface R2Like { get(k: string): Promise<{ body: ReadableStream } | null>; put(k: string, v: ArrayBuffer | Uint8Array, o?: unknown): Promise<unknown> }
+interface Env { THUMBS?: R2Like; IMG_SECRET?: string; IMG_LEGACY?: string; RL_IMG?: { limit(o: { key: string }): Promise<{ success: boolean }> } }
 
 let ready: Promise<unknown> | null = null;
 const init = () => (ready ??= Promise.all([initJpeg(JPEG_DEC), initPng(PNG_DEC), initWebpDec(WEBP_DEC), initWebpEnc(WEBP_ENC), initResize(RESIZE)]));
@@ -122,6 +123,16 @@ export default {
     const key = new Request(`https://eroka-img.cache/${width}/${m[3]}.webp`);
     const hit = await cache.match(key);
     if (hit) return hit;
+    // R2: a thumbnail made once is never computed again (any colo, after cache eviction); key = sha256, R2 keys ≤ 1024 B
+    const rkey = `${width}/${[...new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(m[3]!)))].map((x) => x.toString(16).padStart(2, '0')).join('')}.webp`;
+    const HDR = { 'content-type': 'image/webp', 'cache-control': 'public, max-age=31536000, immutable', 'access-control-allow-origin': '*', 'x-content-type-options': 'nosniff' };
+    const stored = env.THUMBS ? await env.THUMBS.get(rkey).catch(() => null) : null;
+    if (stored) {
+      const res = new Response(stored.body, { headers: { ...HDR, 'x-eroka-img': 'r2' } });
+      ctx.waitUntil(cache.put(key, res.clone()));
+      return res;
+    }
+    const keep = (r: Response) => { if (env.THUMBS) ctx.waitUntil(r.clone().arrayBuffer().then((b) => env.THUMBS!.put(rkey, b, { httpMetadata: { contentType: 'image/webp' } })).catch(() => null)); };
     const ip = request.headers.get('cf-connecting-ip') ?? '0.0.0.0';
     if (env.RL_IMG && !(await env.RL_IMG.limit({ key: ip })).success) return new Response('Too many requests', { status: 429, headers: { 'retry-after': '30' } });
 
@@ -147,6 +158,7 @@ export default {
         },
       });
       ctx.waitUntil(cache.put(key, res.clone()));
+      keep(res);
       return res;
     } catch (e) {
       console.log(JSON.stringify({ event: 'img.error', src: src.toString(), error: String(e).slice(0, 200) }));

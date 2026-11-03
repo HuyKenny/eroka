@@ -1,6 +1,6 @@
 {
   "$schema": "../../node_modules/wrangler/config-schema.json",
-  // Product photo thumbnails for shops wsrv.nl refuses (src/index.ts). Stateless, no bindings, nothing stored.
+  // Product photo thumbnails for shops wsrv.nl refuses (src/index.ts). Thumbnails are kept in R2 (THUMBS).
   // The web Worker calls it through the IMG service binding (all environments); the route eroka.cz/img/* lets
   // cached thumbnails skip the Astro Worker.
   "name": "eroka-img",
@@ -11,6 +11,8 @@
   "limits": { "cpu_ms": 10000 },
   "rules": [{ "type": "CompiledWasm", "globs": ["**/*.wasm"], "fallthrough": true }],
   // secret IMG_SECRET (same value as on the web Worker): wrangler secret put IMG_SECRET -c workers/img/wrangler.jsonc
+  // thumbnails computed once, kept 180 days (bucket lifecycle) — Kenny 3. 11.: no repeated CPU for the same image
+  "r2_buckets": [{ "binding": "THUMBS", "bucket_name": "eroka-thumbs" }],
   "ratelimits": [{ "name": "RL_IMG", "namespace_id": "74025", "simple": { "limit": 300, "period": 60 } }],
   "observability": { "enabled": true, "head_sampling_rate": 0.05 },
   // one Worker for all environments (staging and local reach it through the IMG service binding of the web Worker)
