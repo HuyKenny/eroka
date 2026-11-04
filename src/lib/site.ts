@@ -12,6 +12,9 @@ export const POSTS_PER_PAGE = 12;
 
 const ADDRESS = { '@type': 'PostalAddress', streetAddress: 'Bartáková 36', addressLocality: 'Krč', addressRegion: 'Praha', postalCode: '140000' };
 
+/** Founder (Kenny's personal site huy.cz is the Person entity; same node on all his projects). */
+export const FOUNDER = { '@type': 'Person', '@id': 'https://huy.cz/#kenny', name: 'Ha Duy Huy', alternateName: 'Kenny', url: 'https://huy.cz/', jobTitle: 'SEO konzultant' };
+
 export function orgGraph(adultOnly = false, searchAction = false): unknown[] {
   return [
     { '@type': 'Place', '@id': BASE + '/#place', address: ADDRESS },
@@ -30,6 +33,7 @@ export function orgGraph(adultOnly = false, searchAction = false): unknown[] {
       location: { '@id': BASE + '/#place' },
       image: { '@id': BASE + '/#logo' },
       telephone: '+420608454771',
+      founder: FOUNDER,
     },
     {
       '@type': 'WebSite', '@id': BASE + '/#website', url: BASE, name: SITE_NAME, publisher: { '@id': BASE + '/#organization' }, inLanguage: 'cs',
