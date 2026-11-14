@@ -35,13 +35,15 @@
   "bdsm-sady": [
    "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
    "bondage-svazovani-pro-zacatecniky",
-   "elektrosex-pro-zacatecniky"
+   "elektrosex-pro-zacatecniky",
+   "eroticke-darky-pro-pary-pod-stromecek"
   ],
   "bezlatexove-kondomy": [
    "jak-vybrat-kondomy"
   ],
   "bodystocking": [
-   "swingers-klub"
+   "swingers-klub",
+   "sexy-vanocni-kostym-a-pradlo"
   ],
   "bondage": [
    "bondage-svazovani-pro-zacatecniky"
@@ -124,20 +126,20 @@
    "rozlucka-se-svobodou"
   ],
   "eroticke-hry-pro-pary": [
+   "silvestr-pro-dva",
+   "eroticke-darky-pro-pary-pod-stromecek",
    "jak-ozivit-vztah",
-   "jak-na-eroticke-hry",
-   "darek-pro-partnera-ktereho-teprve-poznavate",
-   "eroticke-darky"
+   "jak-na-eroticke-hry"
   ],
   "eroticke-masky-a-skrabosky": [
    "facesitting-jak-na-to",
    "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
   ],
   "eroticke-pomucky-pro-muze": [
+   "eroticky-darek-pro-nej-k-vanocum",
    "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu",
    "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi",
-   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu",
-   "erekcni-krouzek-jak-funguje-jak-vybrat-ten-spravny-a-proc-ho-musite-zkusit"
+   "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu"
   ],
   "eroticke-pomucky-pro-pary": [
    "eroticke-darky",
@@ -146,6 +148,7 @@
    "recenze-lustery-kdyz-je-porno-skutecnejsi-nez-realita-proc-jsem-se-zamilovala-do-eticke-erotiky"
   ],
   "eroticke-pomucky-pro-zeny": [
+   "eroticky-darek-pro-ni-k-vanocum",
    "co-je-masturbace-vse-co-chcete-vedet-bez-mytu-a-trapasu",
    "mam-radeji-masturbaci-nez-sex-s-partnerem-je-to-normalni-o-bourani-tabu-a-hledani-vlastni-cesty-k-rozkosi",
    "je-masturbace-zdrava-fakta-bez-mytu-a-zbytecneho-studu"
@@ -452,6 +455,24 @@
   ],
   "zvetseni-penisu-pomucky-a-pripravky": [
    "jak-zvetsit-penis-co-skutecne-funguje-a-co-je-podvod"
+  ],
+  "eroticke-adventni-kalendare": [
+   "adventni-kalendar-pro-pary"
+  ],
+  "sady-erotickych-pomucek": [
+   "adventni-kalendar-pro-pary",
+   "eroticke-darky-pro-pary-pod-stromecek",
+   "silvestr-pro-dva"
+  ],
+  "krajkove-eroticke-pradlo": [
+   "eroticky-darek-pro-ni-k-vanocum",
+   "sexy-vanocni-kostym-a-pradlo"
+  ],
+  "damske-eroticke-kostymy": [
+   "sexy-vanocni-kostym-a-pradlo"
+  ],
+  "cervene-body": [
+   "sexy-vanocni-kostym-a-pradlo"
   ]
  },
  "titulky": {
@@ -533,7 +554,13 @@
   "sex-v-tehotenstvi-a-po-porodu": "Sex v těhotenství a po porodu",
   "svatebni-noc-a-libanky": "Svatební noc a líbánky",
   "swingers-klub": "Swingers klub",
-  "threesome-trojka": "Threesome: jak na sex ve třech, aby si ho užili"
+  "threesome-trojka": "Threesome: jak na sex ve třech, aby si ho užili",
+  "adventni-kalendar-pro-pary": "Adventní kalendář pro páry",
+  "eroticke-darky-pro-pary-pod-stromecek": "Erotické hry pro páry a další společné dárky pod stromeček",
+  "eroticky-darek-pro-nej-k-vanocum": "Co koupit příteli k Vánocům",
+  "eroticky-darek-pro-ni-k-vanocum": "Dárek pro přítelkyni k Vánocům",
+  "sexy-vanocni-kostym-a-pradlo": "Sexy vánoční kostým a prádlo",
+  "silvestr-pro-dva": "Silvestr pro dva"
  },
  "clanek_kategorie": {
   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum": [
@@ -1007,6 +1034,42 @@
    "parove-vibratory",
    "eroticke-hry-pro-pary",
    "lubrikacni-gely-a-oleje"
+  ],
+  "adventni-kalendar-pro-pary": [
+   "eroticke-adventni-kalendare",
+   "eroticke-pomucky-pro-pary",
+   "sady-erotickych-pomucek",
+   "eroticke-hry-pro-pary"
+  ],
+  "eroticke-darky-pro-pary-pod-stromecek": [
+   "eroticke-hry-pro-pary",
+   "sady-erotickych-pomucek",
+   "parove-vibratory",
+   "bdsm-sady"
+  ],
+  "eroticky-darek-pro-nej-k-vanocum": [
+   "eroticke-pomucky-pro-muze",
+   "umele-vaginy-a-masturbatory",
+   "vibracni-erekcni-krouzky-na-penis-a-varlata",
+   "parove-vibratory"
+  ],
+  "eroticky-darek-pro-ni-k-vanocum": [
+   "eroticke-pomucky-pro-zeny",
+   "krajkove-eroticke-pradlo",
+   "vibratory-na-klitoris",
+   "masazni-svicky"
+  ],
+  "sexy-vanocni-kostym-a-pradlo": [
+   "damske-eroticke-kostymy",
+   "krajkove-eroticke-pradlo",
+   "cervene-body",
+   "bodystocking"
+  ],
+  "silvestr-pro-dva": [
+   "eroticke-hry-pro-pary",
+   "masazni-svicky",
+   "parove-vibratory",
+   "sady-erotickych-pomucek"
   ]
  },
  "souvisejici": {
@@ -1399,6 +1462,36 @@
    "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
    "poprve-na-swingers-party-byli-jsme-tam-zjistete-jak-to-funguje-kdo-tam-chodi-a-jaka-plati-pravidla",
    "jak-ozivit-vztah"
+  ],
+  "adventni-kalendar-pro-pary": [
+   "eroticke-darky-pro-pary-pod-stromecek",
+   "eroticke-darky",
+   "eroticky-darek-pro-nej-k-vanocum"
+  ],
+  "eroticke-darky-pro-pary-pod-stromecek": [
+   "eroticke-darky",
+   "bondage-svazovani-pro-zacatecniky",
+   "silvestr-pro-dva"
+  ],
+  "eroticky-darek-pro-nej-k-vanocum": [
+   "nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu",
+   "eroticke-darky",
+   "sexy-vanocni-kostym-a-pradlo"
+  ],
+  "eroticky-darek-pro-ni-k-vanocum": [
+   "eroticke-darky",
+   "nejlepsi-vibrator-pro-zacatecnice-kompletni-pruvodce-vyberem-prvni-hracky",
+   "sexy-vanocni-kostym-a-pradlo"
+  ],
+  "sexy-vanocni-kostym-a-pradlo": [
+   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti",
+   "eroticky-darek-pro-ni-k-vanocum",
+   "eroticky-darek-pro-nej-k-vanocum"
+  ],
+  "silvestr-pro-dva": [
+   "jak-na-eroticke-hry",
+   "eroticka-masaz-navod",
+   "sexy-vanocni-kostym-a-pradlo"
   ]
  }
 }
