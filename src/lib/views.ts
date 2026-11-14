@@ -2,7 +2,7 @@
 // matching the WordPress/Rank Math output. Templates only render what these return.
 import {
   ancestry, brandList, catImages, catTree, cardsByIds, comments, facets, listPosts, listProducts, loadBrand, loadCategory, loadPost, loadProduct,
-  postCat, postsBySlugs, relatedPosts, relatedProducts, searchProducts, siteCache,
+  latestPosts, postCat, postsBySlugs, relatedPosts, relatedProducts, searchProducts, siteCache,
   type Card, type Cat, type Offer, type Post, type PostCard,
 } from './db';
 import { isFiltered, parseFilters, toListQuery, toQuery } from './filters';
@@ -309,8 +309,8 @@ export async function blogView(db: D1Database, page: number, catId?: number) {
 
 export interface HomeBlocks { deals: number[]; popular: number[]; brands: Array<[number, number]>; shops: Array<[string, number]>; products: number; offers: number }
 export async function homeView(db: D1Database) {
-  const MAG = ['eroticke-darky', 'jak-ozivit-vztah', 'nejlepsi-masturbator-pro-muze-2026-velke-srovnani-a-pruvodce-vyberem-bez-trapasu', 'klitoris-jak-najit-a-stimulovat'];
-  const [tree, brands, imgs, raw, mag] = await Promise.all([catTree(db), brandList(db), catImages(db), siteCache(db, 'home'), postsBySlugs(db, MAG)]);
+  // newest magazine articles (was a hard-coded slug list that never changed)
+  const [tree, brands, imgs, raw, mag] = await Promise.all([catTree(db), brandList(db), catImages(db), siteCache(db, 'home'), latestPosts(db, 4)]);
   let home: HomeBlocks = { deals: [], popular: [], brands: [], shops: [], products: 0, offers: 0 };
   try { if (raw) home = JSON.parse(raw) as HomeBlocks; } catch { /* nightly block missing */ }
   const cards = await cardsByIds(db, [...home.deals, ...home.popular]);

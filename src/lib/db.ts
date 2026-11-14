@@ -213,6 +213,9 @@ export async function listPosts(db: D1Database, page: number, catId?: number): P
   ]);
   return { items: a!.results as PostCard[], total: Number((c!.results[0] as { n: number }).n) };
 }
+export async function latestPosts(db: D1Database, n: number): Promise<PostCard[]> {
+  return (await db.prepare(`SELECT ${POST_CARD} FROM posts WHERE type = 'post' AND status = 'publish' ORDER BY published_at DESC LIMIT ?`).bind(n).all<PostCard>()).results;
+}
 export async function postsBySlugs(db: D1Database, slugs: string[]): Promise<PostCard[]> {
   if (!slugs.length) return [];
   const rows = (await db.prepare(`SELECT ${POST_CARD} FROM posts WHERE type = 'post' AND status = 'publish' AND slug IN (${slugs.map(() => '?').join(',')})`).bind(...slugs).all<PostCard & { slug: string }>()).results;
