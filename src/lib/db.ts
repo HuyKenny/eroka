@@ -225,6 +225,9 @@ export async function postsBySlugs(db: D1Database, slugs: string[]): Promise<Pos
 export async function relatedPosts(db: D1Database, post: Post, n = 4): Promise<PostCard[]> {
   return (await db.prepare(`SELECT ${POST_CARD} FROM posts WHERE type = 'post' AND status = 'publish' AND id <> ? AND cat_id = ? ORDER BY published_at DESC LIMIT ?`).bind(post.id, post.cat_id, n).all<PostCard>()).results;
 }
+export async function postCats(db: D1Database): Promise<Array<{ id: number; slug: string; name: string }>> {
+  return (await db.prepare('SELECT id, slug, name FROM post_categories WHERE count > 0 ORDER BY count DESC').all<{ id: number; slug: string; name: string }>()).results;
+}
 export async function postCat(db: D1Database, id: number): Promise<PostCat | null> {
   return db.prepare('SELECT * FROM post_categories WHERE id = ?').bind(id).first<PostCat>();
 }

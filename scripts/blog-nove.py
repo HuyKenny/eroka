@@ -6,7 +6,8 @@
 Each JSON: slug, cat_id (1453 průvodce / 1 tipy a triky), title, seo_title, seo_desc, excerpt, content_html,
 image_alt (+ photo from scripts/blog-fotky.py in public/a/blog/<slug>.webp). Inserts posts + slugs rows; an article
 whose slug already exists is updated instead (re-runs are safe). Publication dates are spread one per day back
-from today, so the blog does not show 11 articles with the same minute. --apply writes, otherwise dry run.
+from today (or from --od YYYY-MM-DD, e.g. to keep a newer wave on the homepage), so the blog does not show many
+articles with the same minute. --apply writes, otherwise dry run.
 """
 import json
 import os
@@ -25,6 +26,7 @@ args = sys.argv[1:]
 SRC = Path(args[0])
 ENV = args[args.index("--env") + 1] if "--env" in args else "production"
 APPLY = "--apply" in args
+OD = args[args.index("--od") + 1] if "--od" in args else None
 
 
 def creds(name):
@@ -57,6 +59,7 @@ def main():
     known = {r["slug"]: r for r in d1("SELECT slug, kind, ref_id FROM slugs")}
     next_id = d1("SELECT MAX(id) AS m FROM posts")[0]["m"] + 1
     now = datetime.now(timezone.utc)
+    start = datetime.strptime(OD, "%Y-%m-%d").replace(hour=now.hour, minute=now.minute, second=now.second, tzinfo=timezone.utc) if OD else now
     sql = []
     for n, a in enumerate(arts):
         slug = a["slug"]
@@ -68,7 +71,7 @@ def main():
         img, card = f"https://eroka.cz/a/blog/{slug}.webp", f"https://eroka.cz/a/blog/{slug}-k.webp"
         cols = {"title": a["title"], "content_html": a["content_html"], "excerpt": a["excerpt"], "seo_title": a["seo_title"],
                 "seo_desc": a["seo_desc"], "cat_id": a["cat_id"], "image": img, "image_card": card, "image_alt": a["image_alt"]}
-        stamp = (now - timedelta(days=n)).strftime("%Y-%m-%dT%H:%M:%S")
+        stamp = (start - timedelta(days=n)).strftime("%Y-%m-%dT%H:%M:%S")
         if k:
             sets = ", ".join(f"{c} = {q(v) if isinstance(v, str) else v}" for c, v in cols.items())
             sql.append(f"UPDATE posts SET {sets}, image_w = 1600, image_h = 900, modified_at = {q(now.strftime('%Y-%m-%dT%H:%M:%S'))} WHERE id = {k['ref_id']};")

@@ -148,6 +148,10 @@ p { margin: 0 0 1em; }
 .vice { border: 0; background: none; padding: 4px 0; color: var(--c); font-weight: 600; cursor: pointer; font-size: .92rem; }
 .pk { list-style: none; margin: 16px 0 6px; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
 /* subcategory grid (like alza.cz): wraps into rows, never scrolls sideways */
+.rub { display: flex; flex-wrap: wrap; gap: 8px; margin: 0 0 22px; }
+.rub a { padding: 6px 14px; border: 1px solid var(--line); border-radius: 999px; background: #fff; font-size: .88rem; font-weight: 600; color: var(--ink2); text-decoration: none; }
+.rub a:hover { border-color: var(--line2); }
+.rub a[aria-current="page"] { border-color: var(--ink); color: var(--ink); }
 .podk { margin: 18px 0 4px; }
 .podk ul { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
 @media (min-width: 640px) { .podk ul { grid-template-columns: repeat(auto-fill, minmax(190px, 1fr)); } }

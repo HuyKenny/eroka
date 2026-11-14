@@ -2,7 +2,7 @@
 // matching the WordPress/Rank Math output. Templates only render what these return.
 import {
   ancestry, brandList, catImages, catTree, cardsByIds, comments, facets, listPosts, listProducts, loadBrand, loadCategory, loadPost, loadProduct,
-  latestPosts, postCat, postsBySlugs, relatedPosts, relatedProducts, searchProducts, siteCache,
+  latestPosts, postCat, postCats, postsBySlugs, relatedPosts, relatedProducts, searchProducts, siteCache,
   type Card, type Cat, type Offer, type Post, type PostCard,
 } from './db';
 import { isFiltered, parseFilters, toListQuery, toQuery } from './filters';
@@ -293,7 +293,7 @@ export async function blogView(db: D1Database, page: number, catId?: number) {
   const { items, total } = await listPosts(db, page, catId);
   const pages = Math.max(1, Math.ceil(total / POSTS_PER_PAGE));
   if (page > pages && page > 1) return null;
-  const cat = catId ? await postCat(db, catId) : null;
+  const [cat, rubriky] = await Promise.all([catId ? postCat(db, catId) : Promise.resolve(null), postCats(db)]);
   const base = cat ? `/${cat.slug}/` : '/blog/';
   const url = abs(pagePath(base, page));
   const title = cat ? termTitle(cat.name, page) : termTitle('Magazín: rady a tipy o erotických pomůckách', page);
@@ -304,7 +304,7 @@ export async function blogView(db: D1Database, page: number, catId?: number) {
     ...(page < pages ? { next: abs(pagePath(base, page + 1)) } : {}),
     graph: [collection(url, title)], jsonLd: [],
   };
-  return { meta, items, total, page, pages, base, cat };
+  return { meta, items, total, page, pages, base, cat, rubriky };
 }
 
 export interface HomeBlocks { deals: number[]; popular: number[]; brands: Array<[number, number]>; shops: Array<[string, number]>; products: number; offers: number }
