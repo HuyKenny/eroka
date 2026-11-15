@@ -40,7 +40,7 @@ const SKALA = ['Vůbec ne', 'Spíš ne', 'Nevím', 'Spíš ano', 'Rozhodně ano'
 <section class="bt" id="bdsm-test" aria-labelledby="bt-h">
 	<h2 id="bt-h">BDSM test: 24 tvrzení</h2>
 	<p class="bt__i">U každého tvrzení vyberte, nakolik s ním souhlasíte. Výsledek se zobrazí pod posledním tvrzením.</p>
-	<form class="bt__f" data-bt>
+	<form class="bt__f" data-bt novalidate>
 		<ol>
 			{OTAZKY.map(([k, t], i) => (
 				<li class="bt__q" data-k={k}>
