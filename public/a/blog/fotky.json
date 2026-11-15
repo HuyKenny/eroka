@@ -967,14 +967,6 @@
   "query": "hourglass sand timer close up",
   "dhash": 16670804476274188288
  },
- "jak-uspokojit-muze": {
-  "src": "pexels",
-  "photo": 5700186,
-  "page": "https://www.pexels.com/photo/sorrowful-black-man-touching-head-in-dismay-near-supporting-wife-5700186/",
-  "author": "Alex Green",
-  "query": "woman hand on man shoulder bedroom",
-  "dhash": 14308982229635616452
- },
  "kegelovy-cviky-panevni-dno": {
   "src": "pexels",
   "photo": 6648803,
@@ -998,5 +990,21 @@
   "author": "Ron Lach",
   "query": "tape measure on white table",
   "dhash": 7835486876942524640
+ },
+ "_zamitnuto-jak-uspokojit-muze": {
+  "src": "pexels",
+  "photo": 5700186,
+  "page": "https://www.pexels.com/photo/sorrowful-black-man-touching-head-in-dismay-near-supporting-wife-5700186/",
+  "author": "Alex Green",
+  "query": "woman hand on man shoulder bedroom",
+  "dhash": 14308982229635616452
+ },
+ "jak-uspokojit-muze": {
+  "src": "pexels",
+  "photo": 5217111,
+  "page": "https://www.pexels.com/photo/happy-couple-cuddling-in-bed-in-morning-5217111/",
+  "author": "Yan Krukau",
+  "query": "smiling couple embracing bed morning light",
+  "dhash": 13283640555366706796
  }
 }
