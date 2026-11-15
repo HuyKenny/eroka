@@ -1,7 +1,7 @@
 // Titles and descriptions (optimised 27. 10. 2026, Kenny: shorter titles, no "recenze" the pages do not have, descriptions
 // ≤ 155 characters, a filled-in template where the object has no text, " – strana N" on paged listings):
 //   product   "{name} – srovnání cen | Eroka"            category "{term}: srovnání cen {year} | Eroka"
-//   brand     "{term}: produkty a ceny | Eroka"          post/page "{title} | Eroka"
+//   brand     "{term}: srovnání cen a modelů | Eroka"       post/page "{title} | Eroka"
 // A per-object title/description from Rank Math (seo_title/seo_desc) still wins and may contain its variables.
 import { decode, stripTags } from './format';
 
@@ -44,7 +44,7 @@ export function categoryTitle(name: string, custom: string, page = 1): string {
   return paged(rmVars(custom || '%term%: srovnání cen %currentyear% | Eroka', { term: decode(name) }), page);
 }
 export function brandTitle(name: string, page = 1): string {
-  return paged(rmVars('%term%: produkty a ceny %sep% %sitename%', { term: decode(name) }), page);
+  return paged(rmVars('%term%: srovnání cen a modelů %sep% %sitename%', { term: decode(name) }), page);
 }
 /** Blog category and the blog itself. */
 export function termTitle(name: string, page = 1): string {

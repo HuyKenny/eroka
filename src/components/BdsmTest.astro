@@ -1,0 +1,121 @@
+---
+// Interactive BDSM test (15. 11. 2026, "bdsm test" 4 200 searches/month). Rendered in place of the <!--bdsm-test--> marker
+// in the article body (Clanek.astro). Runs only in the browser: answers are never stored or sent anywhere.
+const OBLASTI = [
+  { k: 'dom', n: 'Dominance' },
+  { k: 'sub', n: 'Submise' },
+  { k: 'bon', n: 'Bondage' },
+  { k: 'smy', n: 'Smyslová hra' },
+  { k: 'imp', n: 'Impact play' },
+  { k: 'rol', n: 'Hra na role' },
+];
+const OTAZKY: Array<[string, string]> = [
+  ['dom', 'Baví mě v posteli určovat tempo a říkat partnerovi, co má dělat.'],
+  ['sub', 'Vzrušuje mě představa, že se nechám vést a poslouchám pokyny.'],
+  ['bon', 'Láká mě, aby mi partner svázal ruce, nebo abych svázal(a) já jeho.'],
+  ['smy', 'Zavázané oči a nejistota, kde mě čeká další dotek, mě vzrušují.'],
+  ['imp', 'Plácnutí přes zadek při sexu mi přijde vzrušující.'],
+  ['rol', 'Rád(a) bych si v posteli zahrál(a) roli, třeba šéfa a sekretářky.'],
+  ['dom', 'Vzrušuje mě, když partner čeká na moje svolení.'],
+  ['sub', 'Představa, že nade mnou má partner na chvíli kontrolu, je pro mě přitažlivá.'],
+  ['bon', 'Pouta, obojek nebo lano bych si chtěl(a) vyzkoušet.'],
+  ['smy', 'Láká mě hra s teplotou – kapka vosku z masážní svíčky nebo kostka ledu.'],
+  ['imp', 'Chtěl(a) bych vyzkoušet plácačku nebo důtky.'],
+  ['rol', 'Kostým nebo oblečení „do role“ by mě vzrušilo.'],
+  ['dom', 'Baví mě plánovat scénu a mít ji pod kontrolou od začátku do konce.'],
+  ['sub', 'Oslovení „pane“ nebo „paní“ bych v ložnici rád(a) používal(a).'],
+  ['bon', 'Omezený pohyb mi pomáhá vypnout hlavu a soustředit se na pocity.'],
+  ['smy', 'Šimrání pírkem nebo hlazení různými materiály mě dokáže hodně vzrušit.'],
+  ['imp', 'Zarudlá kůže po hře mi přijde jako příjemná vzpomínka.'],
+  ['rol', 'Vymýšlení příběhu nebo scénáře je pro mě stejně vzrušující jako samotný sex.'],
+  ['dom', 'Líbí se mi představa, že partnera „trestám“ za neposlušnost (v rámci hry).'],
+  ['sub', 'Odměna za poslušnost mě vzrušuje víc než sex bez pravidel.'],
+  ['bon', 'Vzrušuje mě pohled na svázaného partnera.'],
+  ['smy', 'Chtěl(a) bych zkusit hru, kdy jeden smysl úplně vypneme a ostatní zesílí.'],
+  ['imp', 'Silnější fyzické vjemy, které jsou na hraně bolesti, mě lákají.'],
+  ['rol', 'Představa, že bychom si s partnerem dali na večer jiná jména a příběh, mě baví.'],
+];
+const SKALA = ['Vůbec ne', 'Spíš ne', 'Nevím', 'Spíš ano', 'Rozhodně ano'];
+---
+<section class="bt" id="bdsm-test" aria-labelledby="bt-h">
+	<h2 id="bt-h">BDSM test: 24 tvrzení</h2>
+	<p class="bt__i">U každého tvrzení vyberte, nakolik s ním souhlasíte. Výsledek se zobrazí pod posledním tvrzením.</p>
+	<form class="bt__f" data-bt>
+		<ol>
+			{OTAZKY.map(([k, t], i) => (
+				<li class="bt__q" data-k={k}>
+					<p>{t}</p>
+					<div class="bt__s" role="radiogroup" aria-label={t}>
+						{SKALA.map((s, v) => (
+							<label><input type="radio" name={`q${i}`} value={v} required /><span>{s}</span></label>
+						))}
+					</div>
+				</li>
+			))}
+		</ol>
+		<p class="bt__err" data-bt-err hidden>Odpovězte prosím na všechna tvrzení, chybí vám ještě <b data-bt-zb></b>.</p>
+		<button type="submit" class="btn">Zobrazit výsledek</button>
+	</form>
+	<div class="bt__r" data-bt-vysledek hidden tabindex="-1">
+		<h3>Váš typ: <span data-bt-typ></span></h3>
+		<p data-bt-popis></p>
+		<ul class="bt__bars">
+			{OBLASTI.map((o) => (
+				<li data-o={o.k}><span>{o.n}</span><b><i></i></b><em>0 %</em></li>
+			))}
+		</ul>
+		<p class="bt__n">Výsledek je orientační pomůcka do rozhovoru s partnerem, ne psychologická diagnóza. Cokoli z toho zkoušejte jen se souhlasem obou a s bezpečným slovem.</p>
+		<button type="button" class="btn btn--g" data-bt-znovu>Vyplnit znovu</button>
+	</div>
+</section>
+
+<script>
+	const POPIS: Record<string, string> = {
+		'Dominantní': 'Baví vás vést, rozhodovat a mít scénu pod kontrolou. Dominance ale stojí na péči: čtete partnera, hlídáte hranice a po hře se o něj postaráte.',
+		'Submisivní': 'Láká vás odevzdat kontrolu a nechat se vést. Submise je aktivní volba – vy určujete hranice a bezpečné slovo platí vždy.',
+		'Switch': 'Užijete si obě strany: někdy chcete vést, jindy se nechat vést. Pro páry je to výhoda, role se dají střídat podle nálady.',
+		'Zvědavec / vanilla': 'BDSM vás zatím spíš zajímá než láká. To je úplně v pořádku – pokud vás něco z testu zaujalo, začněte tím nejjemnějším, třeba zavázanýma očima.',
+	};
+	const form = document.querySelector<HTMLFormElement>('[data-bt]');
+	const out = document.querySelector<HTMLElement>('[data-bt-vysledek]');
+	if (form && out) {
+		form.addEventListener('submit', (e) => {
+			e.preventDefault();
+			const qs = [...form.querySelectorAll<HTMLElement>('.bt__q')];
+			const chybi = qs.filter((q) => !q.querySelector('input:checked'));
+			const err = form.querySelector<HTMLElement>('[data-bt-err]')!;
+			if (chybi.length) {
+				err.hidden = false;
+				err.querySelector('[data-bt-zb]')!.textContent = String(chybi.length);
+				chybi[0]?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+				return;
+			}
+			err.hidden = true;
+			const sum: Record<string, number> = {}, max: Record<string, number> = {};
+			for (const q of qs) {
+				const k = q.dataset.k!;
+				sum[k] = (sum[k] ?? 0) + Number(q.querySelector<HTMLInputElement>('input:checked')!.value);
+				max[k] = (max[k] ?? 0) + 4;
+			}
+			const pct = (k: string) => Math.round((100 * (sum[k] ?? 0)) / (max[k] || 1));
+			const d = pct('dom'), s = pct('sub');
+			const avg = ['dom', 'sub', 'bon', 'smy', 'imp', 'rol'].reduce((a, k) => a + pct(k), 0) / 6;
+			const typ = Math.max(d, s) < 40 && avg < 40 ? 'Zvědavec / vanilla' : d >= 50 && s >= 50 && Math.abs(d - s) <= 20 ? 'Switch' : d >= s ? 'Dominantní' : 'Submisivní';
+			out.querySelector('[data-bt-typ]')!.textContent = typ;
+			out.querySelector('[data-bt-popis]')!.textContent = POPIS[typ] ?? '';
+			for (const li of out.querySelectorAll<HTMLElement>('[data-o]')) {
+				const v = pct(li.dataset.o!);
+				li.querySelector('i')!.style.width = `${v}%`;
+				li.querySelector('em')!.textContent = `${v} %`;
+			}
+			out.hidden = false;
+			out.focus();
+			out.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		});
+		out.querySelector('[data-bt-znovu]')?.addEventListener('click', () => {
+			form.reset();
+			out.hidden = true;
+			form.scrollIntoView({ behavior: 'smooth', block: 'start' });
+		});
+	}
+</script>

@@ -5,6 +5,7 @@ import Base from '../../layouts/Base.astro';
 import Drobky from '../Drobky.astro';
 import PostKarta from '../PostKarta.astro';
 import PartnerBox from '../PartnerBox.astro';
+import BdsmTest from '../BdsmTest.astro';
 import type { postView } from '../../lib/views';
 import { datum, decode, safeCommentHtml, texturize } from '../../lib/format';
 import { ownUpload } from '../../lib/img';
@@ -14,6 +15,9 @@ const { v } = Astro.props;
 const m = v.meta;
 const p = v.post;
 const isPost = p.type === 'post';
+// <!--bdsm-test--> in the body marks where the interactive BDSM test goes (only the bdsm-test article has it)
+const html = p.content_html.replace(/(src|srcset)="https?:\/\/(?:www\.)?eroka\.cz\/wp-content\//g, '$1="/wp-content/').replace(/, https?:\/\/(?:www\.)?eroka\.cz\/wp-content\//g, ', /wp-content/');
+const obsah = html.split('<!--bdsm-test-->', 2);
 const crumbs = isPost ? [{ name: 'Domů', url: '/' }, { name: 'Magazín', url: '/blog/' }, ...(v.cat ? [{ name: decode(v.cat.name), url: `/${v.cat.slug}/` }] : []), { name: decode(p.title) }] : [{ name: 'Domů', url: '/' }, { name: decode(p.title) }];
 ---
 <Base title={m.title} description={m.description} canonical={m.canonical} robots={m.robots} ogImage={m.ogImage} graph={m.graph} jsonLd={m.jsonLd} extraMeta={m.extraMeta} pageType={isPost ? 'post' : 'page'}>
@@ -24,7 +28,9 @@ const crumbs = isPost ? [{ name: 'Domů', url: '/' }, { name: 'Magazín', url: '
 			<h1>{texturize(decode(p.title))}</h1>
 			{isPost && <p class="cl__m">Ester · <time datetime={p.published_at.slice(0, 10)}>{datum(p.published_at)}</time>{p.modified_at.slice(0, 10) > p.published_at.slice(0, 10) && <> · aktualizováno <time datetime={p.modified_at.slice(0, 10)}>{datum(p.modified_at)}</time></>}</p>}
 			{isPost && p.image && <figure class="cl__f"><img src={ownUpload(p.image)} alt={p.image_alt} width={p.image_w || 1400} height={p.image_h || 788} fetchpriority="high" decoding="async" /></figure>}
-			<div class="obsah" set:html={p.content_html.replace(/(src|srcset)="https?:\/\/(?:www\.)?eroka\.cz\/wp-content\//g, '$1="/wp-content/').replace(/, https?:\/\/(?:www\.)?eroka\.cz\/wp-content\//g, ', /wp-content/')} />
+			{obsah.length > 1
+				? <div class="obsah"><Fragment set:html={obsah[0]} /><BdsmTest /><Fragment set:html={obsah[1]} /></div>
+				: <div class="obsah" set:html={obsah[0]} />}
 			{v.shopCats.length > 0 && (
 				<div class="cl__s"><b>Kde vybrat a koupit za nejlepší cenu</b>{v.shopCats.map((c) => <a href={`/${c.slug}/`}>{decode(c.name)}</a>)}</div>
 			)}

@@ -33,10 +33,10 @@
    "femdom-zenska-dominance-jak-zacit"
   ],
   "bdsm-sady": [
+   "bdsm-test",
    "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
    "bondage-svazovani-pro-zacatecniky",
-   "elektrosex-pro-zacatecniky",
-   "eroticke-darky-pro-pary-pod-stromecek"
+   "elektrosex-pro-zacatecniky"
   ],
   "bezlatexove-kondomy": [
    "jak-vybrat-kondomy",
@@ -164,12 +164,14 @@
   ],
   "eroticky-nabytek": [
    "kamasutra-polohy",
-   "cunnilingus-jak-na-to"
+   "cunnilingus-jak-na-to",
+   "doggy-style"
   ],
   "feromony-a-afrodiziaka": [
    "afrodiziaka-co-opravdu-funguji-jidlo-bylinky-a-triky-pro-okamzite-zvyseni-libida"
   ],
   "fetis-kink": [
+   "bdsm-test",
    "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu"
   ],
   "fistingove-lubrikacni-gely-a-oleje": [
@@ -188,12 +190,13 @@
    "fisting-bezpecny-navod"
   ],
   "kondomy": [
+   "velikost-kondomu",
    "jak-na-prvni-sex",
    "jak-vybrat-kondomy",
-   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu",
-   "od-seznameni-k-intimite-pruvodce"
+   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu"
   ],
   "kondomy-my-size": [
+   "velikost-kondomu",
    "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum"
   ],
   "kosmetika-na-oddaleni-ejakulace": [
@@ -378,13 +381,14 @@
    "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum"
   ],
   "velke-kondomy": [
+   "velikost-kondomu",
    "jak-vybrat-kondomy"
   ],
   "venusiny-kulicky": [
+   "kegelovy-cviky-panevni-dno",
    "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom",
    "sex-v-tehotenstvi-a-po-porodu",
-   "bod-g-jak-najit-a-stimulovat",
-   "intimni-komfort-bez-tabu-jak-skutecne-pecovat-o-sve-zenstvi-aby-bylo-zdrave-a-spokojene"
+   "bod-g-jak-najit-a-stimulovat"
   ],
   "vibracni-analni-koliky": [
    "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu"
@@ -479,6 +483,19 @@
    "sexy-vanocni-kostym-a-pradlo"
   ],
   "cervene-body": [
+   "sexy-vanocni-kostym-a-pradlo"
+  ],
+  "bdsm-nabytek": [
+   "bdsm-test",
+   "bondage-svazovani-pro-zacatecniky",
+   "doggy-style"
+  ],
+  "analni-haky": [
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "jak-vybrat-analni-kolik-nejen-pro-muze-kompletni-pruvodce-pro-zacatecniky-bez-bolesti-a-tabu"
+  ],
+  "eroticke-pradlo-plus-size": [
+   "jak-vybrat-eroticke-pradlo-podle-postavy-a-prilezitosti",
    "sexy-vanocni-kostym-a-pradlo"
   ]
  },
@@ -597,7 +614,14 @@
   "vztah-na-dalku": "Vztah na dálku",
   "zamilovanost": "Zamilovanost",
   "zasnubni-prsten-jak-vybrat": "Zásnubní prsten",
-  "zasnuby-jak-pozadat-o-ruku": "Jak požádat o ruku"
+  "zasnuby-jak-pozadat-o-ruku": "Jak požádat o ruku",
+  "bdsm-test": "BDSM test: jaký typ jste?",
+  "doggy-style": "Doggy style: sex zezadu pohodlně",
+  "edging": "Edging: jak oddálit vyvrcholení",
+  "jak-uspokojit-muze": "Jak uspokojit muže",
+  "kegelovy-cviky-panevni-dno": "Kegelovy cviky a posílení pánevního dna",
+  "sex-pri-menstruaci": "Sex při menstruaci: je bezpečný?",
+  "velikost-kondomu": "Velikost kondomu: jak ji změřit a vybrat"
  },
  "clanek_kategorie": {
   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum": [
@@ -1170,6 +1194,46 @@
   ],
   "zasnuby-jak-pozadat-o-ruku": [
    "masazni-svicky"
+  ],
+  "bdsm-test": [
+   "bdsm-sady",
+   "eroticka-pouta",
+   "bdsm-masky",
+   "dutky-biciky-a-placacky"
+  ],
+  "doggy-style": [
+   "eroticky-nabytek",
+   "parove-vibratory",
+   "vibracni-erekcni-krouzky-na-penis-a-varlata",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "edging": [
+   "umele-vaginy-a-masturbatory",
+   "masazni-vibratory",
+   "vibratory-na-dalkove-ovladani",
+   "lubrikacni-gely-a-oleje-na-vodni-bazi"
+  ],
+  "jak-uspokojit-muze": [
+   "masazni-oleje",
+   "oralni-lubrikacni-gely-a-oleje-s-prichuti",
+   "erekcni-krouzky-na-penis-a-varlata",
+   "umele-vaginy-a-masturbatory"
+  ],
+  "kegelovy-cviky-panevni-dno": [
+   "venusiny-kulicky",
+   "vibracni-venusiny-kulicky"
+  ],
+  "sex-pri-menstruaci": [
+   "kondomy",
+   "menstruacni-pomucky",
+   "rousky-pro-oralni-sex",
+   "tehotenske-a-ovulacni-testy"
+  ],
+  "velikost-kondomu": [
+   "kondomy-my-size",
+   "velke-kondomy",
+   "standardni-kondomy",
+   "kondomy"
   ]
  },
  "souvisejici": {
@@ -1741,6 +1805,41 @@
    "zasnubni-prsten-jak-vybrat",
    "kolik-stoji-svatba",
    "svatebni-noc-a-libanky"
+  ],
+  "bdsm-test": [
+   "bdsm-pro-zacatecniky-jak-zacit-bezpecne-s-duverou-a-bez-strachu",
+   "bondage-svazovani-pro-zacatecniky",
+   "femdom-zenska-dominance-jak-zacit"
+  ],
+  "doggy-style": [
+   "nejlepsi-sexualni-polohy",
+   "kamasutra-polohy",
+   "bod-g-jak-najit-a-stimulovat"
+  ],
+  "edging": [
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
+   "15-technik-masturbace-jak-si-to-udelat-lepe-nez-kdy-driv-velky-manual",
+   "masaz-penisu"
+  ],
+  "jak-uspokojit-muze": [
+   "jak-se-stat-bohyni-oralniho-sexu-kompletni-manual-techniky-a-tajne-triky",
+   "masaz-penisu",
+   "masaz-prostaty-navod"
+  ],
+  "kegelovy-cviky-panevni-dno": [
+   "venusiny-kulicky-kompletni-pruvodce-pro-zacatecnice-i-pokrocile-zdravi-a-slast-v-jednom",
+   "jak-dele-vydrzet-v-posteli-techniky-proti-predcasne-ejakulaci",
+   "sex-v-tehotenstvi-a-po-porodu"
+  ],
+  "sex-pri-menstruaci": [
+   "jak-mluvit-s-partnerem-o-sexu-bez-trapasu-prakticky-pruvodce",
+   "cunnilingus-jak-na-to",
+   "jak-vybrat-kondomy"
+  ],
+  "velikost-kondomu": [
+   "jak-vybrat-kondomy",
+   "jaka-je-prumerna-velikost-penisu-konec-mytu-a-tipy-jak-z-nej-dostat-maximum",
+   "masturbace-s-kondomem-zbytecna-komplikace-nebo-cesta-k-lepsimu-sexu"
   ]
  }
 }

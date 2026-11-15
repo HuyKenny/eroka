@@ -76,11 +76,18 @@ export const RULES: Rule[] = [
   { cat: 'bezlatexove-kondomy', any: [{ within: K, name: /bezlatex|latex.?free|non.?latex|polyisopren|polyuretan/i }] },
   { cat: 'znecitlivujici-kondomy', any: [{ within: K, name: /znecitl|prodlou|delay|performa|endurance|long ?love/i }] },
   // feed expansion 27. 10. 2026 (Marketing Miner): poppers 8 900/měs, bodystocking 620, adventní kalendář 550, houpačka 200, nuru 120
-  { cat: 'poppers', any: [{ within: ['*'], name: /poppers|\brush\b|amyl|pentyl|isopropyl nitrit|propyl nitrit|jungle juice|iron fist|\bpush original|\blocker room/i }], not: /kondom|lubrik|tričko|tricko/i },
+  { cat: 'poppers', any: [{ within: ['*'], name: /poppers|\brush\b|amyl|pentyl|isopropyl nitrit|propyl nitrit|jungle juice|iron fist|\bpush original|\blocker room/i }], not: /kondom|lubrik|tričko|tricko|satisfyer|dildo|vibr|masturb|kroužek|krouzek|kapky|herbal/i },
   { cat: 'bodystocking', any: [{ within: ['eroticke-pradlo', 'fetis-kink'], name: /bodystocking|body stocking|bodystock/i }] },
-  { cat: 'eroticke-adventni-kalendare', any: [{ within: ['*'], name: /adventn|advent calendar|calendar|kalendář|kalendar/i }] },
+  { cat: 'eroticke-adventni-kalendare', any: [{ within: ['*'], name: /adventn|advent calendar|calendar of desires|sexy calendar/i }], not: /nástěnn|nastenn/i },
   { cat: 'eroticke-houpacky', any: [{ within: ['eroticky-nabytek', 'fetis-kink', 'bondage'], name: /houpa|swing|závěs|zaves|sling/i }] },
   { cat: 'nuru-gely', any: [{ within: ['*'], name: /\bnuru\b/i }] },
+  // SEO content gap 15. 11. 2026 (Marketing Miner): plus size prádlo ~300/měs, BDSM nábytek ~730, anální háky 120.
+  // Patterns checked on the live catalogue: "lavic" alone hit "hlavice", "kříž" hit "křížové pásky", cages for the penis
+  // and hogtie connectors are not furniture.
+  { cat: 'eroticke-pradlo-plus-size', any: [{ within: ['damske-eroticke-pradlo'], name: /plus.?size|queen.?size|\bcurv(es|y)\b|\bx{2,4}l\b|\b[2-6]xl\b/i }], not: /pánsk|pansk|\bmen\b|\bslipy\b|boxerk/i },
+  { cat: 'bdsm-nabytek', any: [{ within: ['eroticky-nabytek', 'fetis-kink', 'bondage'], name: /kříž(?!ov)|\bkriz\b|\bcross\b|andrew|ondřej|\blavic|\bbench\b|bdsm klec|bondage cage|kennel|suspension cage|prisoner cage|pranýř|\bstocks\b|obedience chair|sex chair|spanish donkey/i }],
+    not: /cock|penis|chastity|cudnost|varlat|cuffs|nipple|nálepk|podprsen|páska|\btape\b|elektrod|e-stim|hog ?tie|hlavic|sprch/i },
+  { cat: 'analni-haky', any: [{ within: ['*'], name: /an[aá]ln[ií] h[aá]k|anal hook|vagin[aá]ln[ií] h[aá]k/i }] },
   // audience hubs last (they collect the type categories above)
   { cat: 'eroticke-pomucky-pro-pary', any: [
     { within: ['parove-vibratory', 'eroticke-hry-pro-pary', 'kondomy-pro-pary', 'sady-erotickych-pomucek'] },

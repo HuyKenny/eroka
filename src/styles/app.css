@@ -312,6 +312,29 @@ p { margin: 0 0 1em; }
 .obsah h2 { font-size: 1.25rem; margin-top: 1.4em; }
 .obsah h3 { font-size: 1.08rem; margin-top: 1.3em; }
 .obsah img { border-radius: var(--r); }
+.bt { margin: 1.6em 0; padding: 20px; border: 1px solid var(--line); border-radius: var(--r); background: var(--bg2); }
+.bt h2 { margin-top: 0; }
+.bt__i { color: var(--ink2); }
+.bt__f ol { list-style: none; padding: 0; margin: 0; counter-reset: bt; }
+.bt__q { counter-increment: bt; padding: 14px 0; border-top: 1px solid var(--line); }
+.bt__q p { margin: 0 0 8px; font-weight: 600; }
+.bt__q p::before { content: counter(bt) ". "; color: var(--c); }
+.bt__s { display: flex; flex-wrap: wrap; gap: 6px; }
+.bt__s label { cursor: pointer; }
+.bt__s input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.bt__s span { display: inline-block; padding: 6px 12px; border: 1px solid var(--line2); border-radius: 999px; background: #fff; font-size: .88rem; }
+.bt__s input:checked + span { background: var(--c); border-color: var(--c); color: #fff; }
+.bt__s input:focus-visible + span { outline: 2px solid var(--c); outline-offset: 2px; }
+.bt__err { color: var(--c-d); font-weight: 600; }
+.bt__r { margin-top: 18px; padding-top: 14px; border-top: 2px solid var(--c); }
+.bt__r:focus { outline: none; }
+.bt__bars { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
+.bt__bars li { display: grid; grid-template-columns: 9.5em 1fr 3.5em; align-items: center; gap: 10px; font-size: .92rem; }
+.bt__bars b { display: block; height: 10px; background: var(--bg3); border-radius: 999px; overflow: hidden; }
+.bt__bars i { display: block; height: 100%; width: 0; background: var(--c); border-radius: 999px; transition: width .5s; }
+.bt__bars em { font-style: normal; text-align: right; font-weight: 650; }
+.bt__n { font-size: .88rem; color: var(--ink2); }
+@media (max-width: 480px) { .bt { padding: 14px; } .bt__bars li { grid-template-columns: 7.5em 1fr 3em; } }
 .obsah ul, .obsah ol { padding-left: 1.3em; }
 .obsah li { margin-bottom: .35em; }
 .obsah table { border-collapse: collapse; width: 100%; font-size: .92rem; }
