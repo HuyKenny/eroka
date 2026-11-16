@@ -88,6 +88,9 @@ export const RULES: Rule[] = [
   { cat: 'bdsm-nabytek', any: [{ within: ['eroticky-nabytek', 'fetis-kink', 'bondage'], name: /kříž(?!ov)|\bkriz\b|\bcross\b|andrew|ondřej|\blavic|\bbench\b|bdsm klec|bondage cage|kennel|suspension cage|prisoner cage|pranýř|\bstocks\b|obedience chair|sex chair|spanish donkey/i }],
     not: /cock|penis|chastity|cudnost|varlat|cuffs|nipple|nálepk|podprsen|páska|\btape\b|elektrod|e-stim|hog ?tie|hlavic|sprch/i },
   { cat: 'analni-haky', any: [{ within: ['*'], name: /an[aá]ln[ií] h[aá]k|anal hook|vagin[aá]ln[ií] h[aá]k/i }] },
+  // SEO content gap round 2 16. 11. 2026: erotic bras ~220/měs, masturbation eggs ~100 (TENGA Egg), "Eroticke pomucky" hub below.
+  { cat: 'eroticke-podprsenky', any: [{ within: ['damske-eroticke-pradlo'], name: /podprsen|\bbra\b|bralette/i }], not: /sportovn|bye bra|kojic|těhotensk|tehotensk|pánsk|pansk|\bmen\b/i },
+  { cat: 'masturbacni-vajicka', any: [{ within: ['umele-vaginy-a-masturbatory'], name: /\begg\b|vajíč|vajic|vibegg/i }] },
   // audience hubs last (they collect the type categories above)
   { cat: 'eroticke-pomucky-pro-pary', any: [
     { within: ['parove-vibratory', 'eroticke-hry-pro-pary', 'kondomy-pro-pary', 'sady-erotickych-pomucek'] },
@@ -101,6 +104,8 @@ export const RULES: Rule[] = [
     { within: ['umele-vaginy-a-masturbatory', 'erekcni-krouzky-na-penis-a-varlata', 'navleky-na-penis-prst', 'vakuove-pumpy-pro-muze-na-penis', 'umele-panny', 'masaz-prostaty', 'zvetseni-penisu-pomucky-a-pripravky', 'sexualni-stroje'] },
     { within: [...ANAL, ...V], param: { key: 'pro', values: ['pro muže'] } },
   ] },
+  // umbrella hub: everything in the three audience hubs (erotické pomůcky ~12 000/měs, erotické hračky ~3 600, sex hračky ~2 400)
+  { cat: 'eroticke-pomucky', any: [{ within: ['eroticke-pomucky-pro-pary', 'eroticke-pomucky-pro-zeny', 'eroticke-pomucky-pro-muze'] }] },
   // facet landings: param value OR brand OR product name, within the base category
   ...FASETY.map((f): Rule => ({
     cat: f.slug,
