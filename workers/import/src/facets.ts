@@ -39,7 +39,23 @@ export async function rebuildFacets(db: D1Database, day: string): Promise<Record
       disc = (SELECT p.disc_pct FROM products p WHERE p.id = cat_products.product_id)`).run();
 
   // 3. facets
-  const all = async <T>(sql: string, ...b: unknown[]) => (await db.prepare(sql).bind(...b).all<T>()).results;
+  // one aggregation at a time, retried when D1 reports "overloaded" (16. 11.: eight parallel GROUP BYs over cat_products
+  // exceeded the 10 s resource window once the audience hub passed 6 800 rows, finalize returned 1101)
+  let queue: Promise<unknown> = Promise.resolve();
+  const all = <T>(sql: string, ...b: unknown[]): Promise<T[]> => {
+    const run = async (): Promise<T[]> => {
+      for (let i = 0; ; i++) {
+        try { return (await db.prepare(sql).bind(...b).all<T>()).results; }
+        catch (e) {
+          if (i >= 5 || !/overloaded/i.test(String(e))) throw e;
+          await new Promise((r) => setTimeout(r, 4000 * (i + 1)));
+        }
+      }
+    };
+    const p = queue.then(run, run);
+    queue = p.catch(() => undefined);
+    return p;
+  };
   const base = `FROM cat_products x JOIN products p ON p.id = x.product_id WHERE p.status = 'publish'`;
   const [stats, brands, shops, params, nums, bstats, bcats, bshops] = await Promise.all([
     all<{ id: number; n: number; lo: number; hi: number; st: number; d: number }>(`SELECT x.cat_id AS id, COUNT(*) AS n, MIN(NULLIF(p.min_price, 0)) AS lo, MAX(p.min_price) AS hi, SUM(p.in_stock) AS st, SUM(p.disc_pct >= 10) AS d ${base} GROUP BY x.cat_id`),
