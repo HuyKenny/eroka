@@ -15,8 +15,8 @@ import { robots } from '../../lib/seo';
 
 interface Props { v: Awaited<ReturnType<typeof homeView>> }
 const { v } = Astro.props;
-const title = 'Eroka.cz | Srovnání cen erotických pomůcek z ověřených eshopů';
-const description = 'Porovnejte ceny tisíců erotických hraček z prověřených českých eshopů. Nakupujte chytře, výhodně a 100% diskrétně. Vibrátory, dilda, prádlo i kondomy.';
+const title = 'Sexshop: srovnání cen erotických pomůcek z eshopů | Eroka.cz';
+const description = 'Sexshop bez přeplácení: porovnejte ceny tisíců erotických hraček z prověřených českých eshopů. Nakupujte chytře, výhodně a 100% diskrétně. Vibrátory, dilda, prádlo i kondomy.';
 const celkem = cislo(Math.floor((v.home.products || 11000) / 1000) * 1000);
 const TILES: Array<[string, string]> = [
 	['vibratory', 'Vibrátory'], ['dilda', 'Dilda'], ['umele-vaginy-a-masturbatory', 'Masturbátory'], ['analni-koliky', 'Anální kolíky'],
