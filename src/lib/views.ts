@@ -278,6 +278,14 @@ export async function postView(db: D1Database, id: number) {
       inLanguage: 'cs', '@id': url + '#richSnippet', isPartOf: { '@id': url + '#webpage' }, mainEntityOfPage: { '@id': url + '#webpage' },
     },
   ];
+  // FAQPage: question/answer pairs from the "Časté otázky" block (h3 question + following paragraphs), so Google can show rich answers
+  const faqAt = post.content_html.search(/<h2[^>]*>\s*Časté otázky\s*<\/h2>/i);
+  if (faqAt >= 0) {
+    const plain = (s: string) => decode(s.replace(/<[^>]+>/g, ' ')).replace(/\s+/g, ' ').trim();
+    const pairs = [...post.content_html.slice(faqAt).matchAll(/<h3[^>]*>([\s\S]*?)<\/h3>\s*((?:<p[^>]*>[\s\S]*?<\/p>\s*)+)/gi)]
+      .map((m) => ({ q: plain(m[1] ?? ""), a: plain(m[2] ?? "") })).filter((p) => p.q && p.a).slice(0, 10);
+    if (pairs.length >= 2) graph.push({ '@type': 'FAQPage', '@id': url + '#faq', url, inLanguage: 'cs', isPartOf: { '@id': url + '#webpage' }, mainEntity: pairs.map((p) => ({ '@type': 'Question', name: p.q, acceptedAnswer: { '@type': 'Answer', text: p.a } })) });
+  }
   const meta: Meta = {
     title, description, ...(post.noindex ? {} : { canonical: url }), robots: robots(post.noindex === 1, post.seo_robots), ogImage: img || OG_DEFAULT, graph, jsonLd: [],
     extraMeta: [{ property: 'article:published_time', content: isoPrague(post.published_at) }, { property: 'article:modified_time', content: isoPrague(post.modified_at) }],
