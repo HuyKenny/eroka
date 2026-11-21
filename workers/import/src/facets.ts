@@ -25,18 +25,26 @@ export async function rebuildFacets(db: D1Database, day: string): Promise<Record
   // 1. discount + popularity
   // only the shop's own old price counts: the daily minimum moves whenever an offer appears or disappears, so a
   // "drop" against price history is no discount (27. 10.: history-based values gave dozens of false −80 %)
-  await db.prepare(`UPDATE products SET disc_pct = MIN(70,
-      COALESCE((SELECT CAST(ROUND((o.price_old - o.price) * 100.0 / o.price_old) AS INTEGER) FROM offers o WHERE o.id = products.best_offer_id AND o.active = 1 AND o.price_old > o.price), 0))`).run();
-  await db.prepare("UPDATE products SET disc_pct = 0 WHERE disc_pct < 3 OR min_price = 0").run();
+  // WHERE IS NOT guard (18. 11.): D1 účtuje "rows written" za KAŽDÝ řádek dotčený UPDATE, ne jen změněný —
+  // bez téhle podmínky se každý běh přepisovaly všechny produkty/cat_products stejnou hodnotou (eroka 22,9 M
+  // zápisů/měsíc, 9× rozpočet). S podmínkou se zapíšou jen řádky, kde se hodnota opravdu liší.
+  const discExpr = `MIN(70,
+      COALESCE((SELECT CAST(ROUND((o.price_old - o.price) * 100.0 / o.price_old) AS INTEGER) FROM offers o WHERE o.id = products.best_offer_id AND o.active = 1 AND o.price_old > o.price), 0))`;
+  await db.prepare(`UPDATE products SET disc_pct = ${discExpr} WHERE disc_pct IS NOT ${discExpr}`).run();
+  await db.prepare("UPDATE products SET disc_pct = 0 WHERE (disc_pct < 3 OR min_price = 0) AND disc_pct != 0").run();
   // clicks count once per visitor and day (ip_hash rotates daily) — a few IPs cannot push a product up
+  const popExpr = `total_sales * 5 + shop_count * 3 + in_stock * 5 + 20 * COALESCE((SELECT n FROM c WHERE c.product_id = products.id), 0)`;
   await db.prepare(`WITH c AS (SELECT product_id, COUNT(DISTINCT ip_hash || substr(clicked_at, 1, 10)) AS n FROM clicks WHERE clicked_at >= ? AND ip_hash <> '' GROUP BY product_id)
-    UPDATE products SET pop = total_sales * 5 + shop_count * 3 + in_stock * 5 + 20 * COALESCE((SELECT n FROM c WHERE c.product_id = products.id), 0)`).bind(clicksSince).run();
+    UPDATE products SET pop = ${popExpr} WHERE pop IS NOT (${popExpr})`).bind(clicksSince).run();
   const rules = await applyCategoryRules(db);
   // 2. sort keys
   await db.prepare(`UPDATE cat_products SET
       min_price = (SELECT p.min_price FROM products p WHERE p.id = cat_products.product_id),
       pop = (SELECT p.pop FROM products p WHERE p.id = cat_products.product_id),
-      disc = (SELECT p.disc_pct FROM products p WHERE p.id = cat_products.product_id)`).run();
+      disc = (SELECT p.disc_pct FROM products p WHERE p.id = cat_products.product_id)
+      WHERE min_price IS NOT (SELECT p.min_price FROM products p WHERE p.id = cat_products.product_id)
+         OR pop IS NOT (SELECT p.pop FROM products p WHERE p.id = cat_products.product_id)
+         OR disc IS NOT (SELECT p.disc_pct FROM products p WHERE p.id = cat_products.product_id)`).run();
 
   // 3. facets
   // one aggregation at a time, retried when D1 reports "overloaded" (16. 11.: eight parallel GROUP BYs over cat_products
