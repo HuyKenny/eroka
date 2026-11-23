@@ -1,0 +1,61 @@
+{
+ "domain": "eroka.cz",
+ "worker": "eroka",
+ "port": 8851,
+ "cron": "25 2 * * *",
+ "go": "go_slug",
+ "import": [
+  [
+   "pnpm",
+   "exec",
+   "tsx",
+   "scripts/static/run-worker.ts",
+   "--db",
+   "{db}",
+   "--run",
+   "ERK_PRODUCTION_APPROVED=yes python3 scripts/katalog-novinky.py --apply",
+   "--tick",
+   "--finalize"
+  ]
+ ],
+ "crawl": {
+  "workers": 4,
+  "extra_until": 0,
+  "no_go": true,
+  "skip": [
+   "/img/"
+  ],
+  "exits": "/go/"
+ },
+ "post_crawl": [
+  [
+   "python3",
+   "scripts/static/img_r2.py",
+   "{out}",
+   "--bucket",
+   "eroka-thumbs",
+   "--base",
+   "https://img.eroka.cz",
+   "--state",
+   "{data}",
+   "--threads",
+   "6"
+  ]
+ ],
+ "fts": [
+  "INSERT INTO product_fts (rowid, name, brand) SELECT p.id, p.name, COALESCE(b.name, '') FROM products p LEFT JOIN brands b ON b.id = p.brand_id"
+ ],
+ "min_pages": 5000,
+ "smoke_paths": [],
+ "actions": {
+  "repo": "HuyKenny/eroka",
+  "cred": ".eroka-credentials.env",
+  "zone": "eroka.cz",
+  "secrets": {},
+  "feeds_ce": ".eroka-feeds.json",
+  "r2_write": true
+ },
+ "pip": [
+  "pillow==11.3.0"
+ ]
+}
