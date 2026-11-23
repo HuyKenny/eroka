@@ -32,7 +32,7 @@ from html.parser import HTMLParser
 from pathlib import Path
 
 ROOT = Path("/home/kenny/ai")
-APP = ROOT / "apps/eroka"
+APP = Path(__file__).resolve().parent.parent
 NODE = "/home/kenny/.nvm/versions/node/v22.23.1/bin"
 MAP_FILE = APP / "src/data/feed-kategorie.json"  # feed path + name → category rules
 # google = Google Merchant <item>, heureka = <SHOPITEM>; order = which shop's data (name, text, photos) wins
@@ -300,11 +300,20 @@ def fetch_feeds():
         if ONLY and n not in ONLY:
             continue
         f = tmp / f"feed-{n}.xml"
+        mirror = Path(os.environ.get("MIRROR_DIR", "/nonexistent")) / f"feed-{n}.xml"
         if not OFFLINE:
-            req = urllib.request.Request(urls[f"Feed__{n}"]["feed_url"], headers={"User-Agent": "Mozilla/5.0 ErokaKatalog/1.0 (+https://eroka.cz)"})
-            with urllib.request.urlopen(req, timeout=300) as r, open(f, "wb") as o:
-                while c := r.read(1 << 20):
-                    o.write(c)
+            try:
+                if mirror.is_file():   # static build: mirrored on Malina (host refuses datacenter IPs)
+                    f.write_bytes(mirror.read_bytes())
+                else:
+                    req = urllib.request.Request(urls[f"Feed__{n}"]["feed_url"], headers={"User-Agent": "Mozilla/5.0 ErokaKatalog/1.0 (+https://eroka.cz)"})
+                    with urllib.request.urlopen(req, timeout=300) as r, open(f, "wb") as o:
+                        while c := r.read(1 << 20):
+                            o.write(c)
+            except Exception as e:  # noqa: BLE001 — one feed down must not stop the catalogue (alkoholicky 23. 11.: HTTP 403)
+                print(f"Feed__{n}: SKIPPED ({type(e).__name__}: {str(e)[:60]})", file=sys.stderr)
+                f.unlink(missing_ok=True)
+                continue
         out[n] = load_feed(n, f)
         if not OFFLINE:
             f.unlink()
