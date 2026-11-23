@@ -58,5 +58,6 @@
  },
  "pip": [
   "pillow==11.3.0"
- ]
+ ],
+ "mirror_release": "feeds"
 }

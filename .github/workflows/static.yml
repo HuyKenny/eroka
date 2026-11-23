@@ -68,6 +68,20 @@ jobs:
         env:
           STATE_KEY: ${{ secrets.STATE_KEY }}
           GH_TOKEN: ${{ github.token }}
+      - name: Feeds mirrored on Malina (release feeds, encrypted)
+        if: env.MODE == 'full'
+        continue-on-error: true
+        run: |
+          mkdir -p .static-work/mirror
+          gh release download feeds -p '*.enc' -D "$RUNNER_TEMP/mirror" --clobber
+          for f in "$RUNNER_TEMP"/mirror/*.enc; do
+            openssl enc -d -aes-256-cbc -pbkdf2 -iter 200000 -pass env:STATE_KEY -in "$f" -out ".static-work/mirror/$(basename "$f" .enc)"
+          done
+          ls -la .static-work/mirror | tail -n +2
+          echo "MIRROR_DIR=$PWD/.static-work/mirror" >> "$GITHUB_ENV"
+        env:
+          STATE_KEY: ${{ secrets.STATE_KEY }}
+          GH_TOKEN: ${{ github.token }}
       - name: Import + render + deploy
         run: python3 -u scripts/static/build.py run --mode "$MODE"
         env:
