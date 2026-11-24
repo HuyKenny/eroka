@@ -21,6 +21,7 @@
  ],
  "crawl": {
   "extra_paths_sql": [
+   "SELECT from_path FROM redirects",
    "SELECT '/hledat/'"
   ],
   "workers": 4,
