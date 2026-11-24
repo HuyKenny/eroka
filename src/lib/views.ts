@@ -49,12 +49,7 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
   if (!cat) return null;
   const f = parseFilters(sp);
   const filtered = isFiltered(f);
-  // facet landings of this category (src/data/fasety.ts) that are indexable: filter value → landing slug
-  const landings: Record<string, string> = {};
-  for (const l of FASETY) {
-    const c = l.base === cat.slug && l.key ? tree.bySlug.get(l.slug) : undefined;
-    if (c && c.count_total >= 5 && !c.noindex) landings[`${l.key}=${l.key === 'brand' ? l.value : valueSlug(l.value!)}`] = l.slug;
-  }
+  const landings = landingsOf(tree, cat.slug);
   // the plain filter of exactly one landing value → 301 to the landing (one indexable URL per combination)
   if (filtered && page === 1) {
     const one = only(f);
@@ -102,6 +97,22 @@ export async function categoryView(db: D1Database, catId: number, page: number, 
     magbox: magSlugs.map((s) => ({ slug: s, title: (links.titulky as Record<string, string>)[s] ?? s })),
     isFiltered: filtered,
   };
+}
+
+/** Facet landings of a category (src/data/fasety.ts) that are indexable: filter value → landing slug. */
+function landingsOf(tree: Awaited<ReturnType<typeof catTree>>, slug: string): Record<string, string> {
+  const landings: Record<string, string> = {};
+  for (const l of FASETY) {
+    const c = l.base === slug && l.key ? tree.bySlug.get(l.slug) : undefined;
+    if (c && c.count_total >= 5 && !c.noindex) landings[`${l.key}=${l.key === 'brand' ? l.value : valueSlug(l.value!)}`] = l.slug;
+  }
+  return landings;
+}
+/** Same for the static data files (lib/staticdata.ts). */
+export async function listingLandings(db: D1Database, catId: number): Promise<Record<string, string>> {
+  const tree = await catTree(db);
+  const c = tree.byId.get(catId);
+  return c ? landingsOf(tree, c.slug) : {};
 }
 
 /** `key=value` when the filter state is a single brand or a single parameter value and nothing else, else null. */

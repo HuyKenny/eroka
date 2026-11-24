@@ -42,12 +42,14 @@ const jsonLd = [
 ];
 ---
 <Base title={title} description={description} canonical={BASE + '/'} robots={robots(false)} ogType="website" ogImage={OG_HOME} graph={graph} jsonLd={jsonLd} pageType="home" searchAction={true}>
+	<!-- the static home ignores ?s= (Workers static assets): old search links and the SearchAction go on to the search page -->
+	<script is:inline>if (/[?&]s=/.test(location.search)) location.replace('/hledat/' + location.search);</script>
 	<section class="hero">
 		<div class="w">
 			<h1>Erotické pomůcky <em>výhodně</em> a 100% diskrétně</h1>
 			<p class="hero__l">Porovnáváme ceny {celkem}+ produktů z ověřených českých e-shopů. Najděte, kde stejnou věc koupíte nejlevněji.</p>
 			<div class="hs">
-				<form class="hs__f" role="search" method="get" action="/" autocomplete="off">
+				<form class="hs__f" role="search" method="get" action="/hledat/" autocomplete="off">
 					<label class="vh" for="hs-hero">Hledat produkt, značku nebo kategorii</label>
 					<Ik id="hledat" />
 					<input type="search" id="hs-hero" name="s" placeholder="Např. Satisfyer, vibrátor, lubrikační gel…" data-suggest enterkeyhint="search" />

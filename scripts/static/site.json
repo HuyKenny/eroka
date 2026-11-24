@@ -20,6 +20,9 @@
   ]
  ],
  "crawl": {
+  "extra_paths_sql": [
+   "SELECT '/hledat/'"
+  ],
   "workers": 4,
   "extra_until": 105000,
   "no_go": true,

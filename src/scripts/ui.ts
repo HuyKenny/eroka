@@ -76,7 +76,7 @@ for (const input of $$<HTMLInputElement>('input[data-suggest]')) {
     if (d.brands.length) h += '<div class="hs__h">Značky</div>' + d.brands.map((c) => `<a href="${esc(c.u)}" role="option"><span>${esc(c.n)}</span><span class="hs__c">${c.c}</span></a>`).join('');
     if (d.products.length) h += '<div class="hs__h">Produkty</div>' + d.products.map((p) => `<a href="${esc(p.u)}" role="option">${p.i ? `<img src="${esc(p.i)}" alt="" width="40" height="40" loading="lazy">` : ''}<span>${esc(p.n)}</span><span class="hs__c">${esc(p.p)}</span></a>`).join('');
     if (!h) { hide(); return; }
-    h += `<a href="/?s=${encodeURIComponent(q)}" role="option"><b>Všechny výsledky pro „${esc(q)}“</b></a>`;
+    h += `<a href="/hledat/?s=${encodeURIComponent(q)}" role="option"><b>Všechny výsledky pro „${esc(q)}“</b></a>`;
     box.innerHTML = h; box.hidden = false; idx = -1;
   };
   input.addEventListener('input', () => {
@@ -86,8 +86,9 @@ for (const input of $$<HTMLInputElement>('input[data-suggest]')) {
     timer = window.setTimeout(async () => {
       const my = ++seq;
       try {
-        const r = await fetch('/api/suggest?q=' + encodeURIComponent(q));
-        if (r.ok && my === seq) render(await r.json() as Sug, q);
+        // static site: suggestions from the prefix index /data/s/* (staticky.ts), loaded on the first keystrokes only
+        const d = await (await import('./staticky')).suggest(q);
+        if (my === seq) render(d as Sug, q);
       } catch { /* offline */ }
     }, 160);
   });
@@ -103,3 +104,9 @@ for (const input of $$<HTMLInputElement>('input[data-suggest]')) {
   });
   document.addEventListener('click', (e) => { if (!(e.target as Element).closest('.hs')) hide(); });
 }
+
+// static site (Cloudflare Workers Free): filtered/sorted listings and the search page are computed in the browser
+const lv = $('.lv[data-src]');
+if (lv && /[?&](orderby|min_price|max_price|znacka|obchod|skladem|sleva|kat|p_[a-z]+|strana)=/.test(location.search)) void import('./staticky').then((m) => m.vypis(lv));
+const hl = $('[data-hledani]');
+if (hl) void import('./staticky').then((m) => m.hledani(hl));

@@ -9,7 +9,7 @@ const { v } = Astro.props;
 const m = v.meta;
 ---
 <Base title={m.title} description={m.description} canonical={m.canonical} prev={m.prev} next={m.next} robots={m.robots} graph={m.graph} jsonLd={m.jsonLd} pageType="brand" adultOnly={true}>
-	<Vypis crumbs={v.crumbs} h1={decode(v.brand.name)} introHtml={v.page === 1 && !v.isFiltered ? v.brand.description_html : undefined}
+	<Vypis src={`/data/l/znacka/${v.brand.slug}.json`} crumbs={v.crumbs} h1={decode(v.brand.name)} introHtml={v.page === 1 && !v.isFiltered ? v.brand.description_html : undefined}
 		f={v.f} fc={v.fc} brands={v.brands} cats={v.tree.byId} items={v.items} total={v.total} page={v.page} pages={v.pages} base={v.base} qs={v.qs}
 		empty="Od této značky teď nemáme žádné produkty." />
 </Base>

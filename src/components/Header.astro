@@ -36,7 +36,7 @@ const q = (Astro.url.searchParams.get('s') ?? '').trim().toLowerCase();
 		</details>
 		<a class="logo" href="/" aria-label="Eroka.cz — srovnání cen erotických pomůcek" set:html={logo} />
 		<div class="hs">
-			<form class="hs__f" role="search" method="get" action="/" autocomplete="off">
+			<form class="hs__f" role="search" method="get" action="/hledat/" autocomplete="off">
 				<label class="vh" for="hs-q">Hledat produkt, značku nebo kategorii</label>
 				<Ik id="hledat" />
 				<input type="search" id="hs-q" name="s" value={q} placeholder="Hledat produkt, značku, kategorii…" data-suggest aria-autocomplete="list" aria-controls="hs-s" enterkeyhint="search" />

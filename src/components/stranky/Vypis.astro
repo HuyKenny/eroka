@@ -24,8 +24,10 @@ interface Props {
 	f: FilterState; fc: Facets | null; brands: { byId: Map<number, BrandLite>; bySlug: Map<string, BrandLite> }; cats?: Map<number, Cat> | undefined;
 	landings?: Record<string, string> | undefined;
 	items: Card[]; total: number; page: number; pages: number; base: string; qs: string; empty?: string | undefined;
+	/** static listing data (/data/l/….json, lib/staticdata.ts) for the client-side filters + a facet landing's preset filter */
+	src?: string | undefined; preset?: string | undefined;
 }
-const { crumbs, h1, introHtml, tiles = [], tilesTitle = 'Podkategorie', links, f, fc, brands, cats, landings, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.' } = Astro.props;
+const { crumbs, h1, introHtml, tiles = [], tilesTitle = 'Podkategorie', links, f, fc, brands, cats, landings, items, total, page, pages, base, qs, empty = 'Tady zatím nic není.', src, preset } = Astro.props;
 // active filters as removable chips
 const chips: Array<[string, string]> = [];
 const url = (s: FilterState) => base + toQuery(s);
@@ -57,7 +59,7 @@ const plain = withFilter(f, { min: undefined, max: undefined, znacka: [], obchod
 			)}
 		</nav>
 	)}
-	<div class="lv">
+	<div class="lv" data-src={src} data-preset={preset || undefined} data-base={base} data-empty={empty}>
 		<Filtry action={base} f={f} fc={fc} brands={brands} links={links} cats={cats} landings={landings} />
 		<div>
 			<div class="lt">

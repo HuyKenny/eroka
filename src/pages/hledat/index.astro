@@ -1,0 +1,19 @@
+---
+// Search results (/hledat/?s=…, the old /?s= redirects here): a static shell, the results are computed in the browser from
+// the static index /data/s/* (src/scripts/staticky.ts; built from /data/search.json, see lib/staticdata.ts). noindex.
+import Base from '../../layouts/Base.astro';
+import Drobky from '../../components/Drobky.astro';
+import { searchTitle } from '../../lib/seo';
+
+export const prerender = false;
+---
+<Base title={searchTitle('Hledání', 1, 1)} robots={['follow', 'noindex']} pageType="search">
+	<div class="w" data-hledani data-title={searchTitle('%q%', 1, 1)} data-src="/data/search.json">
+		<Drobky items={[{ name: 'Domů', url: '/' }, { name: 'Hledání' }]} />
+		<div class="lh"><h1>Výsledky hledání: <span data-q></span></h1><span class="lh__n" hidden></span></div>
+		<ul class="pk" aria-label="Kategorie a značky" hidden></ul>
+		<div style="margin-top:16px" data-vysledky aria-live="polite">
+			<noscript><p class="prazdno">Hledání potřebuje zapnutý JavaScript. Vyberte prosím kategorii v menu.</p></noscript>
+		</div>
+	</div>
+</Base>

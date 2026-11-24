@@ -7,6 +7,7 @@ export const prerender = false;
 const PROD = `User-agent: *
 Disallow: /go/
 Disallow: /api/
+Disallow: /data/
 
 Sitemap: https://eroka.cz/sitemap_index.xml
 `;

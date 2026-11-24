@@ -28,8 +28,8 @@ export interface Post {
 export type PostCard = Pick<Post, 'id' | 'slug' | 'title' | 'excerpt' | 'published_at' | 'image' | 'image_card' | 'image_alt' | 'image_w' | 'image_h' | 'cat_id'>;
 export interface PostCat { id: number; slug: string; name: string; description: string; count: number }
 
-const CARD_COLS = `p.id, p.slug, p.name, p.image, p.min_price, p.offer_count, p.shop_count, p.best_domain, p.primary_cat, o.go_slug, p.disc_pct, p.in_stock`;
-const CARD_JOIN = `LEFT JOIN offers o ON o.id = p.best_offer_id`;
+export const CARD_COLS = `p.id, p.slug, p.name, p.image, p.min_price, p.offer_count, p.shop_count, p.best_domain, p.primary_cat, o.go_slug, p.disc_pct, p.in_stock`;
+export const CARD_JOIN = `LEFT JOIN offers o ON o.id = p.best_offer_id`;
 
 let catMemo: { at: number; byId: Map<number, Cat>; bySlug: Map<string, Cat>; kids: Map<number, Cat[]> } | null = null;
 export async function catTree(db: D1Database) {
@@ -71,6 +71,8 @@ export interface ListQuery {
   brands: number[]; shops: string[]; stock: boolean; disc: boolean; kat?: number | undefined;
   /** canonical param filters: exact values or numeric ranges [from, to) */
   params: Array<{ key: string; values?: string[]; ranges?: Array<[number, number]> }>;
+  /** every row, no LIMIT (static data files, lib/staticdata.ts) */
+  all?: boolean;
 }
 
 /** Sort keys live in cat_products (index range scans, see migration 0004); brand listings sort on products. */
@@ -108,7 +110,7 @@ export async function listProducts(db: D1Database, by: { cat?: number; brand?: n
   }
   const where = `x.${col} = ? AND p.status = 'publish'` + (filt.length ? ' AND ' + filt.join(' AND ') : '');
   const off = (q.page - 1) * PER_PAGE;
-  const list = db.prepare(`SELECT ${CARD_COLS} FROM ${tbl} x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE ${where} ORDER BY ${sortSql(q.sort, !!by.cat)} LIMIT ${PER_PAGE} OFFSET ${off}`).bind(...binds);
+  const list = db.prepare(`SELECT ${CARD_COLS} FROM ${tbl} x JOIN products p ON p.id = x.product_id ${CARD_JOIN} WHERE ${where} ORDER BY ${sortSql(q.sort, !!by.cat)}${q.all ? '' : ` LIMIT ${PER_PAGE} OFFSET ${off}`}`).bind(...binds);
   if (knownTotal !== undefined && !filt.length) {
     return { items: (await list.all<Card>()).results, total: knownTotal };
   }
