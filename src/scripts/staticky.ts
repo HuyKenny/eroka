@@ -142,7 +142,11 @@ export async function vypis(lv: HTMLElement): Promise<void> {
   // count, intro (shown only on the plain first page), sort tabs, filter form state
   const n = document.querySelector('.lh__n');
   if (n) n.textContent = `${cislo(total)} ${produktu(total)}`;
-  if (filtered(preset ? userF : f)) document.querySelectorAll<HTMLElement>('.w > .intro, .w > [data-vice]').forEach((e) => { e.hidden = true; });
+  if (filtered(preset ? userF : f)) {
+    document.querySelectorAll<HTMLElement>('.w > .intro, .w > [data-vice]').forEach((e) => { e.hidden = true; });
+    // as the old SSR (views.ts): a filtered / re-sorted state is noindex, follow; the static canonical stays the clean URL
+    document.querySelector('meta[name="robots"]')?.setAttribute('content', 'noindex, follow');
+  }
   for (const a of lv.querySelectorAll<HTMLAnchorElement>('nav.rz a')) {
     const k = (SORTS.find((s) => a.href.includes(`orderby=${s}`) && !a.href.includes(`orderby=${s}-`)) ?? 'pop') as Sort;
     const u = url(withF(f, { sort: k }));
